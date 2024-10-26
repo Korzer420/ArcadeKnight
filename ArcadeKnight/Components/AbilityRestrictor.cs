@@ -1,12 +1,13 @@
 ﻿using ArcadeKnight.Enums;
-using KorzUtils.Helper;
 using UnityEngine;
 
-namespace ArcadeKnight;
+namespace ArcadeKnight.Components;
 
-public class AbilityController : MonoBehaviour
+public class AbilityRestrictor : MonoBehaviour
 {
-    #region
+    private bool _activated = false;
+
+    #region Properties
 
     public string AffectedFieldName { get; set; }
 
@@ -17,7 +18,7 @@ public class AbilityController : MonoBehaviour
     #endregion
 
     #region Methods
-    
+
     void Start()
     {
         if (gameObject.GetComponent<BoxCollider2D>() == null)
@@ -36,7 +37,12 @@ public class AbilityController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.tag == "Player")
+        {
+            if (PlayerData.instance.GetBool(AffectedFieldName) == SetValue)
+                return;
             PlayerData.instance.SetBool(AffectedFieldName, SetValue);
+            _activated = true;
+        }
     }
 
     void OnTriggerExit2D(Collider2D collider)
@@ -48,7 +54,10 @@ public class AbilityController : MonoBehaviour
                 case CheckDirection.Right when collider.transform.position.x > transform.position.x:
                 case CheckDirection.Up when collider.transform.position.y > transform.position.y:
                 case CheckDirection.Down when collider.transform.position.y < transform.position.y:
+                    if (!_activated)
+                        return;
                     PlayerData.instance.SetBool(AffectedFieldName, !SetValue);
+                    _activated = false;
                     break;
                 default:
                     break;

@@ -1,7 +1,7 @@
 ﻿using KorzUtils.Helper;
 using System.Collections;
+using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using LogType = KorzUtils.Enums.LogType;
 
 namespace ArcadeKnight.Components;
@@ -29,8 +29,10 @@ public class FinishTrigger : MonoBehaviour
     {
         if (collider.tag == "Player" && !_endingStarted)
         {
+            PDHelper.DisablePause = true;
+            PDHelper.IsInvincible = true;
             _endingStarted = true;
-            ArcadeKnight.State = Enums.MinigameState.Finish;
+            MinigameController.CurrentState = Enums.MinigameState.Finish;
             HeroController.instance.RelinquishControl();
             StartCoroutine(DisplayScore());
         }
@@ -43,25 +45,27 @@ public class FinishTrigger : MonoBehaviour
         float timePassed = 0f;
         while (timePassed < 3f)
         {
-            float scale = ArcadeKnight.Tracker.transform.localScale.x;
+            float scale = MinigameController.Tracker.transform.localScale.x;
             scale = Mathf.Min(10, scale + Time.deltaTime * 4);
-            ArcadeKnight.Tracker.transform.localScale = new Vector3(scale, scale, 1f);
-            float yPosition = ArcadeKnight.Tracker.transform.position.y;
+            MinigameController.Tracker.transform.localScale = new Vector3(scale, scale, 1f);
+            float yPosition = MinigameController.Tracker.transform.position.y;
             yPosition = Mathf.Max(0, yPosition - Time.deltaTime * 4);
-            ArcadeKnight.Tracker.transform.position = new Vector3(ArcadeKnight.Tracker.transform.position.x, yPosition);
+            MinigameController.Tracker.transform.position = new Vector3(MinigameController.Tracker.transform.position.x, yPosition);
             timePassed += Time.deltaTime;
             yield return null;
         }
-
+        if (MinigameController.ActiveMinigame.CheckHighscore(MinigameController.SelectedDifficulty, MinigameController.SelectedLevel))
+            MinigameController.Tracker.GetComponent<TextMeshPro>().text = MinigameController.Tracker.GetComponent<TextMeshPro>().text + "\r\nNew Highscore!";
         timePassed = 0f;
         while(timePassed < 3f)
         {
             yield return new WaitForSeconds(0.25f);
             timePassed += 0.25f;
-            ArcadeKnight.Tracker.SetActive(!ArcadeKnight.Tracker.activeSelf);
+            MinigameController.Tracker.SetActive(!MinigameController.Tracker.activeSelf);
         }
-        ArcadeKnight.Tracker.SetActive(true);
+        MinigameController.Tracker.SetActive(true);
         yield return new WaitForSeconds(3f);
         gameObject.LocateMyFSM("Control").SendEvent("FALL");
+        MinigameController.EndMinigame();
     }
 }
