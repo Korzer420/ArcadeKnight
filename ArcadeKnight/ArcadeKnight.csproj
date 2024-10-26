@@ -27,8 +27,27 @@
 	</Target>
 
 	<ItemGroup>
+	  <None Remove="Resources\Sprites\Allow_Double_Jump.png" />
+	  <None Remove="Resources\Sprites\Allow_Superdash.png" />
+	  <None Remove="Resources\Sprites\No_Double_Jump.png" />
+	  <None Remove="Resources\Sprites\No_Pogo_Spikes.png" />
+	  <None Remove="Resources\Sprites\No_Superdash.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Sprites\Allow_Double_Jump.png" />
+	  <EmbeddedResource Include="Resources\Sprites\Allow_Superdash.png" />
+	  <EmbeddedResource Include="Resources\Sprites\No_Double_Jump.png" />
+	  <EmbeddedResource Include="Resources\Sprites\No_Pogo_Spikes.png" />
+	  <EmbeddedResource Include="Resources\Sprites\No_Superdash.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Reference Include="Assembly-CSharp">
 			<HintPath>..\..\..\Program Files\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Assembly-CSharp.dll</HintPath>
+		</Reference>
+		<Reference Include="KorzUtils">
+		  <HintPath>..\..\..\Program Files\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\KorzUtils\KorzUtils.dll</HintPath>
 		</Reference>
 		<Reference Include="MMHOOK_Assembly-CSharp">
 			<HintPath>..\..\..\Program Files\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\MMHOOK_Assembly-CSharp.dll</HintPath>
