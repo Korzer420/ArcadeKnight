@@ -1,4 +1,6 @@
-﻿namespace ArcadeKnight;
+﻿using ArcadeKnight.Enums;
+
+namespace ArcadeKnight;
 
 public class CourseMetaData
 {
@@ -8,13 +10,15 @@ public class CourseMetaData
 
     public string Author { get; set; }
 
+    public string Scene { get; set; }
+
+    public MinigameType Minigame { get; set; }
+
     public CourseData EasyCourse { get; set; }
 
     public CourseData NormalCourse { get; set; }
 
     public CourseData HardCourse { get; set; }
-
-    public string Scene { get; set; }
 
     #endregion
 }

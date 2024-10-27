@@ -4,15 +4,18 @@ using ArcadeKnight.Minigames;
 using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
 using Modding;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static BossStatue;
+using LogType = KorzUtils.Enums.LogType;
 
 namespace ArcadeKnight;
 
@@ -38,7 +41,7 @@ public static class MinigameController
             {
                 GameObject hudCanvas = GameObject.Find("_GameCameras").transform.Find("HudCamera/Hud Canvas").gameObject;
                 GameObject prefab = GameObject.Find("_GameCameras").transform.Find("HudCamera/Inventory/Inv/Inv_Items/Geo").transform.GetChild(0).gameObject;
-                _tracker = GameObject.Instantiate(prefab, hudCanvas.transform, true);
+                _tracker = UnityEngine.Object.Instantiate(prefab, hudCanvas.transform, true);
                 _tracker.name = "Tracker";
                 _tracker.transform.position = new(0f, 6.5f, 1f);
                 _tracker.transform.localScale = new(4f, 4f, 1f);
@@ -81,10 +84,58 @@ public static class MinigameController
     {
         Minigames.Add(new GorbsParkour()
         {
-            Courses = NormalCourses.GorbCourses
+            //Courses = NormalCourses.GorbCourses
         });
+        string customCourseDirectory = Path.Combine(Path.GetDirectoryName(typeof(ArcadeKnight).Assembly.Location), "CustomCourses");
+        if (!Directory.Exists(customCourseDirectory))
+            return;
+        string[] files = Directory.GetFiles(customCourseDirectory, "*.json");
+        if (files.Length == 0)
+            return;
+        LogHelper.Write<ArcadeKnight>("Found custom courses files.", includeScene: false);
+        foreach (string file in files)
+        {
+            string fileContent = File.ReadAllText(file);
+            try
+            {
+                List<CourseMetaData> courseData = JsonConvert.DeserializeObject<List<CourseMetaData>>(fileContent, new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                });
+                LogHelper.Write<ArcadeKnight>($"Found {courseData.Count} course(s) in file {Path.GetFileName(file)}.", includeScene: false);
+                foreach (CourseMetaData metaData in courseData)
+                {
+                    Minigame minigame = Minigames.FirstOrDefault(x => x.GetMinigameType() == metaData.Minigame);
+                    if (minigame == null)
+                    {
+                        LogHelper.Write<ArcadeKnight>($"Couldn't find minigame of entry {metaData.Name}.", LogType.Error, false);
+                        continue;
+                    }
 
-        //string customCourseDirectory = Path.Combine(Path.GetDirectoryName(typeof(ArcadeKnight).Assembly.Location), "CustomCourses");
+                    string validationMessages = ValidateCourseData(metaData);
+                    if (!string.IsNullOrEmpty(validationMessages))
+                    {
+                        LogHelper.Write<ArcadeKnight>($"Course {metaData.Name} has an invalid configuration. Validation messages: {validationMessages}", LogType.Error, false);
+                        continue;
+                    }
+                    if (minigame.Courses.Any(x => x.Name == metaData.Name))
+                    {
+                        LogHelper.Write<ArcadeKnight>($"A course with the name {metaData.Name} already exists in the minigame {metaData.Minigame}. This entry will be skipped.", LogType.Warning, false);
+                        continue;
+                    }
+                    // Highscores will be saved in the save data and are not taken from the initial file.
+                    metaData.EasyCourse.Highscore = "";
+                    metaData.NormalCourse.Highscore = "";
+                    metaData.HardCourse.Highscore = "";
+                    minigame.Courses.Add(metaData);
+                    LogHelper.Write<ArcadeKnight>($"Added course {metaData.Name}.", includeScene: false);
+                }
+            }
+            catch (Exception exception)
+            {
+                LogHelper.Write<ArcadeKnight>($"Couldn't process file {Path.GetFileName(file)}: ", exception, false);
+            }
+        }
     }
 
     #endregion
@@ -131,26 +182,26 @@ public static class MinigameController
         {
             if (course.ObjectsToRemove.Any())
             {
-                GameObject[] gameObjects = GameObject.FindObjectsOfType<GameObject>();
+                GameObject[] gameObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
                 foreach (string objectToRemove in course.ObjectsToRemove)
                 {
                     bool found = false;
                     foreach (GameObject gameObject in gameObjects)
                         if (gameObject.name == objectToRemove)
                         {
-                            GameObject.Destroy(gameObject);
+                            UnityEngine.Object.Destroy(gameObject);
                             found = true;
                             break;
                         }
                     if (!found)
-                        LogHelper.Write<ArcadeKnight>("Requested object to delete \"" + objectToRemove + "\" could not be found.", KorzUtils.Enums.LogType.Warning, false);
+                        LogHelper.Write<ArcadeKnight>("Requested object to delete \"" + objectToRemove + "\" could not be found.", LogType.Warning, false);
                 }
             }
 
             // Special rule
             if (ActiveMinigame.GetTitle() == "Gorbs Parkour" && ActiveMinigame.Courses[SelectedLevel].Name == "Cliffhanger" && SelectedDifficulty == Difficulty.Hard)
             {
-                foreach (TinkEffect spikes in GameObject.FindObjectsOfType<TinkEffect>().Where(obj => obj.name.Contains("Cave Spikes")))
+                foreach (TinkEffect spikes in UnityEngine.Object.FindObjectsOfType<TinkEffect>().Where(obj => obj.name.Contains("Cave Spikes")))
                     spikes.gameObject.AddComponent<NonBouncer>();
 
                 GameObject plaque = new("No Pogo Spike Sign");
@@ -174,7 +225,7 @@ public static class MinigameController
                     transition.gameObject.SetActive(false);
                 }
             // Disable all Hazard Respawn point, so the player always spawns at the start of the minigame.
-            foreach (HazardRespawnTrigger item in Component.FindObjectsOfType<HazardRespawnTrigger>())
+            foreach (HazardRespawnTrigger item in UnityEngine.Object.FindObjectsOfType<HazardRespawnTrigger>())
                 item.gameObject.SetActive(false);
 
             List<(float, float)> previewPoints = [];
@@ -194,7 +245,7 @@ public static class MinigameController
         transitionPoint.entryPoint = "minigame_start";
         transitionPoint.respawnMarker = entryPoint.AddComponent<HazardRespawnMarker>();
 
-        GameObject entry = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Start"]);
+        GameObject entry = UnityEngine.Object.Instantiate(ArcadeKnight.PreloadedObjects["Start"]);
         entry.SetActive(false);
         entry.transform.position = position;
         entry.LocateMyFSM("Control").FsmVariables.FindFsmString("Door Entry").Value = "minigame_start";
@@ -204,11 +255,11 @@ public static class MinigameController
 
     private static void CreateEnd(Vector3 position)
     {
-        GameObject platform = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Platform"]);
+        GameObject platform = UnityEngine.Object.Instantiate(ArcadeKnight.PreloadedObjects["Platform"]);
         platform.transform.position = position;
         platform.SetActive(true);
 
-        GameObject exit = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["ExitTrigger"]);
+        GameObject exit = UnityEngine.Object.Instantiate(ArcadeKnight.PreloadedObjects["ExitTrigger"]);
         exit.transform.position = position + new Vector3(0.1f, 1.5f);
         exit.SetActive(false);
 
@@ -234,11 +285,11 @@ public static class MinigameController
     {
         float height = HeroController.instance.transform.position.y - HeroController.instance.GetComponent<BoxCollider2D>().size.y / 2;
 
-        GameObject teleporterSprite = GameObject.Instantiate(DreamGate);
+        GameObject teleporterSprite = UnityEngine.Object.Instantiate(DreamGate);
         teleporterSprite.transform.position = new Vector3(HeroController.instance.transform.position.x, height - 0.7f);
         teleporterSprite.SetActive(true);
 
-        GameObject teleporter = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["CancelDoor"]);
+        GameObject teleporter = UnityEngine.Object.Instantiate(ArcadeKnight.PreloadedObjects["CancelDoor"]);
         teleporter.name = "Cancel";
         teleporter.transform.position = new Vector3(HeroController.instance.transform.position.x, height);
         teleporter.SetActive(true);
@@ -257,7 +308,7 @@ public static class MinigameController
         foreach (Obstacle obstacle in obstacles)
             if (obstacle is CourseObstacle courseObstacle)
             {
-                GameObject courseObject = GameObject.Instantiate(courseObstacle.ObjectName == "Platform" ? ArcadeKnight.PreloadedObjects["Platform"] : ArcadeKnight.PreloadedObjects["Wingmold"]);
+                GameObject courseObject = UnityEngine.Object.Instantiate(courseObstacle.ObjectName == "Platform" ? ArcadeKnight.PreloadedObjects["Platform"] : ArcadeKnight.PreloadedObjects["Wingmould"]);
                 courseObject.transform.position = new(courseObstacle.XPosition, courseObstacle.YPosition);
                 courseObject.transform.SetRotationZ(courseObstacle.Rotation);
                 courseObject.SetActive(true);
@@ -272,7 +323,7 @@ public static class MinigameController
                 };
                 if (spriteName == "Error")
                 {
-                    LogHelper.Write<ArcadeKnight>("Couldn't assign ability \"" + sign.AffectedAbility + "\".", KorzUtils.Enums.LogType.Error, false);
+                    LogHelper.Write<ArcadeKnight>("Couldn't assign ability \"" + sign.AffectedAbility + "\".", LogType.Error, false);
                     continue;
                 }
                 if (sign.SetValue)
@@ -328,10 +379,10 @@ public static class MinigameController
 
     private static IEnumerator ControlSelection()
     {
-        Transform panel = Component.FindObjectOfType<BossChallengeUI>().transform.Find("Panel");
+        Transform panel = UnityEngine.Object.FindObjectOfType<BossChallengeUI>().transform.Find("Panel");
         panel.Find("BossName_Text").position = new Vector3(7.4f, 4f);
         panel.Find("Description_Text").position = new Vector3(7.5f, 2.9f);
-        GameObject levelObject = GameObject.Instantiate(panel.Find("Description_Text").gameObject, panel);
+        GameObject levelObject = UnityEngine.Object.Instantiate(panel.Find("Description_Text").gameObject, panel);
         levelObject.transform.position = new Vector3(10.6f, 1.51f);
         Text textObject = levelObject.GetComponent<Text>();
         textObject.fontSize++;
@@ -348,7 +399,7 @@ public static class MinigameController
                 _ => "HARD"
             };
             sprites.Add(new(parent.Find("NotchImage").gameObject, parent.Find("SymbolImage").gameObject));
-            GameObject highscoreObject = GameObject.Instantiate(levelObject, panel.Find("Buttons").Find($"Tier{i}Button"));
+            GameObject highscoreObject = UnityEngine.Object.Instantiate(levelObject, panel.Find("Buttons").Find($"Tier{i}Button"));
             highscoreText.Add(highscoreObject.GetComponent<Text>());
             highscoreObject.transform.localPosition = new(243.3334f, 0f, 0f);
         }
@@ -407,7 +458,7 @@ public static class MinigameController
     {
         HeroController.instance.RelinquishControl();
         PDHelper.DisablePause = true;
-        CameraController controller = GameObject.FindObjectOfType<CameraController>();
+        CameraController controller = UnityEngine.Object.FindObjectOfType<CameraController>();
         CameraTarget oldTarget = controller.camTarget;
         GameObject movingObject = new("Preview");
         movingObject.transform.position = HeroController.instance.transform.position;
@@ -449,11 +500,46 @@ public static class MinigameController
 
         HeroController.instance.transform.Find("Vignette").localScale = new(5.5f, 5.5f, 5.5f);
         controller.camTarget = oldTarget;
-        GameObject.Destroy(movingObject);
+        UnityEngine.Object.Destroy(movingObject);
         HeroController.instance.RegainControl();
         PDHelper.DisablePause = false;
         Tracker.SetActive(true);
         ActiveMinigame.Start();
+    }
+
+    private static string ValidateCourseData(CourseMetaData courseMetaData)
+    {
+        string errorMessage = string.Empty;
+        if (string.IsNullOrEmpty(courseMetaData.Name))
+            errorMessage += "Course needs a name.\r\n";
+        if (string.IsNullOrEmpty(courseMetaData.Scene))
+            errorMessage += "No scene provided.\r\n";
+        if (courseMetaData.EasyCourse == null || courseMetaData.NormalCourse == null || courseMetaData.HardCourse == null)
+            errorMessage += "Not all three difficulties provided.";
+        else
+        {
+            // Ensure that we don't have null values.
+            courseMetaData.EasyCourse.ObjectsToRemove ??= [];
+            courseMetaData.NormalCourse.ObjectsToRemove ??= [];
+            courseMetaData.HardCourse.ObjectsToRemove ??= [];
+            courseMetaData.EasyCourse.Obstacles ??= [];
+            courseMetaData.NormalCourse.Obstacles ??= [];
+            courseMetaData.HardCourse.Obstacles ??= [];
+            courseMetaData.EasyCourse.InitialRules ??= [];
+            courseMetaData.NormalCourse.InitialRules ??= [];
+            courseMetaData.HardCourse.InitialRules ??= [];
+        }
+        if (courseMetaData.EasyCourse.StartPositionX == 0 || courseMetaData.EasyCourse.StartPositionY == 0
+            || courseMetaData.EasyCourse.EndPositionX == 0 || courseMetaData.EasyCourse.EndPositionY == 0)
+            errorMessage += "Easy course requires the start and end position to be assigned.";
+        if (courseMetaData.NormalCourse.StartPositionX == 0 || courseMetaData.NormalCourse.StartPositionY == 0
+            || courseMetaData.NormalCourse.EndPositionX == 0 || courseMetaData.NormalCourse.EndPositionY == 0)
+            errorMessage += "Normal course requires the start and end position to be assigned.";
+        if (courseMetaData.HardCourse.StartPositionX == 0 || courseMetaData.HardCourse.StartPositionY == 0
+            || courseMetaData.HardCourse.EndPositionX == 0 || courseMetaData.HardCourse.EndPositionY == 0)
+            errorMessage += "Hard course requires the start and end position to be assigned.";
+        
+        return errorMessage.TrimStart();
     }
 
     #endregion
@@ -465,7 +551,7 @@ public static class MinigameController
         if (Minigames.FirstOrDefault(x => x.GetEntryScene() == newScene.name) is Minigame minigame && CurrentState == MinigameState.Inactive)
         {
             ActiveMinigame = minigame;
-            GameObject tablet = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Tablet"]);
+            GameObject tablet = UnityEngine.Object.Instantiate(ArcadeKnight.PreloadedObjects["Tablet"]);
             tablet.SetActive(true);
             tablet.transform.position = minigame.GetEntryPosition();
             PlayMakerFSM fsm = tablet.LocateMyFSM("GG Boss UI");

@@ -37,31 +37,31 @@ public static class NormalCourses
                         [
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 56.66f,
                                 YPosition = 6.4f
                             },
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 116.04f,
                                 YPosition = 31.4f
                             },
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 35.52f,
                                 YPosition = 11.4f
                             },
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 89.64f,
                                 YPosition = 6.4f
                             },
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 129.59f,
                                 YPosition = 32.86f
                             },
@@ -109,31 +109,31 @@ public static class NormalCourses
                         [
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 56.66f,
                                 YPosition = 6.4f
                             },
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 116.04f,
                                 YPosition = 31.4f
                             },
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 199.25f,
                                 YPosition = 28.41f
                             },
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 178.02f,
                                 YPosition = 23.41f
                             },
                             new CourseObstacle()
                             {
-                                ObjectName = "Wingmold",
+                                ObjectName = "Wingmould",
                                 XPosition = 215.43f,
                                 YPosition = 28.41f
                             },

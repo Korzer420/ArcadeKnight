@@ -32,7 +32,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         PreloadedObjects.Add("ExitTrigger", preloadedObjects["Dream_01_False_Knight"]["Dream Fall Catcher"]);
         PreloadedObjects.Add("Platform", preloadedObjects["Crossroads_04"]["_Scenery/plat_float_01"]);
         PreloadedObjects.Add("CancelDoor", preloadedObjects["White_Palace_03_hub"]["doorWarp"]);
-        PreloadedObjects.Add("Wingmold", preloadedObjects["White_Palace_06"]["White Palace Fly (3)"]);
+        PreloadedObjects.Add("Wingmould", preloadedObjects["White_Palace_06"]["White Palace Fly (3)"]);
         MinigameController.Initialize();
     }
 
