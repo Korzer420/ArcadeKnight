@@ -98,10 +98,23 @@ public static class MinigameController
             string fileContent = File.ReadAllText(file);
             try
             {
-                List<CourseMetaData> courseData = JsonConvert.DeserializeObject<List<CourseMetaData>>(fileContent, new JsonSerializerSettings()
+                List<CourseMetaData> courseData = [];
+                try
                 {
-                    TypeNameHandling = TypeNameHandling.Auto,
-                });
+                    CourseMetaData singleCourseData = JsonConvert.DeserializeObject<CourseMetaData>(fileContent, new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                    });
+                    courseData.Add(singleCourseData);
+                }
+                catch (Exception)
+                {
+                    courseData = JsonConvert.DeserializeObject<List<CourseMetaData>>(fileContent, new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                    });
+                }
+                
                 LogHelper.Write<ArcadeKnight>($"Found {courseData.Count} course(s) in file {Path.GetFileName(file)}.", includeScene: false);
                 foreach (CourseMetaData metaData in courseData)
                 {
