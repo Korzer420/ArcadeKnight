@@ -185,13 +185,14 @@ public static class MinigameController
 
     private static void SetupLevel(CourseData course)
     {
+        PlayerData.instance.isInvincible = true;
         CreateStart(new Vector3(course.StartPositionX, course.StartPositionY), course.StartPositionX > course.EndPositionX);
         CreateEnd(new Vector3(course.EndPositionX, course.EndPositionY));
         CreateObstacles(course.Obstacles);
         Tracker.GetComponent<TextMeshPro>().text = "0";
         Tracker.SetActive(false);
 
-        CoroutineHelper.WaitUntil(() =>
+        CoroutineHelper.WaitFrames(() =>
         {
             if (course.ObjectsToRemove.Any())
             {
@@ -210,19 +211,25 @@ public static class MinigameController
                         LogHelper.Write<ArcadeKnight>("Requested object to delete \"" + objectToRemove + "\" could not be found.", LogType.Warning, false);
                 }
             }
-
             // Special rule
             if (ActiveMinigame.GetTitle() == "Gorbs Parkour" && ActiveMinigame.Courses[SelectedLevel].Name == "Cliffhanger" && SelectedDifficulty == Difficulty.Hard)
             {
-                foreach (TinkEffect spikes in UnityEngine.Object.FindObjectsOfType<TinkEffect>().Where(obj => obj.name.Contains("Cave Spikes")))
-                    spikes.gameObject.AddComponent<NonBouncer>();
-
                 GameObject plaque = new("No Pogo Spike Sign");
                 plaque.SetActive(false);
                 plaque.transform.position = new(16.04f, 18.4f, 0.02f);
                 plaque.transform.localScale = new(2f, 2f, 1f);
                 plaque.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites/No_Pogo_Spikes");
                 plaque.SetActive(true);
+            }
+        }, false);
+
+        CoroutineHelper.WaitUntil(() =>
+        {
+            // Special rule
+            if (ActiveMinigame.GetTitle() == "Gorbs Parkour" && ActiveMinigame.Courses[SelectedLevel].Name == "Cliffhanger" && SelectedDifficulty == Difficulty.Hard)
+            {
+                foreach (TinkEffect spikes in UnityEngine.Object.FindObjectsOfType<TinkEffect>().Where(obj => obj.name.Contains("Cave Spikes")))
+                    spikes.gameObject.AddComponent<NonBouncer>();
             }
 
             // Disable transitions and replace them with hazard respawns.
@@ -470,6 +477,7 @@ public static class MinigameController
     private static IEnumerator PreviewCourse(List<(float, float)> coordinates)
     {
         HeroController.instance.RelinquishControl();
+        PlayerData.instance.isInvincible = true;
         PDHelper.DisablePause = true;
         CameraController controller = UnityEngine.Object.FindObjectOfType<CameraController>();
         CameraTarget oldTarget = controller.camTarget;
@@ -487,7 +495,9 @@ public static class MinigameController
         int currentPositionIndex = 0;
         while (true)
         {
-            vignette.localScale += new Vector3(21f * Time.deltaTime, 21f * Time.deltaTime, 21f * Time.deltaTime);
+            vignette.localScale += new Vector3(20f * Time.deltaTime, 20f * Time.deltaTime, 20 * Time.deltaTime);
+            if (vignette.localScale.x > 600f)
+                vignette.localScale = new Vector3(600f, 600f, 600f);
             movingObject.transform.position = Vector3.MoveTowards(movingObject.transform.position, positions[currentPositionIndex], Time.deltaTime * 20);
             if (Vector3.Distance(movingObject.transform.position, positions[currentPositionIndex]) < 1)
             {
@@ -501,21 +511,25 @@ public static class MinigameController
         CreateExitPoint();
         while (true)
         {
-            vignette.localScale -= new Vector3(50f * Time.deltaTime, 50f * Time.deltaTime, 50f * Time.deltaTime);
-            if (vignette.localScale.x < 5.5f)
-                vignette.localScale = new Vector3(5.5f, 5.5f, 5.5f);
             movingObject.transform.position = Vector3.MoveTowards(movingObject.transform.position, HeroController.instance.transform.position, Time.deltaTime * 40);
             if (Vector3.Distance(movingObject.transform.position, HeroController.instance.transform.position) < 1)
                 break;
-
             yield return null;
         }
-
+        while(vignette.localScale.x > 5.5f)
+        {
+            vignette.localScale -= new Vector3(200f * Time.deltaTime, 200f * Time.deltaTime, 200f * Time.deltaTime);
+            if (vignette.localScale.x < 5.5f)
+                vignette.localScale = new Vector3(5.5f, 5.5f, 5.5f);
+            yield return null;
+        }
+        
         HeroController.instance.transform.Find("Vignette").localScale = new(5.5f, 5.5f, 5.5f);
         controller.camTarget = oldTarget;
         UnityEngine.Object.Destroy(movingObject);
         HeroController.instance.RegainControl();
         PDHelper.DisablePause = false;
+        PlayerData.instance.isInvincible = false;
         Tracker.SetActive(true);
         ActiveMinigame.Start();
     }

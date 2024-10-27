@@ -22,7 +22,8 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         ("Dream_01_False_Knight", "Dream Fall Catcher"),
         ("Crossroads_04", "_Scenery/plat_float_01"),
         ("White_Palace_03_hub", "doorWarp"),
-        ("White_Palace_06", "White Palace Fly (3)")
+        ("White_Palace_06", "White Palace Fly (3)"),
+        ("Fungus1_31", "_Scenery/fung_plat_float_02")
     };
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -33,8 +34,29 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         PreloadedObjects.Add("Platform", preloadedObjects["Crossroads_04"]["_Scenery/plat_float_01"]);
         PreloadedObjects.Add("CancelDoor", preloadedObjects["White_Palace_03_hub"]["doorWarp"]);
         PreloadedObjects.Add("Wingmould", preloadedObjects["White_Palace_06"]["White Palace Fly (3)"]);
+        PreloadedObjects.Add("Block", preloadedObjects["Fungus1_31"]["_Scenery/fung_plat_float_02"]);
         MinigameController.Initialize();
     }
+    /*
+     Easy mode:
+     Remove:
+     fung_plat_float_08
+     fung_plat_float_07
+     Platforms at:
+     25.21, 111.57
+     25.22, 84.4
+     18.74, 76.4
+     16.3, 103.4
+    Startpunkt:
+    30.51, 115.4
+    Endpunkt:
+     4.48, 125.94
+
+    Kamera Preview Points:
+    29.52, 74.93
+    21.13, 79.88
+    9.61, 98.23
+     */
 
     public void OnLoadLocal(LocalSaveData localSaveData)
     {
@@ -80,7 +102,6 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
     }
 
     // ToDo:
-    // Custom Course Support
     // Zwei weitere Kurse
     // Zweites Minispiel.
 }
