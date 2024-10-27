@@ -169,10 +169,7 @@ public static class MinigameController
         _tracker.transform.position = new(0f, 6.5f, 1f);
         _tracker.transform.localScale = new(4f, 4f, 1f);
         if (PlayerData.instance != null)
-        { 
             PDHelper.DisablePause = false;
-            PDHelper.IsInvincible = false;
-        }
     }
 
     internal static IEnumerator UpdateProgression(int newProgression)

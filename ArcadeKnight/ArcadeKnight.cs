@@ -86,8 +86,6 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
     }
 
     // ToDo:
-    // Ein weiterer Kurs
-    // Invincibility in Finish Sequenz fixen.
     // Zweites Minispiel.
     
 }

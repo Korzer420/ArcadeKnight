@@ -20,7 +20,7 @@ public static class AbilityController
         {"damagePenalty", false}
     };
 
-    private static bool _damagePenalty = true;
+    private static bool _damagePenalty = false;
 
     #endregion
 
