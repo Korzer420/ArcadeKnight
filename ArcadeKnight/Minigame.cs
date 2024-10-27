@@ -37,6 +37,8 @@ public abstract class Minigame
 
     internal abstract bool CheckHighscore(Difficulty difficulty, int level);
 
+    internal abstract void ApplyScorePenalty();
+
     #endregion
 
     #region Eventhandler

@@ -66,6 +66,12 @@ internal class GorbsParkour : Minigame
         return false;
     }
 
+    internal override void ApplyScorePenalty()
+    {
+        _score++;
+        HeroController.instance.StartCoroutine(MinigameController.UpdateProgression(_score));
+    }
+
     #endregion
 
     private bool ModHooks_GetPlayerBoolHook(string name, bool orig)

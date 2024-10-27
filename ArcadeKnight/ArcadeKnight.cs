@@ -37,26 +37,6 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         PreloadedObjects.Add("Block", preloadedObjects["Fungus1_31"]["_Scenery/fung_plat_float_02"]);
         MinigameController.Initialize();
     }
-    /*
-     Easy mode:
-     Remove:
-     fung_plat_float_08
-     fung_plat_float_07
-     Platforms at:
-     25.21, 111.57
-     25.22, 84.4
-     18.74, 76.4
-     16.3, 103.4
-    Startpunkt:
-    30.51, 115.4
-    Endpunkt:
-     4.48, 125.94
-
-    Kamera Preview Points:
-    29.52, 74.93
-    21.13, 79.88
-    9.61, 98.23
-     */
 
     public void OnLoadLocal(LocalSaveData localSaveData)
     {
@@ -102,6 +82,9 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
     }
 
     // ToDo:
-    // Zwei weitere Kurse
+    // Ein weiterer Kurse
+    // Invincibility in Finish Sequenz fixen.
+    // Hazard Respawn mit Ability Restrictor fixen.
+    // Initial Rules implementieren.
     // Zweites Minispiel.
 }
