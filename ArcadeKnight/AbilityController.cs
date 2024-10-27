@@ -13,10 +13,10 @@ public static class AbilityController
 
     private static Dictionary<string, bool> _initialRules = new()
     {
-        {$"{nameof(PlayerData.instance.hasDash)}", true},
-        {$"{nameof(PlayerData.instance.hasWalljump)}", true},
-        {$"{nameof(PlayerData.instance.hasSuperDash)}", true},
-        {$"{nameof(PlayerData.instance.hasDoubleJump)}", true},
+        {nameof(PlayerData.instance.canDash), true},
+        {nameof(PlayerData.instance.hasWalljump), true},
+        {nameof(PlayerData.instance.hasSuperDash), true},
+        {nameof(PlayerData.instance.hasDoubleJump), true},
         {"damagePenalty", false}
     };
 
@@ -26,19 +26,19 @@ public static class AbilityController
 
     #region Methods
 
-    public static void Enable(string[] initialRules)
+    public static void Enable(string[] restrictions)
     {
+        // Prevents shade spawn.
+        PDHelper.SoulLimited = false;
         _originalValues.Clear();
         foreach (string key in _initialRules.Keys)
             _originalValues.Add(key, PlayerData.instance.GetBool(key));
         
-        foreach (string rule in initialRules)
+        foreach (string rule in restrictions)
             if (_initialRules.ContainsKey(rule))
-                _initialRules[rule] = true;
-            else if (rule.StartsWith("Not") && _initialRules.ContainsKey(rule.Substring(3)))
-                _initialRules[rule.Substring(3)] = false;
+                _initialRules[rule] = false;
             else
-                LogHelper.Write<ArcadeKnight>("Rule " + rule + " could not be established.", KorzUtils.Enums.LogType.Warning, false);
+                LogHelper.Write<ArcadeKnight>("Restriction " + rule + " could not be established.", KorzUtils.Enums.LogType.Warning, false);
         
         ResetToCurrentRules();
         ModHooks.SetPlayerBoolHook += ModHooks_SetPlayerBoolHook;

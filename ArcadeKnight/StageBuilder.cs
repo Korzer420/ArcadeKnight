@@ -1,5 +1,6 @@
 ﻿using ArcadeKnight.Components;
 using ArcadeKnight.Enums;
+using ArcadeKnight.Obstacles;
 using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ public static class StageBuilder
 
     internal static void SetupLevel(CourseData course)
     {
-        AbilityController.Enable(course.InitialRules);
+        AbilityController.Enable(course.Restrictions);
         PlayerData.instance.isInvincible = true;
         CreateStart(new Vector3(course.StartPositionX, course.StartPositionY), course.StartPositionX > course.EndPositionX);
         CreateEnd(new Vector3(course.EndPositionX, course.EndPositionY));
@@ -85,6 +86,8 @@ public static class StageBuilder
 
         CoroutineHelper.WaitUntil(() =>
         {
+            // To prevent shade spawn.
+            PDHelper.SoulLimited = !string.IsNullOrEmpty(PDHelper.ShadeScene);
             // Special rule
             if (ActiveMinigame.GetTitle() == "Gorbs Parkour" && ActiveMinigame.Courses[SelectedLevel].Name == "Cliffhanger" && SelectedDifficulty == Difficulty.Hard)
             {
@@ -186,20 +189,18 @@ public static class StageBuilder
     private static void CreateObstacles(Obstacle[] obstacles)
     {
         foreach (Obstacle obstacle in obstacles)
+        {
+            GameObject obstacleGameObject;
             if (obstacle is CourseObstacle courseObstacle)
-            {
-                GameObject courseObject = Object.Instantiate(courseObstacle.ObjectName == "Platform" ? ArcadeKnight.PreloadedObjects["Platform"] : ArcadeKnight.PreloadedObjects["Wingmould"]);
-                courseObject.transform.position = new(courseObstacle.XPosition, courseObstacle.YPosition);
-                courseObject.transform.SetRotationZ(courseObstacle.Rotation);
-                courseObject.SetActive(true);
-            }
-            else if (obstacle is AbilityModifier sign)
+                obstacleGameObject = Object.Instantiate(ArcadeKnight.PreloadedObjects[courseObstacle.ObjectName]);
+            else if (obstacle is RestrictObstacle sign)
             {
                 string spriteName = sign.AffectedAbility switch
                 {
                     "hasDoubleJump" => "Double_Jump",
                     "hasSuperDash" => "Superdash",
                     "hasWalljump" => "Wall_Jump",
+                    "canDash" => "Dash",
                     "damagePenalty" => "Damage_Penalty",
                     _ => "Error"
                 };
@@ -213,18 +214,41 @@ public static class StageBuilder
                 else
                     spriteName = "No_" + spriteName;
 
-                GameObject plaque = new("Ability Blocker");
-                plaque.SetActive(false);
-                plaque.transform.position = new(sign.XPosition, sign.YPosition, 0.02f);
-                plaque.transform.localScale = new(2f, 2f, 1f);
-                plaque.transform.SetRotationZ(sign.Rotation);
-                plaque.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites/" + spriteName);
-                AbilityRestrictor controller = plaque.AddComponent<AbilityRestrictor>();
+                obstacleGameObject = new("Ability Blocker");
+                obstacleGameObject.SetActive(false);
+                obstacleGameObject.transform.position = new(sign.XPosition, sign.YPosition, 0.02f);
+                obstacleGameObject.transform.localScale = new(2f, 2f, 1f);
+                obstacleGameObject.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites/" + spriteName);
+                AbilityRestrictor controller = obstacleGameObject.AddComponent<AbilityRestrictor>();
                 controller.AffectedFieldName = sign.AffectedAbility;
                 controller.SetValue = sign.SetValue;
                 controller.RevertDirection = sign.RevertDirection;
-                plaque.SetActive(true);
+                obstacleGameObject.SetActive(true);
+                continue;
             }
+            else if (obstacle is GateObstacle gateObstacle)
+            {
+                obstacleGameObject = Object.Instantiate(ArcadeKnight.PreloadedObjects["Switch"]);
+                obstacleGameObject.SetActive(false);
+                PlayMakerFSM fsm = obstacleGameObject.LocateMyFSM("Switch Control");
+                fsm.GetState("Initiate").AdjustTransitions("Idle");
+                fsm.GetState("Idle").AdjustTransitions("Hit");
+
+                GameObject gate = Object.Instantiate(ArcadeKnight.PreloadedObjects["Gate"]);
+                gate.transform.position = new(gateObstacle.GateXPosition, gateObstacle.GateYPosition);
+                gate.transform.SetRotationZ(gateObstacle.GateRotation);
+                gate.SetActive(true);
+                fsm.FsmVariables.FindFsmGameObject("Target").Value = gate;
+            }
+            else
+            {
+                LogHelper.Write<ArcadeKnight>("Not a obstacle");
+                continue;
+            }
+            obstacleGameObject.transform.position = new(obstacle.XPosition, obstacle.YPosition);
+            obstacleGameObject.transform.SetRotationZ(obstacle.Rotation);
+            obstacleGameObject.SetActive(true);
+        }
     }
 
     #endregion

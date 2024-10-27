@@ -1,4 +1,5 @@
 ﻿using ArcadeKnight.Enums;
+using ArcadeKnight.Obstacles;
 using System.Collections.Generic;
 
 namespace ArcadeKnight;
@@ -79,7 +80,7 @@ public static class NormalCourses
                                 YPosition = 35.3f,
                                 Rotation = 90f
                             },
-                            new AbilityModifier()
+                            new RestrictObstacle()
                             {
                                 XPosition = 121.2908f,
                                 YPosition = 32.5081f,
@@ -137,7 +138,7 @@ public static class NormalCourses
                                 XPosition = 215.43f,
                                 YPosition = 28.41f
                             },
-                            new AbilityModifier()
+                            new RestrictObstacle()
                             {
                                 XPosition = 6.77f,
                                 YPosition = 25.4f,
@@ -165,7 +166,7 @@ public static class NormalCourses
                         ],
                         Obstacles =
                         [
-                            new AbilityModifier()
+                            new RestrictObstacle()
                             {
                                 XPosition = 6.77f,
                                 YPosition = 25.4f,
@@ -173,7 +174,7 @@ public static class NormalCourses
                                 AffectedAbility = "hasSuperDash",
                                 RevertDirection = CheckDirection.Left
                             },
-                            new AbilityModifier()
+                            new RestrictObstacle()
                             {
                                 XPosition = 11.06f,
                                 YPosition = 22.41f,
@@ -181,7 +182,7 @@ public static class NormalCourses
                                 AffectedAbility = "hasDoubleJump",
                                 RevertDirection = CheckDirection.Left
                             },
-                            new AbilityModifier()
+                            new RestrictObstacle()
                             {
                                 XPosition = 80.15f,
                                 YPosition = 10.3f,
@@ -189,7 +190,7 @@ public static class NormalCourses
                                 AffectedAbility = "hasDoubleJump",
                                 RevertDirection = CheckDirection.Left
                             },
-                            new AbilityModifier()
+                            new RestrictObstacle()
                             {
                                 XPosition = 61.54f,
                                 YPosition = 7.4f,
@@ -197,7 +198,7 @@ public static class NormalCourses
                                 AffectedAbility = "hasDoubleJump",
                                 RevertDirection = CheckDirection.Left
                             },
-                            new AbilityModifier()
+                            new RestrictObstacle()
                             {
                                 XPosition = 198.79f,
                                 YPosition = 29.4f,

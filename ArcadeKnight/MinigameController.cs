@@ -25,13 +25,13 @@ public static class MinigameController
 
     private static GameObject _tracker;
 
-    
-
     #endregion
 
     #region Properties
 
     public static MinigameState CurrentState { get; set; }
+
+    public static bool PlayingPreview { get; set; }
 
     public static GameObject Tracker
     {
@@ -53,8 +53,6 @@ public static class MinigameController
             return _tracker;
         }
     }
-
-    
 
     public static int SelectedLevel { get; set; } = 0;
 
@@ -343,6 +341,7 @@ public static class MinigameController
         PDHelper.DisablePause = false;
         PlayerData.instance.isInvincible = false;
         Tracker.SetActive(true);
+        PlayingPreview = false;
         ActiveMinigame.Start();
     }
 
@@ -364,9 +363,9 @@ public static class MinigameController
             courseMetaData.EasyCourse.Obstacles ??= [];
             courseMetaData.NormalCourse.Obstacles ??= [];
             courseMetaData.HardCourse.Obstacles ??= [];
-            courseMetaData.EasyCourse.InitialRules ??= [];
-            courseMetaData.NormalCourse.InitialRules ??= [];
-            courseMetaData.HardCourse.InitialRules ??= [];
+            courseMetaData.EasyCourse.Restrictions ??= [];
+            courseMetaData.NormalCourse.Restrictions ??= [];
+            courseMetaData.HardCourse.Restrictions ??= [];
         }
         if (courseMetaData.EasyCourse.StartPositionX == 0 || courseMetaData.EasyCourse.StartPositionY == 0
             || courseMetaData.EasyCourse.EndPositionX == 0 || courseMetaData.EasyCourse.EndPositionY == 0)
@@ -396,7 +395,11 @@ public static class MinigameController
             PlayMakerFSM fsm = tablet.LocateMyFSM("GG Boss UI");
             fsm.FsmVariables.FindFsmString("Boss Name Key").Value = "MinigameTitle";
             fsm.FsmVariables.FindFsmString("Description Key").Value = "MinigameDesc";
-            fsm.GetState("Reset Player").AddActions(() => CurrentState = MinigameState.Active);
+            fsm.GetState("Reset Player").AddActions(() => 
+            {
+                CurrentState = MinigameState.Active;
+                PlayingPreview = true;
+            });
             fsm.GetState("Open UI").AddActions(() => HeroController.instance.StartCoroutine(ControlSelection()));
             fsm.GetState("Close UI").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
             fsm.GetState("Take Control").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
@@ -412,12 +415,14 @@ public static class MinigameController
 
         }
         else if (CurrentState == MinigameState.Active)
+        {
             StageBuilder.SetupLevel(SelectedDifficulty switch
             {
                 Difficulty.Easy => ActiveMinigame.Courses[SelectedLevel].EasyCourse,
                 Difficulty.Hard => ActiveMinigame.Courses[SelectedLevel].HardCourse,
                 _ => ActiveMinigame.Courses[SelectedLevel].NormalCourse
             });
+        }
         else
             ActiveMinigame = null;
         if (newScene.name == "Cliffs_02")
@@ -447,7 +452,7 @@ public static class MinigameController
 
     private static void CameraController_LockToArea(On.CameraController.orig_LockToArea orig, CameraController self, CameraLockArea lockArea)
     {
-        if (CurrentState != MinigameState.Active)
+        if (PlayingPreview)
             orig(self, lockArea);
     }
 

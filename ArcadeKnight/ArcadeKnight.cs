@@ -23,7 +23,9 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         ("Crossroads_04", "_Scenery/plat_float_01"),
         ("White_Palace_03_hub", "doorWarp"),
         ("White_Palace_06", "White Palace Fly (3)"),
-        ("Fungus1_31", "_Scenery/fung_plat_float_02")
+        ("Fungus1_31", "_Scenery/fung_plat_float_02"),
+        ("Fungus1_22", "Gate Switch"),
+        ("Fungus1_22", "Metal Gate")
     };
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -35,6 +37,8 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         PreloadedObjects.Add("CancelDoor", preloadedObjects["White_Palace_03_hub"]["doorWarp"]);
         PreloadedObjects.Add("Wingmould", preloadedObjects["White_Palace_06"]["White Palace Fly (3)"]);
         PreloadedObjects.Add("Block", preloadedObjects["Fungus1_31"]["_Scenery/fung_plat_float_02"]);
+        PreloadedObjects.Add("Gate", preloadedObjects["Fungus1_22"]["Metal Gate"]);
+        PreloadedObjects.Add("Switch", preloadedObjects["Fungus1_22"]["Gate Switch"]);
         MinigameController.Initialize();
     }
 
@@ -82,9 +86,8 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
     }
 
     // ToDo:
-    // Ein weiterer Kurse
+    // Ein weiterer Kurs
     // Invincibility in Finish Sequenz fixen.
-    // Hazard Respawn mit Ability Restrictor fixen.
-    // Initial Rules implementieren.
     // Zweites Minispiel.
+    
 }

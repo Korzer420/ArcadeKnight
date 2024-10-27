@@ -8,7 +8,7 @@ public class CourseData
 
     public Obstacle[] Obstacles { get; set; } = [];
 
-    public string[] InitialRules { get; set; } = [];
+    public string[] Restrictions { get; set; } = [];
 
     public string Highscore { get; set; }
 

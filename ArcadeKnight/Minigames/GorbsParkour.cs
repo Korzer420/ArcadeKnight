@@ -77,7 +77,7 @@ internal class GorbsParkour : Minigame
     private bool ModHooks_GetPlayerBoolHook(string name, bool orig)
     {
         if (name == "canDash")
-            return (int)HeroController.instance.hero_state > 2;
+            return (int)HeroController.instance.hero_state > 2 && orig;
         return orig;
     }
 

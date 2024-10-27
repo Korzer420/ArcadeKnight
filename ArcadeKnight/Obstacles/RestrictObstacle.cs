@@ -1,8 +1,8 @@
 ﻿using ArcadeKnight.Enums;
 
-namespace ArcadeKnight;
+namespace ArcadeKnight.Obstacles;
 
-public class AbilityModifier : Obstacle
+public class RestrictObstacle : Obstacle
 {
     #region Properties
 
