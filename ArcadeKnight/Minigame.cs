@@ -33,6 +33,8 @@ public abstract class Minigame
 
     internal abstract void Conclude();
 
+    internal abstract MinigameType GetMinigameType();
+
     internal abstract bool CheckHighscore(Difficulty difficulty, int level);
 
     #endregion

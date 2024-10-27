@@ -25,6 +25,8 @@ internal class GorbsParkour : Minigame
 
     internal override string GetTitle() => "Gorbs Parkour";
 
+    internal override MinigameType GetMinigameType() => MinigameType.GorbsParkour;
+
     internal override void Start()
     {
         _score = 0;

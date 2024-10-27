@@ -24,8 +24,6 @@ public static class MinigameController
 
     private static GameObject _dreamGate;
 
-    private static List<Minigame> _minigames = [];
-
     #endregion
 
     #region Properties
@@ -71,16 +69,22 @@ public static class MinigameController
 
     public static Minigame ActiveMinigame { get; set; }
 
+    public static List<Minigame> Minigames { get; set; } = [];
+
+    public static List<RecordData> UnassignableRecordData { get; set; } = [];
+
     #endregion
 
     #region Constructors
 
     static MinigameController()
     {
-        _minigames.Add(new GorbsParkour()
+        Minigames.Add(new GorbsParkour()
         {
             Courses = NormalCourses.GorbCourses
         });
+
+        //string customCourseDirectory = Path.Combine(Path.GetDirectoryName(typeof(ArcadeKnight).Assembly.Location), "CustomCourses");
     }
 
     #endregion
@@ -458,7 +462,7 @@ public static class MinigameController
 
     private static void SceneManager_activeSceneChanged(UnityEngine.SceneManagement.Scene oldScene, UnityEngine.SceneManagement.Scene newScene)
     {
-        if (_minigames.FirstOrDefault(x => x.GetEntryScene() == newScene.name) is Minigame minigame && CurrentState == MinigameState.Inactive)
+        if (Minigames.FirstOrDefault(x => x.GetEntryScene() == newScene.name) is Minigame minigame && CurrentState == MinigameState.Inactive)
         {
             ActiveMinigame = minigame;
             GameObject tablet = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Tablet"]);
