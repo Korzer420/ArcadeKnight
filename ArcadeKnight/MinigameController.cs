@@ -406,6 +406,7 @@ public static class MinigameController
             entryPoint.transform.position = minigame.GetEntryPosition();
             TransitionPoint transitionPoint = entryPoint.AddComponent<TransitionPoint>();
             transitionPoint.isADoor = true;
+            transitionPoint.dontWalkOutOfDoor = true;
             transitionPoint.entryPoint = "minigame_exit";
             transitionPoint.targetScene = "";
             transitionPoint.respawnMarker = entryPoint.AddComponent<HazardRespawnMarker>();

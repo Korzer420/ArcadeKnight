@@ -68,16 +68,16 @@ public class NoEyesTrial : Minigame
     private void SetVector3XYZ_DoSetVector3XYZ(On.HutongGames.PlayMaker.Actions.SetVector3XYZ.orig_DoSetVector3XYZ orig, HutongGames.PlayMaker.Actions.SetVector3XYZ self)
     {
         orig(self);
-        if (!MinigameController.PracticeMode && self.IsCorrectContext("Darkness Control", "Vignette", null))
-        {
-            float scale = MinigameController.SelectedDifficulty switch
-            {
-                Difficulty.Easy => 1.1f,
-                Difficulty.Normal => 0.8f,
-                _ => self.x.Value
-            };
-            self.vector3Variable.Value = new(scale, scale, scale);
-        }
+        //if (!MinigameController.PracticeMode && self.IsCorrectContext("Darkness Control", "Vignette", null))
+        //{
+        //    float scale = MinigameController.SelectedDifficulty switch
+        //    {
+        //        Difficulty.Easy => 1.1f,
+        //        Difficulty.Normal => 0.8f,
+        //        _ => self.x.Value
+        //    };
+        //    self.vector3Variable.Value = new(scale, scale, scale);
+        //}
     }
 
     internal override bool HasPracticeMode() => true;

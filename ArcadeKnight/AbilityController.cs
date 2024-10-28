@@ -34,8 +34,6 @@ public static class AbilityController
     {
         _signs.Clear();
         _signs.AddRange(Object.FindObjectsOfType<AbilityRestrictor>());
-        // Prevents shade spawn.
-        PDHelper.SoulLimited = false;
         _originalValues.Clear();
         foreach (string key in _initialRules.Keys)
             _originalValues.Add(key, PlayerData.instance.GetBool(key));

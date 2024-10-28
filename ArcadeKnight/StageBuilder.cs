@@ -86,8 +86,6 @@ public static class StageBuilder
 
         CoroutineHelper.WaitUntil(() =>
         {
-            // To prevent shade spawn.
-            PDHelper.SoulLimited = !string.IsNullOrEmpty(PDHelper.ShadeScene);
             // Special rule
             if (ActiveMinigame.GetTitle() == "Gorbs Parkour" && ActiveMinigame.Courses[SelectedLevel].Name == "Cliffhanger" && SelectedDifficulty == Difficulty.Hard)
             {
