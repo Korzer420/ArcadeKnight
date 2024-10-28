@@ -39,6 +39,8 @@ public abstract class Minigame
 
     internal abstract void ApplyScorePenalty();
 
+    internal virtual bool HasPracticeMode() => false;
+
     #endregion
 
     #region Eventhandler

@@ -1,7 +1,9 @@
-﻿using KorzUtils.Helper;
+﻿using ArcadeKnight.Components;
+using KorzUtils.Helper;
 using Modding;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace ArcadeKnight;
 
@@ -22,12 +24,16 @@ public static class AbilityController
 
     private static bool _damagePenalty = false;
 
+    private static List<AbilityRestrictor> _signs = [];
+
     #endregion
 
     #region Methods
 
     public static void Enable(string[] restrictions)
     {
+        _signs.Clear();
+        _signs.AddRange(Object.FindObjectsOfType<AbilityRestrictor>());
         // Prevents shade spawn.
         PDHelper.SoulLimited = false;
         _originalValues.Clear();
@@ -63,6 +69,7 @@ public static class AbilityController
     {
         foreach (string key in _initialRules.Keys)
             PlayerData.instance.SetBool(key, _initialRules[key]);
+        _signs.ForEach(x => x.Activated = false);
     }
 
     #endregion

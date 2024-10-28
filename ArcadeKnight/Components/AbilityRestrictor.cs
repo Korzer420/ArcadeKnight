@@ -7,8 +7,6 @@ namespace ArcadeKnight.Components;
 
 public class AbilityRestrictor : MonoBehaviour
 {
-    private bool _activated = false;
-
     #region Properties
 
     public string AffectedFieldName { get; set; }
@@ -16,6 +14,8 @@ public class AbilityRestrictor : MonoBehaviour
     public bool SetValue { get; set; }
 
     public CheckDirection RevertDirection { get; set; }
+
+    public bool Activated { get; set; } = false;
 
     #endregion
 
@@ -43,7 +43,7 @@ public class AbilityRestrictor : MonoBehaviour
             if (PlayerData.instance.GetBool(AffectedFieldName) == SetValue)
                 return;
             PlayerData.instance.SetBool(AffectedFieldName, SetValue);
-            _activated = true;
+            Activated = true;
         }
     }
 
@@ -56,10 +56,10 @@ public class AbilityRestrictor : MonoBehaviour
                 case CheckDirection.Right when collider.transform.position.x > transform.position.x:
                 case CheckDirection.Up when collider.transform.position.y > transform.position.y:
                 case CheckDirection.Down when collider.transform.position.y < transform.position.y:
-                    if (!_activated)
+                    if (!Activated)
                         return;
                     PlayerData.instance.SetBool(AffectedFieldName, !SetValue);
-                    _activated = false;
+                    Activated = false;
                     break;
                 default:
                     break;
