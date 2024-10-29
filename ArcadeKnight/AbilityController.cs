@@ -4,6 +4,7 @@ using HutongGames.PlayMaker.Actions;
 using KorzUtils.Data;
 using KorzUtils.Helper;
 using Modding;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,28 +32,46 @@ public static class AbilityController
 
     private static bool _canFocus = true;
 
-    private static List<AbilityRestrictor> _signs = [];
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Alle Regeln die etabliert wurden (Wenn eine deaktiviert wird, muss hier geschaut werden)
+    /// </summary>
+    public static List<AbilityRestrictor> CurrentRestrictions { get; set; } = [];
+
+    /// <summary>
+    /// Alle Regelns aus <see cref="CurrentRestrictions"/> werden beim Berühren eines Checkpoints übertragen.
+    /// </summary>
+    public static List<AbilityRestrictor> EstablishedRestrictions { get; set; } = [];
+
+    /// <summary>
+    /// Alle Regeln die deaktiviert wurden, aber nicht in <see cref="CurrentRestrictions"/> auftauchen.
+    /// </summary>
+    public static List<AbilityRestrictor> DisabledRestrictions { get; set; } = [];
 
     #endregion
 
     #region Methods
 
     public static void Initialize() => On.PlayMakerFSM.OnEnable += PlayMakerFSM_OnEnable;
-    
+
     public static void Enable(string[] restrictions)
     {
-        _signs.Clear();
-        _signs.AddRange(Object.FindObjectsOfType<AbilityRestrictor>());
+        CurrentRestrictions.Clear();
+        EstablishedRestrictions.Clear();
+        DisabledRestrictions.Clear();
         _originalValues.Clear();
         foreach (string key in _initialRules.Keys)
             _originalValues.Add(key, PlayerData.instance.GetBool(key));
-        
+
         foreach (string rule in restrictions)
             if (_initialRules.ContainsKey(rule))
                 _initialRules[rule] = false;
             else
                 LogHelper.Write<ArcadeKnight>("Restriction " + rule + " could not be established.", KorzUtils.Enums.LogType.Warning, false);
-        
+
         ResetToCurrentRules();
         ModHooks.SetPlayerBoolHook += ModHooks_SetPlayerBoolHook;
         ModHooks.AfterTakeDamageHook += ModHooks_AfterTakeDamageHook;
@@ -79,11 +98,30 @@ public static class AbilityController
     {
         foreach (string key in _initialRules.Keys)
             PlayerData.instance.SetBool(key, _initialRules[key]);
-        _signs.ForEach(x => x.Activated = false);
+        CurrentRestrictions.ForEach(x => x.Activated = false);
+        CurrentRestrictions.Clear();
+        DisabledRestrictions.ForEach(x => x.Activated = true);
+        DisabledRestrictions.Clear();
+
         if (PDHelper.HasAcidArmour)
             PlayMakerFSM.BroadcastEvent("GET ACID ARMOUR");
         else
             PlayMakerFSM.BroadcastEvent("REMOVE ACID ARMOUR");
+    }
+
+    public static void AdjustCheckpoint()
+    {
+        // Snapshot current rules.
+        foreach (string key in _initialRules.Keys.ToList())
+            _initialRules[key] = PlayerData.instance.GetBool(key);
+        _initialRules["damagePenalty"] = _damagePenalty;
+        _initialRules["canFocus"] = _canFocus;
+
+        foreach (AbilityRestrictor restriction in DisabledRestrictions)
+            EstablishedRestrictions.Remove(restriction);
+        DisabledRestrictions.Clear();
+        EstablishedRestrictions.AddRange(CurrentRestrictions);
+        CurrentRestrictions.Clear();
     }
 
     #endregion
@@ -120,7 +158,7 @@ public static class AbilityController
         {
             if (self.name == "Acid Box")
             {
-                self.AddState("Enable", () => self.GetComponent<DamageHero>().damageDealt = 1, 
+                self.AddState("Enable", () => self.GetComponent<DamageHero>().damageDealt = 1,
                     FsmTransitionData.FromTargetState("Disable").WithEventName("GET ACID ARMOUR"));
                 self.GetState("Disable").AddTransition("REMOVE ACID ARMOUR", "Enable");
             }

@@ -180,6 +180,11 @@ public static class StageBuilder
         transitionPoint.dontWalkOutOfDoor = true;
         transitionPoint.entryPoint = "minigame_start";
         transitionPoint.respawnMarker = entryPoint.AddComponent<HazardRespawnMarker>();
+        entryPoint.SetActive(false);
+        RespawnSetter respawn = entryPoint.AddComponent<RespawnSetter>();
+        respawn.Height = 4f;
+        respawn.Width = 4f;
+        entryPoint.SetActive(true);
 
         GameObject entry = Object.Instantiate(ArcadeKnight.PreloadedObjects["Start"]);
         entry.SetActive(false);
