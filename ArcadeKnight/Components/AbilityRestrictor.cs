@@ -16,6 +16,10 @@ public class AbilityRestrictor : MonoBehaviour
 
     public bool Activated { get; set; } = false;
 
+    public float Height { get; set; }
+
+    public float Width { get; set; }
+
     #endregion
 
     #region Methods
@@ -26,11 +30,7 @@ public class AbilityRestrictor : MonoBehaviour
         {
             BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
             collider.isTrigger = true;
-
-            if (RevertDirection == CheckDirection.Left || RevertDirection == CheckDirection.Right)
-                collider.size = new(1f, 600f);
-            else
-                collider.size = new(600f, 1f);
+            collider.size = new(Width, Height);
         }
     }
 
@@ -47,7 +47,7 @@ public class AbilityRestrictor : MonoBehaviour
             else if (!Activated)
                 AbilityController.CurrentRestrictions.Add(this);
             else
-                LogHelper.Write<ArcadeKnight>("An error occured. The restrict sign has an invalid state. Please report this to the mod developer."+name, KorzUtils.Enums.LogType.Error);
+                LogHelper.Write<ArcadeKnight>("An error occured. The restrict sign has an invalid state. Please report this to the mod developer." + name, KorzUtils.Enums.LogType.Error);
             PlayerData.instance.SetBool(AffectedFieldName, SetValue);
             if (AffectedFieldName == nameof(PlayerData.hasAcidArmour))
                 PlayMakerFSM.BroadcastEvent(SetValue ? "GET ACID ARMOUR" : "REMOVE ACID ARMOUR");

@@ -303,6 +303,26 @@ public static class StageBuilder
                 controller.AffectedFieldName = sign.AffectedAbility;
                 controller.SetValue = sign.SetValue;
                 controller.RevertDirection = sign.RevertDirection;
+                float height = sign.Height;
+                float width = sign.Width;
+                if (height == 0f || width == 0f)
+                    switch (sign.RevertDirection)
+                    {
+                        case CheckDirection.Left:
+                        case CheckDirection.Right:
+                            height = 600f;
+                            width = 1f;
+                            break;
+                        case CheckDirection.Up:
+                        case CheckDirection.Down:
+                            height = 1f;
+                            width = 600f;
+                            break;
+                        case CheckDirection.None:
+                            break;
+                    }
+                controller.Height = height;
+                controller.Width = width;
                 obstacleGameObject.SetActive(true);
                 continue;
             }
@@ -334,7 +354,6 @@ public static class StageBuilder
                         case CheckDirection.None:
                             break;
                     }
-                
                 controller.Height = height;
                 controller.Width = width;
                 obstacleGameObject.SetActive(true);

@@ -156,8 +156,9 @@
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
-					"XPosition": 97.06,
-					"YPosition": 14.26,
+					"XPosition": 87.6,
+					"YPosition": 24.72,
+					"Rotation": 90,
 					"GateRotation": 90,
 					"GateXPosition": 11.96,
 					"GateYPosition": 23.4
@@ -186,14 +187,66 @@
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
-					"XPosition": 101.92,
-					"YPosition": 25.4,
+					"XPosition": 48.47,
+					"YPosition": 11.4,
 					"SetValue": false,
 					"AffectedAbility": "hasAcidArmour",
 					"RevertDirection": 0
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 130.34,
+					"YPosition": 32.86,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
+					"XPosition": 97.0,
+					"YPosition": 14.26,
+					"GateRotation": 90,
+					"GateXPosition": 69.3,
+					"GateYPosition": 23.7
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 69.5,
+					"YPosition": 27.67,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 146.95,
+					"YPosition": 14.4,
+					"Width": 3,
+					"Height": 600,
+					"SetValue": false,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 0
 				}
 			],
-			"PreviewPoints": []
+			"PreviewPoints": [
+				{
+					"Item1": 48.47,
+					"Item2": 11.4
+				},
+				{
+					"Item1": 101.08,
+					"Item2": 37.4
+				},
+				{
+					"Item1": 175.69,
+					"Item2": 27.4
+				},
+				{
+					"Item1": 212.3,
+					"Item2": 18.46
+				},
+				{
+					"Item1": 87.6,
+					"Item2": 24.72
+				}
+			]
 		}
 	},
 	{
