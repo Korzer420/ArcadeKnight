@@ -27,7 +27,7 @@ internal class GorbsParkour : Minigame
 
     internal override MinigameType GetMinigameType() => MinigameType.GorbsParkour;
 
-    internal override void Start()
+    protected override void Start()
     {
         _score = 0;
         _lastState = -1;
@@ -35,7 +35,7 @@ internal class GorbsParkour : Minigame
         On.HeroController.FixedUpdate += HeroController_FixedUpdate;
     }
 
-    internal override void Conclude()
+    protected override void Conclude()
     {
         HeroController.instance.RUN_SPEED = 8.3f;
         HeroController.instance.WALK_SPEED = 6f;
@@ -71,6 +71,10 @@ internal class GorbsParkour : Minigame
         _score++;
         HeroController.instance.StartCoroutine(MinigameController.UpdateProgression(_score));
     }
+
+    internal override string GetCourseFile() => "ParkourCourses";
+
+    internal override void AdditionalEntranceSetup() => GameObject.Find("Inspect Region Ghost").SetActive(false);
 
     #endregion
 

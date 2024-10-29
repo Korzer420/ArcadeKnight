@@ -26,7 +26,8 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         ("White_Palace_06", "White Palace Fly (3)"),
         ("Fungus1_31", "_Scenery/fung_plat_float_02"),
         ("Fungus1_22", "Gate Switch"),
-        ("Fungus1_22", "Metal Gate")
+        ("Fungus1_22", "Metal Gate"),
+        ("Crossroads_01", "_Transition Gates/door1")
     };
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -40,6 +41,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         PreloadedObjects.Add("Block", preloadedObjects["Fungus1_31"]["_Scenery/fung_plat_float_02"]);
         PreloadedObjects.Add("Gate", preloadedObjects["Fungus1_22"]["Metal Gate"]);
         PreloadedObjects.Add("Switch", preloadedObjects["Fungus1_22"]["Gate Switch"]);
+        PreloadedObjects.Add("Door", preloadedObjects["Crossroads_01"]["_Transition Gates/door1"]);
         MinigameController.Initialize();
     }
 

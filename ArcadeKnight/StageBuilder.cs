@@ -3,11 +3,16 @@ using ArcadeKnight.Enums;
 using ArcadeKnight.Obstacles;
 using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
+using Modding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
+using static BossStatue;
 using LogType = KorzUtils.Enums.LogType;
+using Object = UnityEngine.Object;
 
 namespace ArcadeKnight;
 
@@ -43,6 +48,38 @@ public static class StageBuilder
 
     #region Methods
 
+    internal static void Initialize()
+    {
+        On.BossChallengeUI.LoadBoss_int_bool += BossChallengeUI_LoadBoss_int_bool;
+        ModHooks.GetPlayerVariableHook += ModHooks_GetPlayerVariableHook;
+        On.BossChallengeUI.Setup += BossChallengeUI_Setup;
+    }
+
+    internal static void CreateMinigameEntry()
+    {
+        GameObject tablet = Object.Instantiate(ArcadeKnight.PreloadedObjects["Tablet"]);
+        tablet.SetActive(true);
+        tablet.transform.position = MinigameController.ActiveMinigame.GetEntryPosition();
+        PlayMakerFSM fsm = tablet.LocateMyFSM("GG Boss UI");
+        fsm.FsmVariables.FindFsmString("Boss Name Key").Value = "MinigameTitle";
+        fsm.FsmVariables.FindFsmString("Description Key").Value = "MinigameDesc";
+        fsm.GetState("Reset Player").AddActions(() => MinigameController.CurrentState = MinigameState.Active);
+        fsm.GetState("Open UI").AddActions(() => HeroController.instance.StartCoroutine(MinigameController.ControlSelection()));
+        fsm.GetState("Close UI").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
+        fsm.GetState("Take Control").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
+        fsm.GetState("Change Scene").GetFirstAction<BeginSceneTransition>().entryGateName.Value = "minigame_start";
+
+        GameObject entryPoint = new("minigame_exit");
+        entryPoint.transform.position = MinigameController.ActiveMinigame.GetEntryPosition();
+        TransitionPoint transitionPoint = entryPoint.AddComponent<TransitionPoint>();
+        transitionPoint.isADoor = true;
+        transitionPoint.dontWalkOutOfDoor = true;
+        transitionPoint.entryPoint = "minigame_exit";
+        transitionPoint.targetScene = "";
+        transitionPoint.respawnMarker = entryPoint.AddComponent<HazardRespawnMarker>();
+        CoroutineHelper.WaitFrames(MinigameController.ActiveMinigame.AdditionalEntranceSetup, false);
+    }
+
     internal static void SetupLevel(CourseData course)
     {
         AbilityController.Enable(course.Restrictions);
@@ -50,6 +87,7 @@ public static class StageBuilder
         CreateStart(new Vector3(course.StartPositionX, course.StartPositionY), course.StartPositionX > course.EndPositionX);
         CreateEnd(new Vector3(course.EndPositionX, course.EndPositionY));
         CreateObstacles(course.Obstacles);
+        
         MinigameController.Tracker.GetComponent<TextMeshPro>().text = "0";
         MinigameController.Tracker.SetActive(false);
 
@@ -95,7 +133,7 @@ public static class StageBuilder
 
             // Disable transitions and replace them with hazard respawns.
             foreach (TransitionPoint transition in TransitionPoint.TransitionPoints)
-                if (!transition.name.Contains("minigame") && transition.name != "Cancel")
+                if (!transition.name.Contains("minigame") && transition.name != "Cancel" && transition.name != "Practice_Gate")
                 {
                     GameObject collider = new("Entry Blocker");
                     collider.AddComponent<BoxCollider2D>().size = transition.GetComponent<BoxCollider2D>().size;
@@ -247,6 +285,66 @@ public static class StageBuilder
             obstacleGameObject.transform.SetRotationZ(obstacle.Rotation);
             obstacleGameObject.SetActive(true);
         }
+    }
+
+    private static void CreatePracticeDoor(Vector3 position)
+    {
+        GameObject door = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Door"]);
+        door.name = "Practice_Gate";
+        door.transform.position = position;
+        door.SetActive(true);
+        PlayMakerFSM fsm = door.LocateMyFSM("Door Control");
+        fsm.FsmVariables.FindFsmString("New Scene").Value = MinigameController.ActiveMinigame.Courses[MinigameController.SelectedLevel].Scene;
+        fsm.FsmVariables.FindFsmBool("Crossroads Ascent").Value = false;
+        fsm.FsmVariables.FindFsmString("Entry Gate").Value = "minigame_start";
+    }
+
+    #endregion
+
+    #region Eventhandler
+
+    private static void BossChallengeUI_LoadBoss_int_bool(On.BossChallengeUI.orig_LoadBoss_int_bool orig, BossChallengeUI self, int level, bool doHideAnim)
+    {
+        if (!UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Contains("GG"))
+        {
+            MinigameController.SelectedDifficulty = (Difficulty)level;
+            FieldInfo info = typeof(BossChallengeUI).GetField("bossStatue", BindingFlags.NonPublic | BindingFlags.Instance);
+            BossStatue statue = info.GetValue(self) as BossStatue;
+            statue.bossScene.sceneName = ActiveMinigame.Courses[SelectedLevel].Scene;
+        }
+        orig(self, level, doHideAnim);
+    }
+
+    private static object ModHooks_GetPlayerVariableHook(Type type, string name, object value)
+    {
+        if (name == "ArcadeKnightDummy")
+            return new Completion()
+            {
+                completedTier2 = true,
+                seenTier3Unlock = true,
+                isUnlocked = true,
+                hasBeenSeen = true,
+            };
+        return value;
+    }
+
+    private static void BossChallengeUI_Setup(On.BossChallengeUI.orig_Setup orig, BossChallengeUI self, BossStatue bossStatue, string bossNameSheet, string bossNameKey, string descriptionSheet, string descriptionKey)
+    {
+        if (bossStatue == null)
+        {
+            bossStatue = new BossStatue
+            {
+                statueStatePD = "ArcadeKnightDummy",
+                bossScene = new()
+                {
+                    sceneName = "Will be overwritten anyway"
+                },
+                hasNoTiers = false,
+                dreamReturnGate = new()
+            };
+
+        }
+        orig(self, bossStatue, bossNameSheet, bossNameKey, descriptionSheet, descriptionKey);
     }
 
     #endregion

@@ -66,79 +66,16 @@ public static class MinigameController
 
     public static bool DamagePenaltyActive { get; set; }
 
+    public static bool PracticeMode { get; set; }
+
     #endregion
 
     #region Constructors
 
     static MinigameController()
     {
-        Minigames.Add(new GorbsParkour()
-        {
-            //Courses = NormalCourses.GorbCourses
-        });
-        string customCourseDirectory = Path.Combine(Path.GetDirectoryName(typeof(ArcadeKnight).Assembly.Location), "CustomCourses");
-        if (!Directory.Exists(customCourseDirectory))
-            return;
-        string[] files = Directory.GetFiles(customCourseDirectory, "*.json");
-        if (files.Length == 0)
-            return;
-        LogHelper.Write<ArcadeKnight>("Found custom courses files.", includeScene: false);
-        foreach (string file in files)
-        {
-            string fileContent = File.ReadAllText(file);
-            try
-            {
-                List<CourseMetaData> courseData = [];
-                try
-                {
-                    CourseMetaData singleCourseData = JsonConvert.DeserializeObject<CourseMetaData>(fileContent, new JsonSerializerSettings()
-                    {
-                        TypeNameHandling = TypeNameHandling.Auto,
-                    });
-                    courseData.Add(singleCourseData);
-                }
-                catch (Exception)
-                {
-                    courseData = JsonConvert.DeserializeObject<List<CourseMetaData>>(fileContent, new JsonSerializerSettings()
-                    {
-                        TypeNameHandling = TypeNameHandling.Auto,
-                    });
-                }
-                
-                LogHelper.Write<ArcadeKnight>($"Found {courseData.Count} course(s) in file {Path.GetFileName(file)}.", includeScene: false);
-                foreach (CourseMetaData metaData in courseData)
-                {
-                    Minigame minigame = Minigames.FirstOrDefault(x => x.GetMinigameType() == metaData.Minigame);
-                    if (minigame == null)
-                    {
-                        LogHelper.Write<ArcadeKnight>($"Couldn't find minigame of entry {metaData.Name}.", LogType.Error, false);
-                        continue;
-                    }
-
-                    string validationMessages = ValidateCourseData(metaData);
-                    if (!string.IsNullOrEmpty(validationMessages))
-                    {
-                        LogHelper.Write<ArcadeKnight>($"Course {metaData.Name} has an invalid configuration. Validation messages: {validationMessages}", LogType.Error, false);
-                        continue;
-                    }
-                    if (minigame.Courses.Any(x => x.Name == metaData.Name))
-                    {
-                        LogHelper.Write<ArcadeKnight>($"A course with the name {metaData.Name} already exists in the minigame {metaData.Minigame}. This entry will be skipped.", LogType.Warning, false);
-                        continue;
-                    }
-                    // Highscores will be saved in the save data and are not taken from the initial file.
-                    metaData.EasyCourse.Highscore = "";
-                    metaData.NormalCourse.Highscore = "";
-                    metaData.HardCourse.Highscore = "";
-                    minigame.Courses.Add(metaData);
-                    LogHelper.Write<ArcadeKnight>($"Added course {metaData.Name}.", includeScene: false);
-                }
-            }
-            catch (Exception exception)
-            {
-                LogHelper.Write<ArcadeKnight>($"Couldn't process file {Path.GetFileName(file)}: ", exception, false);
-            }
-        }
+        Minigames.Add(new GorbsParkour());
+        CourseLoader.Load();
     }
 
     #endregion
@@ -150,11 +87,10 @@ public static class MinigameController
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
         ModHooks.AfterPlayerDeadHook += ModHooks_AfterPlayerDeadHook;
         On.UIManager.ReturnToMainMenu += UIManager_ReturnToMainMenu;
-        On.BossChallengeUI.LoadBoss_int_bool += BossChallengeUI_LoadBoss_int_bool;
-        ModHooks.GetPlayerVariableHook += ModHooks_GetPlayerVariableHook;
         On.CameraController.LockToArea += CameraController_LockToArea;
-        On.BossChallengeUI.Setup += BossChallengeUI_Setup;
         ModHooks.LanguageGetHook += ModHooks_LanguageGetHook;
+        ModHooks.TakeHealthHook += ModHooks_TakeHealthHook;
+        StageBuilder.Initialize();
     }
 
     public static void EndMinigame()
@@ -163,7 +99,7 @@ public static class MinigameController
         AbilityController.Disable();
         SelectedLevel = 0;
         DamagePenaltyActive = false;
-        ActiveMinigame?.Conclude();
+        ActiveMinigame?.End();
         ActiveMinigame = null;
         Tracker.SetActive(false);
         _tracker.transform.position = new(0f, 6.5f, 1f);
@@ -204,7 +140,7 @@ public static class MinigameController
         }
     }
 
-    private static IEnumerator ControlSelection()
+    internal static IEnumerator ControlSelection()
     {
         Transform panel = UnityEngine.Object.FindObjectOfType<BossChallengeUI>().transform.Find("Panel");
         panel.Find("BossName_Text").position = new Vector3(7.4f, 4f);
@@ -336,45 +272,8 @@ public static class MinigameController
         UnityEngine.Object.Destroy(movingObject);
         HeroController.instance.RegainControl();
         PDHelper.DisablePause = false;
-        PlayerData.instance.isInvincible = false;
-        Tracker.SetActive(true);
         PlayingPreview = false;
-        ActiveMinigame.Start();
-    }
-
-    private static string ValidateCourseData(CourseMetaData courseMetaData)
-    {
-        string errorMessage = string.Empty;
-        if (string.IsNullOrEmpty(courseMetaData.Name))
-            errorMessage += "Course needs a name.\r\n";
-        if (string.IsNullOrEmpty(courseMetaData.Scene))
-            errorMessage += "No scene provided.\r\n";
-        if (courseMetaData.EasyCourse == null || courseMetaData.NormalCourse == null || courseMetaData.HardCourse == null)
-            errorMessage += "Not all three difficulties provided.";
-        else
-        {
-            // Ensure that we don't have null values.
-            courseMetaData.EasyCourse.ObjectsToRemove ??= [];
-            courseMetaData.NormalCourse.ObjectsToRemove ??= [];
-            courseMetaData.HardCourse.ObjectsToRemove ??= [];
-            courseMetaData.EasyCourse.Obstacles ??= [];
-            courseMetaData.NormalCourse.Obstacles ??= [];
-            courseMetaData.HardCourse.Obstacles ??= [];
-            courseMetaData.EasyCourse.Restrictions ??= [];
-            courseMetaData.NormalCourse.Restrictions ??= [];
-            courseMetaData.HardCourse.Restrictions ??= [];
-        }
-        if (courseMetaData.EasyCourse.StartPositionX == 0 || courseMetaData.EasyCourse.StartPositionY == 0
-            || courseMetaData.EasyCourse.EndPositionX == 0 || courseMetaData.EasyCourse.EndPositionY == 0)
-            errorMessage += "Easy course requires the start and end position to be assigned.";
-        if (courseMetaData.NormalCourse.StartPositionX == 0 || courseMetaData.NormalCourse.StartPositionY == 0
-            || courseMetaData.NormalCourse.EndPositionX == 0 || courseMetaData.NormalCourse.EndPositionY == 0)
-            errorMessage += "Normal course requires the start and end position to be assigned.";
-        if (courseMetaData.HardCourse.StartPositionX == 0 || courseMetaData.HardCourse.StartPositionY == 0
-            || courseMetaData.HardCourse.EndPositionX == 0 || courseMetaData.HardCourse.EndPositionY == 0)
-            errorMessage += "Hard course requires the start and end position to be assigned.";
-        
-        return errorMessage.TrimStart();
+        ActiveMinigame.Begin();
     }
 
     #endregion
@@ -386,45 +285,17 @@ public static class MinigameController
         if (Minigames.FirstOrDefault(x => x.GetEntryScene() == newScene.name) is Minigame minigame && CurrentState == MinigameState.Inactive)
         {
             ActiveMinigame = minigame;
-            GameObject tablet = UnityEngine.Object.Instantiate(ArcadeKnight.PreloadedObjects["Tablet"]);
-            tablet.SetActive(true);
-            tablet.transform.position = minigame.GetEntryPosition();
-            PlayMakerFSM fsm = tablet.LocateMyFSM("GG Boss UI");
-            fsm.FsmVariables.FindFsmString("Boss Name Key").Value = "MinigameTitle";
-            fsm.FsmVariables.FindFsmString("Description Key").Value = "MinigameDesc";
-            fsm.GetState("Reset Player").AddActions(() => 
-            {
-                CurrentState = MinigameState.Active;
-                PlayingPreview = true;
-            });
-            fsm.GetState("Open UI").AddActions(() => HeroController.instance.StartCoroutine(ControlSelection()));
-            fsm.GetState("Close UI").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
-            fsm.GetState("Take Control").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
-            fsm.GetState("Change Scene").GetFirstAction<BeginSceneTransition>().entryGateName.Value = "minigame_start";
-
-            GameObject entryPoint = new("minigame_exit");
-            entryPoint.transform.position = minigame.GetEntryPosition();
-            TransitionPoint transitionPoint = entryPoint.AddComponent<TransitionPoint>();
-            transitionPoint.isADoor = true;
-            transitionPoint.dontWalkOutOfDoor = true;
-            transitionPoint.entryPoint = "minigame_exit";
-            transitionPoint.targetScene = "";
-            transitionPoint.respawnMarker = entryPoint.AddComponent<HazardRespawnMarker>();
-
+            StageBuilder.CreateMinigameEntry();
         }
         else if (CurrentState == MinigameState.Active)
-        {
             StageBuilder.SetupLevel(SelectedDifficulty switch
             {
                 Difficulty.Easy => ActiveMinigame.Courses[SelectedLevel].EasyCourse,
                 Difficulty.Hard => ActiveMinigame.Courses[SelectedLevel].HardCourse,
                 _ => ActiveMinigame.Courses[SelectedLevel].NormalCourse
             });
-        }
         else
             ActiveMinigame = null;
-        if (newScene.name == "Cliffs_02")
-            GameObject.Find("Inspect Region Ghost").SetActive(false);
     }
 
     private static void ModHooks_AfterPlayerDeadHook() => EndMinigame();
@@ -435,36 +306,10 @@ public static class MinigameController
         return orig(self);
     }
 
-    private static object ModHooks_GetPlayerVariableHook(Type type, string name, object value)
-    {
-        if (name == "ArcadeKnightDummy")
-            return new Completion()
-            {
-                completedTier2 = true,
-                seenTier3Unlock = true,
-                isUnlocked = true,
-                hasBeenSeen = true,
-            };
-        return value;
-    }
-
     private static void CameraController_LockToArea(On.CameraController.orig_LockToArea orig, CameraController self, CameraLockArea lockArea)
     {
-        if (PlayingPreview)
+        if (!PlayingPreview)
             orig(self, lockArea);
-    }
-
-    private static void BossChallengeUI_LoadBoss_int_bool(On.BossChallengeUI.orig_LoadBoss_int_bool orig, BossChallengeUI self, int level, bool doHideAnim)
-    {
-        if (!UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Contains("GG"))
-        {
-            SelectedDifficulty = (Difficulty)level;
-            FieldInfo info = typeof(BossChallengeUI).GetField("bossStatue", BindingFlags.NonPublic | BindingFlags.Instance);
-            BossStatue statue = info.GetValue(self) as BossStatue;
-            statue.bossScene.sceneName = ActiveMinigame.Courses[SelectedLevel].Scene;
-            CurrentState = MinigameState.Active;
-        }
-        orig(self, level, doHideAnim);
     }
 
     private static string ModHooks_LanguageGetHook(string key, string sheetTitle, string orig)
@@ -476,23 +321,11 @@ public static class MinigameController
         return orig;
     }
 
-    private static void BossChallengeUI_Setup(On.BossChallengeUI.orig_Setup orig, BossChallengeUI self, BossStatue bossStatue, string bossNameSheet, string bossNameKey, string descriptionSheet, string descriptionKey)
+    private static int ModHooks_TakeHealthHook(int damage)
     {
-        if (bossStatue == null)
-        {
-            bossStatue = new BossStatue
-            {
-                statueStatePD = "ArcadeKnightDummy",
-                bossScene = new()
-                {
-                    sceneName = "Cliffs_02"
-                },
-                hasNoTiers = false,
-                dreamReturnGate = new()
-            };
-
-        }
-        orig(self, bossStatue, bossNameSheet, bossNameKey, descriptionSheet, descriptionKey);
+        if (PracticeMode)
+            damage = 0;
+        return damage;
     }
 
     #endregion

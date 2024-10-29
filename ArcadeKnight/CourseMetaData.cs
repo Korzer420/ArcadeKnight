@@ -20,5 +20,7 @@ public class CourseMetaData
 
     public CourseData HardCourse { get; set; }
 
+    public bool IsCustomCourse { get; set; }
+
     #endregion
 }

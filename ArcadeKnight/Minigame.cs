@@ -1,12 +1,15 @@
 ﻿using ArcadeKnight.Enums;
 using Modding;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace ArcadeKnight;
 
 public abstract class Minigame
 {
+    protected bool _active;
+
     #region Properties
 
     public List<CourseMetaData> Courses { get; set; } = [];
@@ -21,17 +24,39 @@ public abstract class Minigame
 
     #region Methods
 
+    internal void Begin()
+    {
+        if (_active)
+            return;
+        _active = true;
+        PlayerData.instance.isInvincible = false;
+        MinigameController.Tracker.SetActive(true);
+        Start();
+    }
+
+    internal void End()
+    {
+        if (!_active)
+            return;
+        _active = false;
+        Conclude();
+        // Safety check.
+        MinigameController.PracticeMode = false;
+    }
+
     internal abstract string GetTitle();
     
     internal abstract string GetDescription();
 
     internal abstract string GetEntryScene();
 
+    internal abstract string GetCourseFile();
+
     internal abstract Vector3 GetEntryPosition();
 
-    internal abstract void Start();
+    protected abstract void Start();
 
-    internal abstract void Conclude();
+    protected abstract void Conclude();
 
     internal abstract MinigameType GetMinigameType();
 
@@ -40,6 +65,8 @@ public abstract class Minigame
     internal abstract void ApplyScorePenalty();
 
     internal virtual bool HasPracticeMode() => false;
+
+    internal virtual void AdditionalEntranceSetup() { }
 
     #endregion
 

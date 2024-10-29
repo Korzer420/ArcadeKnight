@@ -27,6 +27,8 @@
 	</Target>
 
 	<ItemGroup>
+	  <None Remove="Resources\Data\ParkourCourses.json" />
+	  <None Remove="Resources\Data\TrialCourses.json" />
 	  <None Remove="Resources\Sprites\Allow_Damage_Penalty.png" />
 	  <None Remove="Resources\Sprites\Allow_Dash.png" />
 	  <None Remove="Resources\Sprites\Allow_Double_Jump.png" />
@@ -40,6 +42,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Data\ParkourCourses.json" />
+	  <EmbeddedResource Include="Resources\Data\TrialCourses.json" />
 	  <EmbeddedResource Include="Resources\Sprites\Allow_Dash.png" />
 	  <EmbeddedResource Include="Resources\Sprites\Allow_Double_Jump.png" />
 	  <EmbeddedResource Include="Resources\Sprites\Allow_Superdash.png" />

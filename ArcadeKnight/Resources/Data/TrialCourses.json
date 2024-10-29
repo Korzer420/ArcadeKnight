@@ -1,0 +1,864 @@
+[
+	{
+		"Name": "Trust",
+		"Scene": "Cliffs_02",
+		"Author": "Korz",
+		"Minigame": 1,
+		"EasyCourse":
+		{
+			"StartPositionX": 4.0938,
+			"StartPositionY": 24.4081,
+			"EndPositionX": 222.89,
+			"EndPositionY": 28.4,
+			"Restrictions":[],
+			"ObjectsToRemove":
+			[
+				"plat_float_01",
+				"plat_float_01 (1)",
+				"plat_float_02",
+				"plat_float_03",
+				"plat_float_05"
+			],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 56.66,
+					"YPosition": 6.4,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 116.04,
+					"YPosition": 31.4,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 35.52,
+					"YPosition": 11.4,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 89.64,
+					"YPosition": 6.4,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 129.59,
+					"YPosition": 32.86,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 124.49,
+					"YPosition": 36,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 224.49,
+					"YPosition": 35.3,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 121.2908,
+					"YPosition": 32.5081,
+					"SetValue": true,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 0
+				}
+			],
+			"PreviewPoints":
+			[
+				{"Item1": 49.58, "Item2": 9.6},
+				{"Item1": 86.45, "Item2": 9.6},
+				{"Item1": 115.78, "Item2": 32.76},
+				{"Item1": 137.54, "Item2": 30.9},
+				{"Item1": 161.9, "Item2": 22.24},
+				{"Item1": 174.03, "Item2": 28.95},
+			]
+		},
+		"NormalCourse":
+		{
+			"StartPositionX": 4.0938,
+			"StartPositionY": 24.4081,
+			"EndPositionX": 222.89,
+			"EndPositionY": 28.4,
+			"Restrictions":
+			[
+				"hasSuperDash"
+			],
+			"ObjectsToRemove":[],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 56.66,
+					"YPosition": 6.4,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 116.04,
+					"YPosition": 31.4,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 199.25,
+					"YPosition": 28.41,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 178.02,
+					"YPosition": 23.41,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 215.43,
+					"YPosition": 28.41,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 6.77,
+					"YPosition": 25.4,
+					"SetValue": false,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 0
+				}
+			],
+			"PreviewPoints":
+			[
+				{"Item1": 49.58, "Item2": 9.6},
+				{"Item1": 86.45, "Item2": 9.6},
+				{"Item1": 115.78, "Item2": 32.76},
+				{"Item1": 137.54, "Item2": 30.9},
+				{"Item1": 161.9, "Item2": 22.24},
+				{"Item1": 174.03, "Item2": 28.95},
+			]
+		},
+		"HardCourse":
+		{
+			"StartPositionX": 4.0938,
+			"StartPositionY": 24.4081,
+			"EndPositionX": 222.89,
+			"EndPositionY": 28.4,
+			"Restrictions":
+			[
+				"hasSuperDash"
+			],
+			"ObjectsToRemove":[],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 6.77,
+					"YPosition": 25.4,
+					"SetValue": false,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 0
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 11.06,
+					"YPosition": 22.41,
+					"SetValue": false,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 0
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 79.5,
+					"YPosition": 10.3,
+					"SetValue": false,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 0
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 61.54,
+					"YPosition": 7.4,
+					"SetValue": true,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 0
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 198.79,
+					"YPosition": 29.4,
+					"SetValue": true,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 0
+				}
+			],
+			"PreviewPoints":
+			[
+				{"Item1": 49.58, "Item2": 9.6},
+				{"Item1": 86.45, "Item2": 9.6},
+				{"Item1": 115.78, "Item2": 32.76},
+				{"Item1": 137.54, "Item2": 30.9},
+				{"Item1": 161.9, "Item2": 22.24},
+				{"Item1": 174.03, "Item2": 28.95},
+			]
+		}
+	},
+	{
+		"Name": "Are you blind?",
+		"Scene": "Fungus1_31",
+		"Author": "Korz",
+		"Minigame": 1,
+		"EasyCourse":
+		{
+			"StartPositionX": 30.51,
+			"StartPositionY": 115.4,
+			"EndPositionX": 4.48,
+			"EndPositionY": 125.94,
+			"Restrictions":[],
+			"ObjectsToRemove":
+			[
+				"fung_plat_float_09",
+				"fung_plat_float_08 (1)",
+				"fung_plat_float_07",
+				"Fat Fly (1)"
+			],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 25.21,
+					"YPosition": 112.97,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 25.21,
+					"YPosition": 115.57,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 25.21,
+					"YPosition": 110.27,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 25.21,
+					"YPosition": 107.57,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 25.22,
+					"YPosition": 84.4,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 25.22,
+					"YPosition": 87.14,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 25.22,
+					"YPosition": 89.89,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 25.22,
+					"YPosition": 92.54,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 17.4491,
+					"YPosition": 76.3865,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 17.4491,
+					"YPosition": 79.08,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 17.4491,
+					"YPosition": 81.78,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 15.44,
+					"YPosition": 103.26,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 15.44,
+					"YPosition": 105.96,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 15.44,
+					"YPosition": 108.64,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+			],
+			"PreviewPoints":
+			[
+				{"Item1": 29.52, "Item2": 74.93},
+				{"Item1": 21.13, "Item2": 79.88},
+				{"Item1": 9.61, "Item2": 98.23},
+			]
+		},
+		"NormalCourse":
+		{
+			"StartPositionX": 17.93,
+			"StartPositionY": 3.41,
+			"EndPositionX": 4.48,
+			"EndPositionY": 125.94,
+			"Restrictions":[],
+			"ObjectsToRemove":
+			[
+				"Toll Gate",	
+				"Toll Gate (1)",
+				"RestBench",
+				"Toll Gate Machine"
+			],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 18.06,
+					"YPosition": 45.8,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 14.45,
+					"YPosition": 51.4,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 14.45,
+					"YPosition": 54.1,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 32.44,
+					"YPosition": 53.2,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 17.83,
+					"YPosition": 59.4,
+					"SetValue": false,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 3
+				}
+			],
+			"PreviewPoints":[]
+		},
+		"HardCourse":
+		{
+			"StartPositionX": 17.93,
+			"StartPositionY": 3.41,
+			"EndPositionX": 4.48,
+			"EndPositionY": 125.94,
+			"Restrictions":[],
+			"ObjectsToRemove":
+			[
+				"Toll Gate",	
+				"Toll Gate (1)",
+				"RestBench",
+				"Toll Gate Machine",
+				"Mossman_Runner"
+			],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 4.7,
+					"YPosition": 124,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 2,
+					"YPosition": 124,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 26.86,
+					"YPosition": 52.4,
+					"SetValue": false,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 9.59,
+					"YPosition": 73.4,
+					"SetValue": false,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 8.67,
+					"YPosition": 117.85,
+					"SetValue": true,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 30.2,
+					"YPosition": 124.4,
+					"SetValue": true,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 16.16,
+					"YPosition": 127.4,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 4.29,
+					"YPosition": 7.4,
+					"SetValue": false,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 15.07,
+					"YPosition": 46.41,
+					"SetValue": true,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 3
+				}
+			],
+			"PreviewPoints":
+			[
+				{"Item1": 4.29, "Item2": 7.4},
+				{"Item1": 8.67, "Item2": 117.85},
+				{"Item1": 30.21, "Item2": 125.4}
+			]
+		}
+	},
+	{
+		"Name": "My future",
+		"Scene": "Abyss_01",
+		"Author": "Korz",
+		"Minigame": 1,
+		"EasyCourse":
+		{
+			"StartPositionX": 22.68,
+			"StartPositionY": 158.2,
+			"EndPositionX": 14.97,
+			"EndPositionY": 9.4,
+			"Restrictions":[],
+			"ObjectsToRemove":
+			[
+				"Geo Rock 2 (1)"
+			],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 15.5,
+					"YPosition": 120.7,
+					"Rotation": 0,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 18.2,
+					"YPosition": 120.7,
+					"Rotation": 0,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 20.9,
+					"YPosition": 120.7,
+					"Rotation": 0,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 23.6,
+					"YPosition": 120.7,
+					"Rotation": 0,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 26.3,
+					"YPosition": 120.7,
+					"Rotation": 0,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
+					"XPosition": 6.02,
+					"YPosition": 54.4,
+					"GateXPosition": 14.59,
+					"GateYPosition": 54.76
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
+					"XPosition": 25.87,
+					"YPosition": 44.4,
+					"GateXPosition": 15.09,
+					"GateYPosition": 12.81
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 13.4,
+					"YPosition": 11.11,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 16.7,
+					"YPosition": 11.11,
+					"Rotation": 90,
+					"ObjectName": "Platform"
+				}
+			],
+			"PreviewPoints": 
+			[
+				{"Item1": 14.45, "Item2": 162.94}
+			]
+		},
+		"NormalCourse":
+		{
+			"StartPositionX": 14.97,
+			"StartPositionY": 9.4,
+			"EndPositionX": 23,
+			"EndPositionY": 90.9,
+			"Restrictions":[],
+			"ObjectsToRemove": [],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 16.67,
+					"YPosition": 74.64,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 16.67,
+					"YPosition": 77.44,
+					"SetValue": false,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 13.5,
+					"YPosition": 73.4,
+					"SetValue": true,
+					"AffectedAbility": "canDash",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 14.35,
+					"YPosition": 34.4,
+					"SetValue": false,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 9.06,
+					"YPosition": 11.4,
+					"SetValue": false,
+					"AffectedAbility": "canDash",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
+					"XPosition": 21.32,
+					"YPosition": 158.98,
+					"GateRotation": 90,
+					"GateXPosition": 15.53,
+					"GateYPosition": 91.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 5.18,
+					"YPosition": 121.49,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 15.5,
+					"YPosition": 120.7,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 18.2,
+					"YPosition": 120.7,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 20.9,
+					"YPosition": 120.7,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 23.6,
+					"YPosition": 120.7,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 26.3,
+					"YPosition": 120.7,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 3.12,
+					"YPosition": 139.29,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 5.82,
+					"YPosition": 139.29,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 8.52,
+					"YPosition": 139.29,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				}
+			],
+			"PreviewPoints": 
+			[
+				{"Item1": 14.45, "Item2": 162.94}
+			]
+		},
+		"HardCourse":
+		{
+			"StartPositionX": 14.97,
+			"StartPositionY": 9.4,
+			"EndPositionX": 22.68,
+			"EndPositionY": 158.2,
+			"Restrictions":[],
+			"ObjectsToRemove":
+			[
+				"Roof Collider (2)",
+				"elev_plat_l 1",
+				"Ruins Flying Sentry",
+				"Ruins Flying Sentry (1)"
+			],
+			"Obstacles":
+			[
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 9.42,
+					"YPosition": 17.46,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 26.33,
+					"YPosition": 24.6,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 16.75,
+					"YPosition": 32,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 24.49,
+					"YPosition": 71.95,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 20.78,
+					"YPosition": 113.98,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 13.99,
+					"YPosition": 121.4,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 2.5,
+					"YPosition": 131.28,
+					"Rotation": 0,
+					"ObjectName": "Wingmould"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 10.88,
+					"YPosition": 155.28,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 13.52,
+					"YPosition": 155.28,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 16.22,
+					"YPosition": 155.28,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 18.92,
+					"YPosition": 155.28,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				,
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 21.62,
+					"YPosition": 155.28,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 24.32,
+					"YPosition": 155.28,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 27.02,
+					"YPosition": 155.28,
+					"Rotation": 180,
+					"ObjectName": "Platform"
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 11.59,
+					"YPosition": 144.4,
+					"SetValue": false,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 15.4,
+					"YPosition": 134.4,
+					"SetValue": true,
+					"AffectedAbility": "hasWalljump",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 20.89,
+					"YPosition": 11.4,
+					"SetValue": true,
+					"AffectedAbility": "damagePenalty",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 9.43,
+					"YPosition": 11.4,
+					"SetValue": false,
+					"AffectedAbility": "hasWalljump",
+					"RevertDirection": 3
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 13.43,
+					"YPosition": 73.4,
+					"SetValue": false,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 3
+				}
+			],
+			"PreviewPoints": 
+			[
+				{"Item1":14.45, "Item2": 162.94}
+			]
+		}
+	}
+]
