@@ -42,6 +42,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         PreloadedObjects.Add("Gate", preloadedObjects["Fungus1_22"]["Metal Gate"]);
         PreloadedObjects.Add("Switch", preloadedObjects["Fungus1_22"]["Gate Switch"]);
         PreloadedObjects.Add("Door", preloadedObjects["Crossroads_01"]["_Transition Gates/door1"]);
+        PreloadedObjects["Door"].transform.position = new(0f,0f);
         MinigameController.Initialize();
     }
 

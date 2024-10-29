@@ -33,12 +33,15 @@
 	  <None Remove="Resources\Sprites\Allow_Dash.png" />
 	  <None Remove="Resources\Sprites\Allow_Double_Jump.png" />
 	  <None Remove="Resources\Sprites\Allow_Superdash.png" />
+	  <None Remove="Resources\Sprites\Allow_Tear.png" />
 	  <None Remove="Resources\Sprites\Allow_Wall_Jump.png" />
 	  <None Remove="Resources\Sprites\No_Dash.png" />
 	  <None Remove="Resources\Sprites\No_Double_Jump.png" />
 	  <None Remove="Resources\Sprites\No_Pogo_Spikes.png" />
 	  <None Remove="Resources\Sprites\No_Superdash.png" />
+	  <None Remove="Resources\Sprites\No_Tear.png" />
 	  <None Remove="Resources\Sprites\No_Wall_Jump.png" />
+	  <None Remove="Resources\Sprites\SetHazardSpawn.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -47,13 +50,16 @@
 	  <EmbeddedResource Include="Resources\Sprites\Allow_Dash.png" />
 	  <EmbeddedResource Include="Resources\Sprites\Allow_Double_Jump.png" />
 	  <EmbeddedResource Include="Resources\Sprites\Allow_Superdash.png" />
+	  <EmbeddedResource Include="Resources\Sprites\Allow_Tear.png" />
 	  <EmbeddedResource Include="Resources\Sprites\Allow_Wall_Jump.png" />
 	  <EmbeddedResource Include="Resources\Sprites\No_Dash.png" />
 	  <EmbeddedResource Include="Resources\Sprites\No_Double_Jump.png" />
 	  <EmbeddedResource Include="Resources\Sprites\No_Pogo_Spikes.png" />
 	  <EmbeddedResource Include="Resources\Sprites\No_Superdash.png" />
 	  <EmbeddedResource Include="Resources\Sprites\Allow_Damage_Penalty.png" />
+	  <EmbeddedResource Include="Resources\Sprites\No_Tear.png" />
 	  <EmbeddedResource Include="Resources\Sprites\No_Wall_Jump.png" />
+	  <EmbeddedResource Include="Resources\Sprites\SetHazardSpawn.png" />
 	</ItemGroup>
 
 	<ItemGroup>

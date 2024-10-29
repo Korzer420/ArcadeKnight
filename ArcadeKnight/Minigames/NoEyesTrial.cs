@@ -1,16 +1,14 @@
 ﻿using ArcadeKnight.Enums;
+using ArcadeKnight.Extensions;
 using KorzUtils.Helper;
 using System;
+using System.Threading;
 using UnityEngine;
 
 namespace ArcadeKnight.Minigames;
 
-public class NoEyesTrial : Minigame
+public class NoEyesTrial : TimeMinigame
 {
-    private TimeSpan passedTime;
-
-    private int _penalties;
-
     private GameObject _viewBlocker;
 
     public GameObject ViewBlocker
@@ -28,14 +26,25 @@ public class NoEyesTrial : Minigame
             return _viewBlocker;
         }
     }
-
-    internal override void ApplyScorePenalty()
+    
+    internal override bool CheckHighscore(CourseData courseData)
     {
-        _penalties++;
-    }
-
-    internal override bool CheckHighscore(Difficulty difficulty, int level)
-    {
+        if (string.IsNullOrEmpty(courseData.Highscore))
+        {
+            courseData.Highscore = TimeSpan.FromSeconds(_passedTime).ToFormat("mm:ss.ff");
+            return true;
+        }
+        else if (TimeSpan.TryParse(courseData.Highscore, out TimeSpan highscore))
+        {
+            TimeSpan currentScore = TimeSpan.FromSeconds(_passedTime);
+            if (currentScore < highscore)
+            {
+                courseData.Highscore = currentScore.ToFormat("mm:ss.ff");
+                return true;
+            }
+        }
+        else
+            LogHelper.Write<ArcadeKnight>("Highscore data corrupted.", KorzUtils.Enums.LogType.Error);
         return false;
     }
 
@@ -44,8 +53,7 @@ public class NoEyesTrial : Minigame
         if (_viewBlocker != null)
             GameObject.Destroy(_viewBlocker);
         On.HutongGames.PlayMaker.Actions.SetVector3XYZ.DoSetVector3XYZ -= SetVector3XYZ_DoSetVector3XYZ;
-        passedTime = TimeSpan.FromMilliseconds(0);
-        _penalties = 0;
+        _passedTime = 0f;
     }
 
     internal override string GetDescription() => "Reach the goal while the room is shrouded in darkness.";
@@ -64,6 +72,7 @@ public class NoEyesTrial : Minigame
         if (MinigameController.SelectedDifficulty == Difficulty.Hard)
             ViewBlocker.SetActive(true);
         HeroController.instance.vignetteFSM.SendEvent("SCENE RESET");
+        base.Start();
     }
 
     internal override string GetCourseFile() => "TrialCourses";
@@ -86,4 +95,13 @@ public class NoEyesTrial : Minigame
     }
 
     internal override bool HasPracticeMode() => true;
+    /*
+        Fungus1_15
+        Start: 15.34f, 22.4f
+        End: 215.56f, 16.6f
+        Delete: "Vessel Fragment", "Vine Platform", "Vine Platform (1)", "Vine Platform (2)", "Dream Plant", "fung_plat_float_09 (1)", "Chest"
+        Platform at: 70.01, 13.32 + 177.34, 17.94 (Rotation 90) + 177.34, 20.65 (Rotation 90)
+        Lever: 175.76, 27.4 -> Gate: 177.34, 12.4 (Rotation 90)
+        Block CDash at: 101.92, 25.4
+     */
 }

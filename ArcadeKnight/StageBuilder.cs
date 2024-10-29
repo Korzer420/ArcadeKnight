@@ -68,8 +68,8 @@ public static class StageBuilder
             MinigameController.PracticeMode = ActiveMinigame.HasPracticeMode();
             MinigameController.CurrentState = MinigameState.Active;
         });
-        fsm.GetState("Open UI").AddActions(() => HeroController.instance.StartCoroutine(MinigameController.ControlSelection()));
-        fsm.GetState("Close UI").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
+        fsm.GetState("Open UI").AddActions(() => MinigameController.CoroutineHolder.StartCoroutine(MinigameController.ControlSelection()));
+        fsm.GetState("Close UI").AddActions(() => MinigameController.CoroutineHolder.StopCoroutine("ControlSelection"));
         fsm.GetState("Take Control").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
         fsm.GetState("Change Scene").GetFirstAction<BeginSceneTransition>().entryGateName.Value = "minigame_start";
 
@@ -109,7 +109,6 @@ public static class StageBuilder
                         {
                             Object.Destroy(gameObject);
                             found = true;
-                            break;
                         }
                     if (!found)
                         LogHelper.Write<ArcadeKnight>("Requested object to delete \"" + objectToRemove + "\" could not be found.", LogType.Warning, false);
@@ -159,12 +158,14 @@ public static class StageBuilder
                 if (course.PreviewPoints.Any())
                     previewPoints.AddRange(course.PreviewPoints);
                 previewPoints.Add(new(course.EndPositionX, course.EndPositionY));
-                HeroController.instance.StartCoroutine(MinigameController.PreviewCourse(previewPoints));
+                MinigameController.CoroutineHolder.StartCoroutine(MinigameController.PreviewCourse(previewPoints));
             }
             CoroutineHelper.WaitUntil(() => 
-            { 
+            {
                 if (!MinigameController.PracticeMode)
                     ActiveMinigame.Begin();
+                else
+                    GameHelper.DisplayMessage("Enter the dreamgate at the end to quit practice.");
                 PDHelper.IsInvincible = false;
             }, () => !MinigameController.PlayingPreview, false);
         }, HeroController.instance.CanInput, false);
@@ -239,8 +240,11 @@ public static class StageBuilder
         float height = HeroController.instance.transform.position.y - HeroController.instance.GetComponent<BoxCollider2D>().size.y / 2;
 
         GameObject teleporterSprite = Object.Instantiate(DreamGate);
+        teleporterSprite.name = "Cancel Sprite";
         teleporterSprite.transform.position = new Vector3(HeroController.instance.transform.position.x, height - 0.7f);
         teleporterSprite.SetActive(true);
+        foreach (SpriteRenderer spriteRenderer in teleporterSprite.GetComponentsInChildren<SpriteRenderer>())
+            spriteRenderer.sortingOrder = 2;
 
         GameObject teleporter = Object.Instantiate(ArcadeKnight.PreloadedObjects["CancelDoor"]);
         teleporter.name = "Cancel";
@@ -271,6 +275,7 @@ public static class StageBuilder
                     "hasSuperDash" => "Superdash",
                     "hasWalljump" => "Wall_Jump",
                     "canDash" => "Dash",
+                    "hasAcidArmour" => "Tear",
                     "damagePenalty" => "Damage_Penalty",
                     _ => "Error"
                 };
@@ -293,6 +298,40 @@ public static class StageBuilder
                 controller.AffectedFieldName = sign.AffectedAbility;
                 controller.SetValue = sign.SetValue;
                 controller.RevertDirection = sign.RevertDirection;
+                obstacleGameObject.SetActive(true);
+                continue;
+            }
+            else if (obstacle is RespawnObstacle respawn)
+            {
+                obstacleGameObject = new("Ability Blocker");
+                obstacleGameObject.SetActive(false);
+                obstacleGameObject.transform.position = new(respawn.XPosition, respawn.YPosition, 0.02f);
+                obstacleGameObject.transform.localScale = new(2f, 2f, 1f);
+                obstacleGameObject.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites/SetHazardSpawn");
+                RespawnSetter controller = obstacleGameObject.AddComponent<RespawnSetter>();
+                controller.ActivateOnce = respawn.ActivateOnce;
+
+                float height = respawn.Height;
+                float width = respawn.Width;
+                if (height == 0f || width == 0f)
+                    switch (respawn.RevertDirection)
+                    {
+                        case CheckDirection.Left:
+                        case CheckDirection.Right:
+                            height = 600f;
+                            width = 1f;
+                            break;
+                        case CheckDirection.Up:
+                        case CheckDirection.Down:
+                            height = 1f;
+                            width = 600f;
+                            break;
+                        case CheckDirection.None:
+                            break;
+                    }
+                
+                controller.Height = height;
+                controller.Width = width;
                 obstacleGameObject.SetActive(true);
                 continue;
             }

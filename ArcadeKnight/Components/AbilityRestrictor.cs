@@ -1,6 +1,5 @@
 ﻿using ArcadeKnight.Enums;
 using KorzUtils.Helper;
-using System.Diagnostics.Eventing.Reader;
 using UnityEngine;
 
 namespace ArcadeKnight.Components;
@@ -43,6 +42,8 @@ public class AbilityRestrictor : MonoBehaviour
             if (PlayerData.instance.GetBool(AffectedFieldName) == SetValue)
                 return;
             PlayerData.instance.SetBool(AffectedFieldName, SetValue);
+            if (AffectedFieldName == nameof(PlayerData.hasAcidArmour))
+                PlayMakerFSM.BroadcastEvent(SetValue ? "GET ACID ARMOUR" : "REMOVE ACID ARMOUR");
             Activated = true;
         }
     }
@@ -60,6 +61,8 @@ public class AbilityRestrictor : MonoBehaviour
                         return;
                     PlayerData.instance.SetBool(AffectedFieldName, !SetValue);
                     Activated = false;
+                    if (AffectedFieldName == nameof(PlayerData.hasAcidArmour))
+                        PlayMakerFSM.BroadcastEvent(SetValue ? "REMOVE ACID ARMOUR" : "GET ACID ARMOUR");
                     break;
                 default:
                     break;

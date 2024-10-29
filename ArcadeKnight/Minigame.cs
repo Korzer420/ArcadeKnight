@@ -1,7 +1,6 @@
 ﻿using ArcadeKnight.Enums;
 using Modding;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 namespace ArcadeKnight;
@@ -44,7 +43,7 @@ public abstract class Minigame
     }
 
     internal abstract string GetTitle();
-    
+
     internal abstract string GetDescription();
 
     internal abstract string GetEntryScene();
@@ -59,7 +58,7 @@ public abstract class Minigame
 
     internal abstract MinigameType GetMinigameType();
 
-    internal abstract bool CheckHighscore(Difficulty difficulty, int level);
+    internal abstract bool CheckHighscore(CourseData runCourse);
 
     internal abstract void ApplyScorePenalty();
 

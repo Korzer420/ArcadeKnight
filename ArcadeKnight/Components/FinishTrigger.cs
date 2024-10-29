@@ -54,7 +54,7 @@ public class FinishTrigger : MonoBehaviour
             timePassed += Time.deltaTime;
             yield return null;
         }
-        if (MinigameController.ActiveMinigame.CheckHighscore(MinigameController.SelectedDifficulty, MinigameController.SelectedLevel))
+        if (MinigameController.ActiveMinigame.CheckHighscore(MinigameController.ActiveCourse))
             MinigameController.Tracker.GetComponent<TextMeshPro>().text = MinigameController.Tracker.GetComponent<TextMeshPro>().text + "\r\nNew Highscore!";
         timePassed = 0f;
         while(timePassed < 3f)

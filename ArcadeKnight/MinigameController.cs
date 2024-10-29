@@ -1,21 +1,14 @@
 ﻿using ArcadeKnight.Components;
 using ArcadeKnight.Enums;
 using ArcadeKnight.Minigames;
-using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
 using Modding;
-using Newtonsoft.Json;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static BossStatue;
-using LogType = KorzUtils.Enums.LogType;
 
 namespace ArcadeKnight;
 
@@ -68,6 +61,15 @@ public static class MinigameController
 
     public static bool PracticeMode { get; set; }
 
+    public static Dummy CoroutineHolder { get; set; }
+
+    public static CourseData ActiveCourse => SelectedDifficulty switch
+    {
+        Difficulty.Normal => ActiveMinigame.Courses[SelectedLevel].NormalCourse,
+        Difficulty.Hard => ActiveMinigame.Courses[SelectedLevel].HardCourse,
+        _ => ActiveMinigame.Courses[SelectedLevel].EasyCourse,
+    };
+
     #endregion
 
     #region Constructors
@@ -92,6 +94,10 @@ public static class MinigameController
         ModHooks.LanguageGetHook += ModHooks_LanguageGetHook;
         ModHooks.TakeHealthHook += ModHooks_TakeHealthHook;
         StageBuilder.Initialize();
+        AbilityController.Initialize();
+        GameObject coroutineHolder = new("ArcadeKnight Dummy");
+        CoroutineHolder = coroutineHolder.AddComponent<Dummy>();
+        GameObject.DontDestroyOnLoad(coroutineHolder);
     }
 
     public static void EndMinigame()

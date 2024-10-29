@@ -13,5 +13,7 @@ public enum CheckDirection
 
     Up,
 
-    Down
+    Down,
+
+    None
 }

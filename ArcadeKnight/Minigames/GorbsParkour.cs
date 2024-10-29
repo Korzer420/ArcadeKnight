@@ -1,5 +1,4 @@
 ﻿using ArcadeKnight.Enums;
-using KorzUtils.Helper;
 using Modding;
 using System;
 using UnityEngine;
@@ -21,7 +20,7 @@ internal class GorbsParkour : Minigame
 
     internal override string GetDescription() => "Reach the goal while touching the ground as few times as possible.";
 
-    internal override string GetEntryScene() => "Cliffs_02";
+    internal override string GetEntryScene() => "Cliffs_01";
 
     internal override string GetTitle() => "Gorbs Parkour";
 
@@ -47,16 +46,10 @@ internal class GorbsParkour : Minigame
         On.HeroController.FixedUpdate -= HeroController_FixedUpdate;
     }
 
-    internal override bool CheckHighscore(Difficulty difficulty, int level)
+    internal override bool CheckHighscore(CourseData runCourse)
     {
         if (_score >= 0)
         {
-            CourseData runCourse = difficulty switch
-            {
-                Difficulty.Easy => Courses[level].EasyCourse,
-                Difficulty.Hard => Courses[level].HardCourse,
-                _ => Courses[level].NormalCourse,
-            };
             if (string.IsNullOrEmpty(runCourse.Highscore) || Convert.ToInt32(runCourse.Highscore) > Convert.ToInt32(_score))
             { 
                 runCourse.Highscore = _score.ToString();
@@ -69,7 +62,7 @@ internal class GorbsParkour : Minigame
     internal override void ApplyScorePenalty()
     {
         _score++;
-        HeroController.instance.StartCoroutine(MinigameController.UpdateProgression(_score.ToString()));
+        MinigameController.CoroutineHolder.StartCoroutine(MinigameController.UpdateProgression(_score.ToString()));
     }
 
     internal override string GetCourseFile() => "ParkourCourses";
@@ -93,7 +86,7 @@ internal class GorbsParkour : Minigame
             if (_lastState > 2)
             {
                 _score++;
-                HeroController.instance.StartCoroutine(MinigameController.UpdateProgression(_score.ToString()));
+                MinigameController.CoroutineHolder.StartCoroutine(MinigameController.UpdateProgression(_score.ToString()));
             }
             self.RUN_SPEED = 0f;
             self.WALK_SPEED = 0f;
