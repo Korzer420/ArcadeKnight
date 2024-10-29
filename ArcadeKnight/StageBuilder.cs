@@ -63,7 +63,11 @@ public static class StageBuilder
         PlayMakerFSM fsm = tablet.LocateMyFSM("GG Boss UI");
         fsm.FsmVariables.FindFsmString("Boss Name Key").Value = "MinigameTitle";
         fsm.FsmVariables.FindFsmString("Description Key").Value = "MinigameDesc";
-        fsm.GetState("Reset Player").AddActions(() => MinigameController.CurrentState = MinigameState.Active);
+        fsm.GetState("Reset Player").AddActions(() => 
+        {
+            MinigameController.PracticeMode = ActiveMinigame.HasPracticeMode();
+            MinigameController.CurrentState = MinigameState.Active;
+        });
         fsm.GetState("Open UI").AddActions(() => HeroController.instance.StartCoroutine(MinigameController.ControlSelection()));
         fsm.GetState("Close UI").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
         fsm.GetState("Take Control").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
@@ -93,6 +97,7 @@ public static class StageBuilder
 
         CoroutineHelper.WaitFrames(() =>
         {
+            CreateExitPoint();
             if (course.ObjectsToRemove.Any())
             {
                 GameObject[] gameObjects = Object.FindObjectsOfType<GameObject>();
@@ -147,11 +152,21 @@ public static class StageBuilder
             foreach (HazardRespawnTrigger item in Object.FindObjectsOfType<HazardRespawnTrigger>())
                 item.gameObject.SetActive(false);
 
-            List<(float, float)> previewPoints = [];
-            if (course.PreviewPoints.Any())
-                previewPoints.AddRange(course.PreviewPoints);
-            previewPoints.Add(new(course.EndPositionX, course.EndPositionY));
-            HeroController.instance.StartCoroutine(MinigameController.PreviewCourse(previewPoints));
+            if (MinigameController.PracticeMode || !ActiveMinigame.HasPracticeMode())
+            {
+                MinigameController.PlayingPreview = true;
+                List<(float, float)> previewPoints = [];
+                if (course.PreviewPoints.Any())
+                    previewPoints.AddRange(course.PreviewPoints);
+                previewPoints.Add(new(course.EndPositionX, course.EndPositionY));
+                HeroController.instance.StartCoroutine(MinigameController.PreviewCourse(previewPoints));
+            }
+            CoroutineHelper.WaitUntil(() => 
+            { 
+                if (!MinigameController.PracticeMode)
+                    ActiveMinigame.Begin();
+                PDHelper.IsInvincible = false;
+            }, () => !MinigameController.PlayingPreview, false);
         }, HeroController.instance.CanInput, false);
     }
 
@@ -161,6 +176,7 @@ public static class StageBuilder
         entryPoint.transform.position = position;
         TransitionPoint transitionPoint = entryPoint.AddComponent<TransitionPoint>();
         transitionPoint.isADoor = true;
+        transitionPoint.dontWalkOutOfDoor = true;
         transitionPoint.entryPoint = "minigame_start";
         transitionPoint.respawnMarker = entryPoint.AddComponent<HazardRespawnMarker>();
 
@@ -178,26 +194,44 @@ public static class StageBuilder
         platform.transform.position = position;
         platform.SetActive(true);
 
-        GameObject exit = Object.Instantiate(ArcadeKnight.PreloadedObjects["ExitTrigger"]);
-        exit.transform.position = position + new Vector3(0.1f, 1.5f);
-        exit.SetActive(false);
-
-        PlayMakerFSM fsm = exit.LocateMyFSM("Control");
-        fsm.AddState(new(fsm.Fsm)
+        if (MinigameController.PracticeMode)
         {
-            Name = "Idle",
-            Actions = []
-        });
-        fsm.GetState("Pause").AdjustTransitions("Idle");
-        fsm.GetState("Idle").AddTransition("FALL", "Fade Out");
-        fsm.FsmVariables.FindFsmString("Return Scene").Value = ActiveMinigame.GetEntryScene();
-        fsm.FsmVariables.FindFsmString("Return Door").Value = "minigame_exit";
-        PlayerData.instance.dreamReturnScene = ActiveMinigame.GetEntryScene();
-        exit.AddComponent<FinishTrigger>();
-        exit.SetActive(true);
+            GameObject teleporterSprite = Object.Instantiate(DreamGate);
+            teleporterSprite.transform.position = position + new Vector3(0f, 0.5f);
+            teleporterSprite.SetActive(true);
+            GameObject door = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Door"]);
+            door.name = "Practice_Gate";
+            door.transform.position = position + new Vector3(0f, 1.2f);
+            door.SetActive(true);
+            PlayMakerFSM fsm = door.LocateMyFSM("Door Control");
+            fsm.FsmVariables.FindFsmString("New Scene").Value = MinigameController.ActiveMinigame.Courses[MinigameController.SelectedLevel].Scene;
+            fsm.FsmVariables.FindFsmBool("Crossroads Ascent").Value = false;
+            fsm.FsmVariables.FindFsmString("Entry Gate").Value = "minigame_start";
+            fsm.GetState("Send Compass Event").AddActions(() => MinigameController.PracticeMode = false);
+        }
+        else
+        {
+            GameObject exit = Object.Instantiate(ArcadeKnight.PreloadedObjects["ExitTrigger"]);
+            exit.transform.position = position + new Vector3(0.1f, 1.5f);
+            exit.SetActive(false);
 
-        // I can't delete the child somehow... Well, then we resort to other solutions.
-        exit.transform.GetChild(0).transform.position = new Vector3(-1000f, -1000f);
+            PlayMakerFSM fsm = exit.LocateMyFSM("Control");
+            fsm.AddState(new(fsm.Fsm)
+            {
+                Name = "Idle",
+                Actions = []
+            });
+            fsm.GetState("Pause").AdjustTransitions("Idle");
+            fsm.GetState("Idle").AddTransition("FALL", "Fade Out");
+            fsm.FsmVariables.FindFsmString("Return Scene").Value = ActiveMinigame.GetEntryScene();
+            fsm.FsmVariables.FindFsmString("Return Door").Value = "minigame_exit";
+            PlayerData.instance.dreamReturnScene = ActiveMinigame.GetEntryScene();
+            exit.AddComponent<FinishTrigger>();
+            exit.SetActive(true);
+
+            // I can't delete the child somehow... Well, then we resort to other solutions.
+            exit.transform.GetChild(0).transform.position = new Vector3(-1000f, -1000f);
+        }
     }
 
     internal static GameObject CreateExitPoint()
@@ -285,18 +319,6 @@ public static class StageBuilder
             obstacleGameObject.transform.SetRotationZ(obstacle.Rotation);
             obstacleGameObject.SetActive(true);
         }
-    }
-
-    private static void CreatePracticeDoor(Vector3 position)
-    {
-        GameObject door = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Door"]);
-        door.name = "Practice_Gate";
-        door.transform.position = position;
-        door.SetActive(true);
-        PlayMakerFSM fsm = door.LocateMyFSM("Door Control");
-        fsm.FsmVariables.FindFsmString("New Scene").Value = MinigameController.ActiveMinigame.Courses[MinigameController.SelectedLevel].Scene;
-        fsm.FsmVariables.FindFsmBool("Crossroads Ascent").Value = false;
-        fsm.FsmVariables.FindFsmString("Entry Gate").Value = "minigame_start";
     }
 
     #endregion

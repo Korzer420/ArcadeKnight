@@ -69,7 +69,7 @@ internal class GorbsParkour : Minigame
     internal override void ApplyScorePenalty()
     {
         _score++;
-        HeroController.instance.StartCoroutine(MinigameController.UpdateProgression(_score));
+        HeroController.instance.StartCoroutine(MinigameController.UpdateProgression(_score.ToString()));
     }
 
     internal override string GetCourseFile() => "ParkourCourses";
@@ -93,7 +93,7 @@ internal class GorbsParkour : Minigame
             if (_lastState > 2)
             {
                 _score++;
-                HeroController.instance.StartCoroutine(MinigameController.UpdateProgression(_score));
+                HeroController.instance.StartCoroutine(MinigameController.UpdateProgression(_score.ToString()));
             }
             self.RUN_SPEED = 0f;
             self.WALK_SPEED = 0f;

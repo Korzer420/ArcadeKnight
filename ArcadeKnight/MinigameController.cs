@@ -75,6 +75,7 @@ public static class MinigameController
     static MinigameController()
     {
         Minigames.Add(new GorbsParkour());
+        Minigames.Add(new NoEyesTrial());
         CourseLoader.Load();
     }
 
@@ -108,7 +109,7 @@ public static class MinigameController
             PDHelper.DisablePause = false;
     }
 
-    internal static IEnumerator UpdateProgression(int newProgression)
+    internal static IEnumerator UpdateProgression(string newProgression)
     {
         if (GameManager.instance?.IsGameplayScene() == true)
         {
@@ -220,7 +221,6 @@ public static class MinigameController
     internal static IEnumerator PreviewCourse(List<(float, float)> coordinates)
     {
         HeroController.instance.RelinquishControl();
-        PlayerData.instance.isInvincible = true;
         PDHelper.DisablePause = true;
         CameraController controller = UnityEngine.Object.FindObjectOfType<CameraController>();
         CameraTarget oldTarget = controller.camTarget;
@@ -251,7 +251,6 @@ public static class MinigameController
             yield return null;
         }
         yield return new WaitForSeconds(2f);
-        StageBuilder.CreateExitPoint();
         while (true)
         {
             movingObject.transform.position = Vector3.MoveTowards(movingObject.transform.position, HeroController.instance.transform.position, Time.deltaTime * 40);
@@ -273,7 +272,6 @@ public static class MinigameController
         HeroController.instance.RegainControl();
         PDHelper.DisablePause = false;
         PlayingPreview = false;
-        ActiveMinigame.Begin();
     }
 
     #endregion

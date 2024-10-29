@@ -29,7 +29,6 @@ public abstract class Minigame
         if (_active)
             return;
         _active = true;
-        PlayerData.instance.isInvincible = false;
         MinigameController.Tracker.SetActive(true);
         Start();
     }

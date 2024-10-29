@@ -50,9 +50,9 @@ public class NoEyesTrial : Minigame
 
     internal override string GetDescription() => "Reach the goal while the room is shrouded in darkness.";
 
-    internal override Vector3 GetEntryPosition() => new(39.29f, 12.4f);
+    internal override Vector3 GetEntryPosition() => new(55.04f, 34.4f);
 
-    internal override string GetEntryScene() => "Tutorial_01";
+    internal override string GetEntryScene() => "Cliffs_02";
 
     internal override MinigameType GetMinigameType() => MinigameType.NoEyesTrial;
 
@@ -61,11 +61,14 @@ public class NoEyesTrial : Minigame
     protected override void Start()
     {
         On.HutongGames.PlayMaker.Actions.SetVector3XYZ.DoSetVector3XYZ += SetVector3XYZ_DoSetVector3XYZ;
-        MinigameController.Tracker.SetActive(false);
-        GameHelper.DisplayMessage("Enter the dream gate to quit practice.");
+        if (MinigameController.SelectedDifficulty == Difficulty.Hard)
+            ViewBlocker.SetActive(true);
+        HeroController.instance.vignetteFSM.SendEvent("SCENE RESET");
     }
 
     internal override string GetCourseFile() => "TrialCourses";
+
+    internal override void AdditionalEntranceSetup() => GameObject.Find("Inspect Region Ghost").SetActive(false);
 
     private void SetVector3XYZ_DoSetVector3XYZ(On.HutongGames.PlayMaker.Actions.SetVector3XYZ.orig_DoSetVector3XYZ orig, HutongGames.PlayMaker.Actions.SetVector3XYZ self)
     {
