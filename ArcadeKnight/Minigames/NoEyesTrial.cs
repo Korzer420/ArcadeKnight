@@ -86,7 +86,7 @@ public class NoEyesTrial : TimeMinigame
             float scale = MinigameController.SelectedDifficulty switch
             {
                 Difficulty.Easy => 1.1f,
-                Difficulty.Normal => 0.8f,
+                Difficulty.Normal => 0.3f,
                 _ => self.x.Value
             };
             self.vector3Variable.Value = new(scale, scale, scale);
