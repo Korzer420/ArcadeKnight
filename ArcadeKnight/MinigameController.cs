@@ -1,6 +1,7 @@
 ﻿using ArcadeKnight.Components;
 using ArcadeKnight.Enums;
 using ArcadeKnight.Minigames;
+using ArcadeKnight.SaveData;
 using KorzUtils.Helper;
 using Modding;
 using System.Collections;
@@ -69,6 +70,8 @@ public static class MinigameController
         Difficulty.Hard => ActiveMinigame.Courses[SelectedLevel].HardCourse,
         _ => ActiveMinigame.Courses[SelectedLevel].EasyCourse,
     };
+
+    public static GlobalSaveData GlobalSettings { get; set; } = new();
 
     #endregion
 
@@ -233,9 +236,10 @@ public static class MinigameController
 
     internal static IEnumerator PreviewCourse(List<(float, float)> coordinates)
     {
+        PlayingPreview = true;
         HeroController.instance.RelinquishControl();
         PDHelper.DisablePause = true;
-        CameraController controller = UnityEngine.Object.FindObjectOfType<CameraController>();
+        CameraController controller = Object.FindObjectOfType<CameraController>();
         CameraTarget oldTarget = controller.camTarget;
         GameObject movingObject = new("Preview");
         movingObject.transform.position = HeroController.instance.transform.position;
@@ -281,7 +285,7 @@ public static class MinigameController
 
         HeroController.instance.transform.Find("Vignette").localScale = new(5.5f, 5.5f, 5.5f);
         controller.camTarget = oldTarget;
-        UnityEngine.Object.Destroy(movingObject);
+        Object.Destroy(movingObject);
         HeroController.instance.RegainControl();
         PDHelper.DisablePause = false;
         PlayingPreview = false;

@@ -65,7 +65,7 @@ public static class StageBuilder
         fsm.FsmVariables.FindFsmString("Description Key").Value = "MinigameDesc";
         fsm.GetState("Reset Player").AddActions(() => 
         {
-            MinigameController.PracticeMode = ActiveMinigame.HasPracticeMode();
+            MinigameController.PracticeMode = ActiveMinigame.HasPracticeMode() && !MinigameController.GlobalSettings.DisablePractice;
             MinigameController.CurrentState = MinigameState.Active;
         });
         fsm.GetState("Open UI").AddActions(() => MinigameController.CoroutineHolder.StartCoroutine(MinigameController.ControlSelection()));
@@ -152,9 +152,8 @@ public static class StageBuilder
             foreach (HazardRespawnTrigger item in Object.FindObjectsOfType<HazardRespawnTrigger>())
                 item.gameObject.SetActive(false);
 
-            if (MinigameController.PracticeMode || !ActiveMinigame.HasPracticeMode())
+            if (!MinigameController.GlobalSettings.DisablePreview && (MinigameController.PracticeMode || !ActiveMinigame.HasPracticeMode()))
             {
-                MinigameController.PlayingPreview = true;
                 List<(float, float)> previewPoints = [];
                 if (course.PreviewPoints.Any())
                     previewPoints.AddRange(course.PreviewPoints);

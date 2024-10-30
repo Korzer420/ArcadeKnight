@@ -1,5 +1,4 @@
 ﻿using ArcadeKnight.SaveData;
-using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
 using Modding;
 using System.Collections.Generic;
@@ -8,15 +7,25 @@ using UnityEngine;
 
 namespace ArcadeKnight;
 
-public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
+public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>, IGlobalSettings<GlobalSaveData>, IMenuMod
 {
     #region Properties
 
     public static Dictionary<string, GameObject> PreloadedObjects { get; set; } = [];
 
+    public bool ToggleButtonInsideMenu => false;
+
+    public List<IMenuMod.MenuEntry> GetMenuData(IMenuMod.MenuEntry? toggleButtonEntry)
+        =>
+        [
+            new("Disable Preview", ["False", "True"], "Disables the preview before the minigame.", x => MinigameController.GlobalSettings.DisablePreview = x == 1, () =>
+                MinigameController.GlobalSettings.DisablePreview ? 1 : 0),
+            new("Disable Practice", ["False", "True"], "Disables the practice before the minigame.", x => MinigameController.GlobalSettings.DisablePractice = x == 1, () =>
+                MinigameController.GlobalSettings.DisablePractice ? 1 : 0)
+        ];
+
     #endregion
-    //35.78, 8.4
-    //45.08, 8.4
+
     public override List<(string, string)> GetPreloadNames() => new()
     {
         ("GG_Workshop", "GG_Statue_Vengefly/Inspect"),
@@ -35,7 +44,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
         PreloadedObjects.Add("Start", preloadedObjects["Dream_01_False_Knight"]["Dream Entry"]);
-        PreloadedObjects.Add("Tablet",preloadedObjects["GG_Workshop"]["GG_Statue_Vengefly/Inspect"]);
+        PreloadedObjects.Add("Tablet", preloadedObjects["GG_Workshop"]["GG_Statue_Vengefly/Inspect"]);
         PreloadedObjects.Add("ExitTrigger", preloadedObjects["Dream_01_False_Knight"]["Dream Fall Catcher"]);
         PreloadedObjects.Add("Platform", preloadedObjects["Crossroads_04"]["_Scenery/plat_float_01"]);
         PreloadedObjects.Add("CancelDoor", preloadedObjects["White_Palace_03_hub"]["doorWarp"]);
@@ -44,7 +53,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         PreloadedObjects.Add("Gate", preloadedObjects["Fungus1_22"]["Metal Gate"]);
         PreloadedObjects.Add("Switch", preloadedObjects["Fungus1_22"]["Gate Switch"]);
         PreloadedObjects.Add("Door", preloadedObjects["Crossroads_01"]["_Transition Gates/door1"]);
-        PreloadedObjects["Door"].transform.position = new(0f,0f);
+        PreloadedObjects["Door"].transform.position = new(0f, 0f);
         GameObject spikes = new("Spikes");
         GameObject.DontDestroyOnLoad(spikes);
         spikes.SetActive(false);
@@ -60,6 +69,8 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         GameObject.Destroy(preloadedObjects["Cliffs_02"]["Cave Spikes (14)"]);
         MinigameController.Initialize();
     }
+
+    public void OnLoadGlobal(GlobalSaveData globalSaveData) => MinigameController.GlobalSettings = globalSaveData ?? new();
 
     public void OnLoadLocal(LocalSaveData localSaveData)
     {
@@ -78,7 +89,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
             if (courseMetaData == null)
             {
                 MinigameController.UnassignableRecordData.Add(recordData);
-                LogHelper.Write("Couldn't find course \""+recordData.CourseName+"\" in minigame \""+minigame.GetMinigameType().ToString()+"\". Entry will still be saved.", KorzUtils.Enums.LogType.Normal, false);
+                LogHelper.Write("Couldn't find course \"" + recordData.CourseName + "\" in minigame \"" + minigame.GetMinigameType().ToString() + "\". Entry will still be saved.", KorzUtils.Enums.LogType.Normal, false);
                 continue;
             }
             courseMetaData.EasyCourse.Highscore = recordData.EasyHighscore;
@@ -86,6 +97,8 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
             courseMetaData.HardCourse.Highscore = recordData.HardHighscore;
         }
     }
+
+    public GlobalSaveData OnSaveGlobal() => MinigameController.GlobalSettings ?? new();
 
     public LocalSaveData OnSaveLocal()
     {
@@ -105,6 +118,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
     }
 
     // ToDo:
-    // Zweites Minispiel.
-    
+    // Preview und Übung überspringbar machen
+
+    // Readme schreiben
 }
