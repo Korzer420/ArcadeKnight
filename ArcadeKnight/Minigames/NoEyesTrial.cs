@@ -57,9 +57,9 @@ public class NoEyesTrial : TimeMinigame
 
     internal override string GetDescription() => "Reach the goal while the room is shrouded in darkness.";
 
-    internal override Vector3 GetEntryPosition() => new(55.04f, 34.4f);
+    internal override Vector3 GetEntryPosition() => new(96.12f, 5.41f);
 
-    internal override string GetEntryScene() => "Cliffs_01";
+    internal override string GetEntryScene() => "Fungus1_34";
 
     internal override MinigameType GetMinigameType() => MinigameType.NoEyesTrial;
 
