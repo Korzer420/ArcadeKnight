@@ -69,12 +69,12 @@
 			"PreviewPoints": []
 		},
 		"NormalCourse": {
-			"StartPositionX": 35,
-			"StartPositionY": 23.4,
-			"EndPositionX": 6.96,
-			"EndPositionY": 22.4,
+			"StartPositionX": 212.13,
+			"StartPositionY": 18.4,
+			"EndPositionX": 28.37,
+			"EndPositionY": 23.4,
 			"Restrictions": [
-				"canFocus"
+				"hasSuperDash"
 			],
 			"ObjectsToRemove": [
 				"Vessel Fragment",
@@ -82,51 +82,99 @@
 				"Vine Platform (1)",
 				"Vine Platform (2)",
 				"Dream Plant",
-				"fung_plat_float_09 (1)",
 				"Chest",
 				"Grub Bottle"
 			],
 			"Obstacles": [
 				{
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 77.19,
+					"YPosition": 37.4,
+					"Rotation": 270,
+					"ObjectName": "Platform"
+				},
+				{
 					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
 					"XPosition": 101.08,
 					"YPosition": 37.4,
 					"GateRotation": 90,
-					"GateXPosition": 9.96,
-					"GateYPosition": 23.4
+					"GateXPosition": 69.3,
+					"GateYPosition": 23.7
 				},
 				{
-					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
-					"XPosition": 97.06,
-					"YPosition": 14.26,
-					"GateRotation": 90,
-					"GateXPosition": 11.96,
-					"GateYPosition": 23.4
+					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
+					"XPosition": 69.5,
+					"YPosition": 27.67,
+					"Rotation": 270,
+					"ObjectName": "Platform"
 				},
 				{
-					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
-					"XPosition": 175.69,
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 101.97,
+					"YPosition": 25.4,
+					"Width": 3,
+					"Height": 600,
+					"SetValue": false,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 2
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 168.64,
 					"YPosition": 27.4,
-					"GateRotation": 90,
-					"GateXPosition": 13.96,
-					"GateYPosition": 23.4
+					"Width": 3,
+					"Height": 10,
+					"SetValue": true,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 2
 				},
 				{
-					"$type": "ArcadeKnight.Obstacles.GateObstacle, ArcadeKnight",
-					"XPosition": 212.3,
-					"YPosition": 18.46,
-					"GateRotation": 90,
-					"GateXPosition": 15.96,
-					"GateYPosition": 23.4
-				},
-				{
-					"$type": "ArcadeKnight.Obstacles.RespawnObstacle, ArcadeKnight",
-					"XPosition": 206.26,
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 206.52,
 					"YPosition": 20.4,
-					"RevertDirection": 0
+					"SetValue": false,
+					"AffectedAbility": "hasAcidArmour",
+					"RevertDirection": 2
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 205.34,
+					"YPosition": 9.4,
+					"SetValue": false,
+					"AffectedAbility": "hasSuperDash",
+					"RevertDirection": 2
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 173,
+					"YPosition": 9.4,
+					"SetValue": true,
+					"AffectedAbility": "damagePenalty",
+					"RevertDirection": 2
 				}
 			],
-			"PreviewPoints": []
+			"PreviewPoints": [
+				{
+					"Item1": 205.34,
+					"Item2": 9.4
+				},
+				{
+					"Item1": 146.92,
+					"Item2": 13.4
+				},
+				{
+					"Item1": 168.64,
+					"Item2": 27.4
+				},
+				{
+					"Item1": 69.3,
+					"Item2": 23.7
+				},
+				{
+					"Item1": 101.08,
+					"Item2": 37.4
+				}
+			]
 		},
 		"HardCourse": {
 			"StartPositionX": 35,
@@ -134,7 +182,6 @@
 			"EndPositionX": 6.96,
 			"EndPositionY": 22.4,
 			"Restrictions": [
-				"canFocus"
 			],
 			"ObjectsToRemove": [
 				"Vessel Fragment",
@@ -373,7 +420,7 @@
 			[
 				{"Item1": 29.52, "Item2": 74.93},
 				{"Item1": 21.13, "Item2": 79.88},
-				{"Item1": 9.61, "Item2": 98.23},
+				{"Item1": 9.61, "Item2": 98.23}
 			]
 		},
 		"NormalCourse":

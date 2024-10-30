@@ -46,8 +46,6 @@ public class AbilityRestrictor : MonoBehaviour
                 AbilityController.DisabledRestrictions.Add(this);
             else if (!Activated)
                 AbilityController.CurrentRestrictions.Add(this);
-            else
-                LogHelper.Write<ArcadeKnight>("An error occured. The restrict sign has an invalid state. Please report this to the mod developer." + name, KorzUtils.Enums.LogType.Error);
             PlayerData.instance.SetBool(AffectedFieldName, SetValue);
             if (AffectedFieldName == nameof(PlayerData.hasAcidArmour))
                 PlayMakerFSM.BroadcastEvent(SetValue ? "GET ACID ARMOUR" : "REMOVE ACID ARMOUR");

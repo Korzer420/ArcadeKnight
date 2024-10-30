@@ -61,7 +61,7 @@ public abstract class TimeMinigame : Minigame
         {
             _passedTime += Time.deltaTime;
             currentCounter.text = TimeSpan.FromSeconds(_passedTime).ToFormat("mm:ss.ff");
-            if (_timePenalties > 0)
+            if (_timePenalties > 0 && TimePenaltyFactor() > 0)
             {
                 PenaltyTimer.SetActive(true);
                 TimeSpan penalty = TimeSpan.FromSeconds(_timePenalties * TimePenaltyFactor());

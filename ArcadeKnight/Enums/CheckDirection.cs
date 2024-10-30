@@ -9,9 +9,9 @@ public enum CheckDirection
 {
     Left,
 
-    Right,
-
     Up,
+
+    Right,
 
     Down,
 

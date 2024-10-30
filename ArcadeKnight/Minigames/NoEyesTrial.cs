@@ -2,7 +2,6 @@
 using ArcadeKnight.Extensions;
 using KorzUtils.Helper;
 using System;
-using System.Threading;
 using UnityEngine;
 
 namespace ArcadeKnight.Minigames;
@@ -95,6 +94,13 @@ public class NoEyesTrial : TimeMinigame
     }
 
     internal override bool HasPracticeMode() => true;
+
+    protected override int TimePenaltyFactor() => MinigameController.SelectedDifficulty switch
+    {
+        Difficulty.Easy => 5,
+        Difficulty.Hard => 15,
+        _ => 10,
+    };
     /*
         Fungus1_15
         Start: 15.34f, 22.4f
