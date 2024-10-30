@@ -20,6 +20,8 @@ public class AbilityRestrictor : MonoBehaviour
 
     public float Width { get; set; }
 
+    public Vector3 Offset { get; set; }
+
     #endregion
 
     #region Methods
@@ -31,6 +33,7 @@ public class AbilityRestrictor : MonoBehaviour
             BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
             collider.isTrigger = true;
             collider.size = new(Width, Height);
+            collider.offset = Offset;
         }
     }
 

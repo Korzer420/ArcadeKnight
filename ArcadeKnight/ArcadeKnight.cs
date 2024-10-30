@@ -15,7 +15,8 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
     public static Dictionary<string, GameObject> PreloadedObjects { get; set; } = [];
 
     #endregion
-
+    //35.78, 8.4
+    //45.08, 8.4
     public override List<(string, string)> GetPreloadNames() => new()
     {
         ("GG_Workshop", "GG_Statue_Vengefly/Inspect"),
@@ -27,7 +28,8 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         ("Fungus1_31", "_Scenery/fung_plat_float_02"),
         ("Fungus1_22", "Gate Switch"),
         ("Fungus1_22", "Metal Gate"),
-        ("Crossroads_01", "_Transition Gates/door1")
+        ("Crossroads_01", "_Transition Gates/door1"),
+        ("Cliffs_02", "Cave Spikes (14)")
     };
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
@@ -43,6 +45,19 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>
         PreloadedObjects.Add("Switch", preloadedObjects["Fungus1_22"]["Gate Switch"]);
         PreloadedObjects.Add("Door", preloadedObjects["Crossroads_01"]["_Transition Gates/door1"]);
         PreloadedObjects["Door"].transform.position = new(0f,0f);
+        GameObject spikes = new("Spikes");
+        GameObject.DontDestroyOnLoad(spikes);
+        spikes.SetActive(false);
+        spikes.AddComponent<TinkEffect>().blockEffect = preloadedObjects["Cliffs_02"]["Cave Spikes (14)"].GetComponent<TinkEffect>().blockEffect;
+        spikes.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites.Spikes");
+        DamageHero damageHero = spikes.AddComponent<DamageHero>();
+        damageHero.damageDealt = 1;
+        damageHero.hazardType = 2;
+        spikes.layer = 17;
+        spikes.AddComponent<BoxCollider2D>().size = new(1.3f, 1f);
+        spikes.GetComponent<BoxCollider2D>().isTrigger = true;
+        PreloadedObjects.Add("Spikes", spikes);
+        GameObject.Destroy(preloadedObjects["Cliffs_02"]["Cave Spikes (14)"]);
         MinigameController.Initialize();
     }
 

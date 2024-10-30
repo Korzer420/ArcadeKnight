@@ -42,6 +42,7 @@
 	  <None Remove="Resources\Sprites\No_Tear.png" />
 	  <None Remove="Resources\Sprites\No_Wall_Jump.png" />
 	  <None Remove="Resources\Sprites\SetHazardSpawn.png" />
+	  <None Remove="Resources\Sprites\Spikes.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -60,6 +61,7 @@
 	  <EmbeddedResource Include="Resources\Sprites\No_Tear.png" />
 	  <EmbeddedResource Include="Resources\Sprites\No_Wall_Jump.png" />
 	  <EmbeddedResource Include="Resources\Sprites\SetHazardSpawn.png" />
+	  <EmbeddedResource Include="Resources\Sprites\Spikes.png" />
 	</ItemGroup>
 
 	<ItemGroup>

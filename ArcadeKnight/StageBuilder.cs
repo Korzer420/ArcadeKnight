@@ -323,39 +323,22 @@ public static class StageBuilder
                     }
                 controller.Height = height;
                 controller.Width = width;
+                controller.Offset = new(sign.HorizontalOffset, sign.VerticalOffset);
                 obstacleGameObject.SetActive(true);
                 continue;
             }
             else if (obstacle is RespawnObstacle respawn)
             {
-                obstacleGameObject = new("Ability Blocker");
+                obstacleGameObject = new("Respawn Sign");
                 obstacleGameObject.SetActive(false);
                 obstacleGameObject.transform.position = new(respawn.XPosition, respawn.YPosition, 0.02f);
                 obstacleGameObject.transform.localScale = new(2f, 2f, 1f);
                 obstacleGameObject.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites/SetHazardSpawn");
                 RespawnSetter controller = obstacleGameObject.AddComponent<RespawnSetter>();
                 controller.ActivateOnce = respawn.ActivateOnce;
-
-                float height = respawn.Height;
-                float width = respawn.Width;
-                if (height == 0f || width == 0f)
-                    switch (respawn.RevertDirection)
-                    {
-                        case CheckDirection.Left:
-                        case CheckDirection.Right:
-                            height = 600f;
-                            width = 1f;
-                            break;
-                        case CheckDirection.Up:
-                        case CheckDirection.Down:
-                            height = 1f;
-                            width = 600f;
-                            break;
-                        case CheckDirection.None:
-                            break;
-                    }
-                controller.Height = height;
-                controller.Width = width;
+                controller.Height = respawn.Height;
+                controller.Width = respawn.Width;
+                controller.Offset = new(respawn.HorizontalOffset, respawn.VerticalOffset);
                 obstacleGameObject.SetActive(true);
                 continue;
             }
@@ -372,6 +355,10 @@ public static class StageBuilder
                 gate.transform.SetRotationZ(gateObstacle.GateRotation);
                 gate.SetActive(true);
                 fsm.FsmVariables.FindFsmGameObject("Target").Value = gate;
+            }
+            else if (obstacle is SpikeObstacle)
+            {
+                obstacleGameObject = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Spikes"]);
             }
             else
             {

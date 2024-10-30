@@ -1,4 +1,6 @@
-﻿namespace ArcadeKnight.Obstacles;
+﻿using ArcadeKnight.Enums;
+
+namespace ArcadeKnight.Obstacles;
 
 public class RestrictObstacle : HitboxObstacle
 {
@@ -7,6 +9,8 @@ public class RestrictObstacle : HitboxObstacle
     public string AffectedAbility { get; set; }
 
     public bool SetValue { get; set; }
+
+    public CheckDirection RevertDirection { get; set; }
 
     #endregion
 }

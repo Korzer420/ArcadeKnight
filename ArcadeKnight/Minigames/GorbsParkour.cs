@@ -67,7 +67,7 @@ internal class GorbsParkour : Minigame
 
     internal override string GetCourseFile() => "ParkourCourses";
 
-    internal override void AdditionalEntranceSetup() => GameObject.Find("Inspect Region Ghost").SetActive(false);
+    internal override void AdditionalEntranceSetup() => GameObject.Find("Inspect Region Ghost")?.SetActive(false);
 
     #endregion
 

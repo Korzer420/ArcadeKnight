@@ -10,7 +10,9 @@ public abstract class HitboxObstacle : Obstacle
 
     public float Height { get; set; }
 
-    public CheckDirection RevertDirection { get; set; }
+    public float HorizontalOffset { get; set; }
+
+    public float VerticalOffset { get; set; }
 
     #endregion
 }

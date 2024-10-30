@@ -21,6 +21,8 @@ public class RespawnSetter : MonoBehaviour
 
     public float Width { get; set; }
 
+    public Vector3 Offset { get; set; }
+
     public bool ActivateOnce { get; set; }
 
     #endregion
@@ -35,6 +37,7 @@ public class RespawnSetter : MonoBehaviour
             collider.isTrigger = true;
             collider.size = new(Width, Height);
             collider.enabled = gameObject.name != "minigame_start";
+            collider.offset = Offset;
         }
     }
 
