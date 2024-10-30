@@ -52,15 +52,32 @@ This minigame does work with a timer. Reach the goal as fast as possible. The ti
 A score penalty adds 5/10/15 seconds at the end (depending on difficulty), displayed as red text under the normal timer.
 
 ## Custom Stages
-This mod does provide "fairly easy" options to create your own stages and share them with other people. **DISCLAIMER: I'm not responsible for any offensive message, that might be caused by custom stages! You can always identify the normal built-in stages, since they are the only stages in the stage selection menu that do not have the author text (by X).**
+This mod does provide "fairly easy" options to create your own stages and share them with other people. **DISCLAIMER: I'm not responsible for any offensive message, that might be caused by custom stages! You can always identify the normal built-in stages, since they are the only stages in the stage selection menu that do not have the author text "(by X)".**
 
 ### Playing Custom Stages
 Playing custom stages is simple. Close the game (if it is running), go to the "Mods" folder of your Hollow Knight installation, then move into the folder "ArcadeKnight" and then "CustomStages". Here, you can place json files that contain one or more stages. Then start the game. If everything worked fine, you should be able to select the custom stages at their respective minigame. You can also check your modlog.txt file, as it will provide you with more information which files got loaded and which didn't (and why). If you're unsure where you find you Hollow Knight installation/modlog you can always look/ask in the modding Discord of Hollow Knight (or the modding section of the normal HK Discord). When the mod detects a highscore for a custom stage that you might've losted/removed the highscore will still be saved. Unless you delete the save file the record was done on, all recordings will be saved regardless if the stage does still exist.
 
 ### Creating Custom Stages
-Creating your own custom stages is also possible. For this I recommend knowledge of: 
-- The json format to create the files
+Creating your own custom stages is a bit more complex, but nothing to be scared of. For this I recommend knowledge of: 
+- The json format to create the files.
 - The DebugMod for stuff like no-clip, reading the current position, showing hitboxes and toggling items.
 - UnityExplorerPlus for removing unwanted objects or less time consuming placing of obstacles. Don't worry, you don't need to know much of it. I'll try to explain the needed features simply.
 
 You can always ask in the modding discord of Hollow Knight for help to operate with the Debug and UnityExplorer Mod.
+
+#### Rules
+Before stages can be played they have to satisfy certain conditions:
+- The name has to be unique. If a stage has the same name as another one, the first one takes priority. Note that the name only has be unique in the intended minigame, not the whole mod.
+- All three level (easy, normal and hard) must be provided (meaning a start and endpoint to all three)
+- A scene has to be assigned, where the minigame plays out.
+If any rule couldn't be satified, it will provide the missing information in the modlog.
+
+#### Format
+The custom stages have to be provided as json file(s). You can put one or more per json file.
+
+The obstacle types are:
+- CourseObstacle: Spawns a preloaded object (Wingmould, Platform, or Box), that the player can interact with.
+- SpikeObstacle: Spawns a small spike element. (WIP)
+- RespawnObstacle: Spawns a sign that sets a checkpoint upon entering it.
+- GateObstacle: Spawns a gate and a lever, which opens said gate.
+- RestrictObstacle: Spawns a sign that toggle a player ability upon entering its hitbox.
