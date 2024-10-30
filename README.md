@@ -74,10 +74,30 @@ If any rule couldn't be satified, it will provide the missing information in the
 
 #### Format
 The custom stages have to be provided as json file(s). You can put one or more per json file.
-
+You can see the json structure here: https://github.com/Korzer420/ArcadeKnight/blob/main/CustomStageFormat.md
+Each course allows you to remove objects, create a camera preview path and place extra obstacles.
 The obstacle types are:
 - CourseObstacle: Spawns a preloaded object (Wingmould, Platform, or Box), that the player can interact with.
 - SpikeObstacle: Spawns a small spike element. (WIP)
 - RespawnObstacle: Spawns a sign that sets a checkpoint upon entering it.
 - GateObstacle: Spawns a gate and a lever, which opens said gate.
 - RestrictObstacle: Spawns a sign that toggle a player ability upon entering its hitbox.
+
+#### Tips
+Generally speaking, upon understanding the format and copying repeated data, you should be fine creating your level.
+The built-in level were also designed with this json system, so you can look up examples yourself (at: https://github.com/Korzer420/ArcadeKnight/tree/main/ArcadeKnight/Resources/Data)
+Once you created your json, you can put it in the CustomStage folder (like described in "Playing Custom Stages") and test them.
+Here are a few tips, that I used while creating these stages:
+- Copy/Paste your course two times in the other difficulties to fill all three required courses, to test quickly and not having to design all three at the same time.
+- Use DebugMod for all "easy" coordinate specific things, like the start/end position. Move to the position via NoClip, press F1 and look at your coordinates.
+- If you want to create a perfect slidable wall/bridge/ceiling of platforms, each platform has to be 2.7 units away. Knowing this, you can easier place multiple platforms in a row without having to restart the game every time. For example: If you want to create a normal bridge and your first platform is at 20, 11.3 (which you determined by DebugMod), you know that if you want to put a platform right next to it for a perfect bridge, it must be at 22.7, 11.3 (2.7 units further).
+- Place a sign always 1 unit above the coordinates that the Knight has on the ground (to correctly show the signs legs).If the Knight stands at the ground at Y coordinate 3.4, the sign should be at 4.4.
+- Each rule you establish via "Restrictions" in the CourseData should be telegraphed by a Restriction sign somewhere near the start. The sign itself does nothing as the initial rules already set its value, but it is a better clue for the player.
+- Use DebugMods "Show Hitboxes" option at page 5 to look at the area of Restriction and Respawn signs.
+- The modlog should provide you with additional information about how your level loaded and what might not be right yet (like invalid data or unknown obstacles)
+- Remember that the player can respawn at the start via a hazard/transition. In case you want the player to travel back on their own, set a checkpoint to mess with them.^^
+- Use UnityExplorerPlus to find the name of the object you want to delete or to move an object in a sign without the need of resetting the game and adjusting it in the json file.
+- Install UnityExplorer(Plus), open the game, go to the scene that you'd like to modify and press F7, then (if done for the first time) click "Options" in the header that appears after a few seconds. Scroll down in the option menu until you find "World Mouse - Inspect Key", click on the arrow below and select a key that you like for inspecting (I personally recommend "Tab"), then save the options. Now you can press that assigned key to let your cursor display you information about the object it hovers over. When pressing Left on the mouse, you can view that element and modify its position/rotation etc. You can also disable them by unchecking the "ActiveSelf" field on the left side of the window. Note that sometimes the object you want to select it blocked by other stuff (like sound, darkness or camera lock areas), just click on your element and deactivate the viewed one over and over again until deactivating the shown object does indeed remove your desired one, then you know that you have the correct object and can view its name + work with it.
+- Note that UnityExplorerPlus sometimes does mess with HK UI. When UnityExplorer is active, you might not be able to select a level in the selection menu and be softlock there. Similiar goes for the main menu. Pressing F7 before entering a menu MIGHT prevent this. In the worst case, just Alt F4^^
+
+If you need help understanding some aspects, or would like to request an additional feature (obstacle, sign value etc.), you can always open an issue on this github or talk to the mod developer on the HK Modding discord.
