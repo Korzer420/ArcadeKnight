@@ -86,6 +86,7 @@ public static class StageBuilder
 
     internal static void SetupLevel(CourseData course)
     {
+        AbilityController.Disable();
         AbilityController.Enable(course.Restrictions);
         PlayerData.instance.isInvincible = true;
         CreateStart(new Vector3(course.StartPositionX, course.StartPositionY), course.StartPositionX > course.EndPositionX);

@@ -113,6 +113,7 @@ public static class MinigameController
         _tracker.transform.localScale = new(4f, 4f, 1f);
         if (PlayerData.instance != null)
             PDHelper.DisablePause = false;
+        CoroutineHolder.StopAllCoroutines();
     }
 
     internal static IEnumerator UpdateProgression(string newProgression)

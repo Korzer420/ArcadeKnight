@@ -29,6 +29,8 @@ public static class AbilityController
 
     private static bool _canFocus = true;
 
+    private static bool _active = false;
+
     #endregion
 
     #region Properties
@@ -56,9 +58,10 @@ public static class AbilityController
 
     public static void Enable(string[] restrictions)
     {
-        CurrentRestrictions.Clear();
-        EstablishedRestrictions.Clear();
-        DisabledRestrictions.Clear();
+        if (_active)
+            return;
+        _active = true;
+        
         _originalValues.Clear();
         foreach (string key in _initialRules.Keys)
             _originalValues.Add(key, PlayerData.instance.GetBool(key));
@@ -78,10 +81,6 @@ public static class AbilityController
 
     public static void Disable()
     {
-        ModHooks.SetPlayerBoolHook -= ModHooks_SetPlayerBoolHook;
-        ModHooks.AfterTakeDamageHook -= ModHooks_AfterTakeDamageHook;
-        On.GameManager.HazardRespawn -= GameManager_HazardRespawn;
-        On.HeroController.CanFocus -= HeroController_CanFocus;
         foreach (string key in _initialRules.Keys.ToList())
             _initialRules[key] = true;
         _initialRules["damagePenalty"] = false;
@@ -89,6 +88,16 @@ public static class AbilityController
         _canFocus = true;
         foreach (string key in _originalValues.Keys)
             PlayerData.instance.SetBool(key, _originalValues[key]);
+        if (!_active)
+            return;
+        _active = false;
+        CurrentRestrictions.Clear();
+        DisabledRestrictions.Clear();
+        EstablishedRestrictions.Clear();
+        ModHooks.SetPlayerBoolHook -= ModHooks_SetPlayerBoolHook;
+        ModHooks.AfterTakeDamageHook -= ModHooks_AfterTakeDamageHook;
+        On.GameManager.HazardRespawn -= GameManager_HazardRespawn;
+        On.HeroController.CanFocus -= HeroController_CanFocus;
     }
 
     public static void ResetToCurrentRules()

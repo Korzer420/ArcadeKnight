@@ -71,6 +71,8 @@ public abstract class TimeMinigame : Minigame
                     penaltyCounter.text = "<color=#de0404>+" + penalty.ToFormat("ss") + " seconds</color>";
             }
             yield return null;
+            if (GameManager.instance?.IsGamePaused() == true)
+                yield return new WaitUntil(() => GameManager.instance?.IsGamePaused() == false);
         }
         _passedTime += _timePenalties * TimePenaltyFactor();
         GameObject.Destroy(_penaltyTimer);

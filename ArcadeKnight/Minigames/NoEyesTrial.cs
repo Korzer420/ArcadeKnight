@@ -101,13 +101,4 @@ public class NoEyesTrial : TimeMinigame
         Difficulty.Hard => 15,
         _ => 10,
     };
-    /*
-        Fungus1_15
-        Start: 15.34f, 22.4f
-        End: 215.56f, 16.6f
-        Delete: "Vessel Fragment", "Vine Platform", "Vine Platform (1)", "Vine Platform (2)", "Dream Plant", "fung_plat_float_09 (1)", "Chest"
-        Platform at: 70.01, 13.32 + 177.34, 17.94 (Rotation 90) + 177.34, 20.65 (Rotation 90)
-        Lever: 175.76, 27.4 -> Gate: 177.34, 12.4 (Rotation 90)
-        Block CDash at: 101.92, 25.4
-     */
 }
