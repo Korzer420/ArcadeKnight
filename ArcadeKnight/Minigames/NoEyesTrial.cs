@@ -49,10 +49,10 @@ public class NoEyesTrial : TimeMinigame
 
     protected override void Conclude()
     {
+        base.Conclude();
         if (_viewBlocker != null)
             GameObject.Destroy(_viewBlocker);
         On.HutongGames.PlayMaker.Actions.SetVector3XYZ.DoSetVector3XYZ -= SetVector3XYZ_DoSetVector3XYZ;
-        _passedTime = 0f;
     }
 
     internal override string GetDescription() => "Reach the goal while the room is shrouded in darkness.";

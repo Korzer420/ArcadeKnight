@@ -49,7 +49,13 @@ public abstract class TimeMinigame : Minigame
     #region Methods
 
     protected override void Start() =>MinigameController.CoroutineHolder.StartCoroutine(StartTimer());
-    
+
+    protected override void Conclude() 
+    { 
+        _passedTime = 0f;
+        _timePenalties = 0;
+    }
+
     internal IEnumerator StartTimer()
     {
         TextMeshPro currentCounter = MinigameController.Tracker.GetComponent<TextMeshPro>();
