@@ -257,7 +257,7 @@ public static class StageBuilder
         teleporter.transform.position = new Vector3(HeroController.instance.transform.position.x, height);
         teleporter.SetActive(true);
         teleporter.transform.localScale = new(0.5f, 1f, 1f);
-
+        
         PlayMakerFSM teleportFsm = teleporter.GetComponent<PlayMakerFSM>();
         teleportFsm.FsmVariables.FindFsmString("Entry Gate").Value = "minigame_exit";
         teleportFsm.FsmVariables.FindFsmString("New Scene").Value = ActiveMinigame.GetEntryScene();

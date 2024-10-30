@@ -88,11 +88,12 @@ public static class MinigameController
     public static void Initialize()
     {
         UnityEngine.SceneManagement.SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
-        ModHooks.AfterPlayerDeadHook += ModHooks_AfterPlayerDeadHook;
         On.UIManager.ReturnToMainMenu += UIManager_ReturnToMainMenu;
         On.CameraController.LockToArea += CameraController_LockToArea;
         ModHooks.LanguageGetHook += ModHooks_LanguageGetHook;
         ModHooks.TakeHealthHook += ModHooks_TakeHealthHook;
+        ModHooks.GetPlayerBoolHook += ModHooks_GetPlayerBoolHook;
+        On.GameManager.ReadyForRespawn += GameManager_ReadyForRespawn;
         StageBuilder.Initialize();
         AbilityController.Initialize();
         GameObject coroutineHolder = new("ArcadeKnight Dummy");
@@ -102,6 +103,8 @@ public static class MinigameController
 
     public static void EndMinigame()
     {
+        if (CurrentState == MinigameState.Inactive)
+            return;
         CurrentState = MinigameState.Inactive;
         AbilityController.Disable();
         SelectedLevel = 0;
@@ -265,14 +268,14 @@ public static class MinigameController
                 break;
             yield return null;
         }
-        while(vignette.localScale.x > 5.5f)
+        while (vignette.localScale.x > 5.5f)
         {
             vignette.localScale -= new Vector3(200f * Time.deltaTime, 200f * Time.deltaTime, 200f * Time.deltaTime);
             if (vignette.localScale.x < 5.5f)
                 vignette.localScale = new Vector3(5.5f, 5.5f, 5.5f);
             yield return null;
         }
-        
+
         HeroController.instance.transform.Find("Vignette").localScale = new(5.5f, 5.5f, 5.5f);
         controller.camTarget = oldTarget;
         UnityEngine.Object.Destroy(movingObject);
@@ -303,8 +306,6 @@ public static class MinigameController
             ActiveMinigame = null;
     }
 
-    private static void ModHooks_AfterPlayerDeadHook() => EndMinigame();
-
     private static IEnumerator UIManager_ReturnToMainMenu(On.UIManager.orig_ReturnToMainMenu orig, UIManager self)
     {
         EndMinigame();
@@ -331,6 +332,19 @@ public static class MinigameController
         if (PracticeMode)
             damage = 0;
         return damage;
+    }
+
+    private static bool ModHooks_GetPlayerBoolHook(string name, bool orig)
+    {
+        if (name == "hasDreamGate")
+            return orig && CurrentState == MinigameState.Inactive;
+        return orig;
+    }
+
+    private static void GameManager_ReadyForRespawn(On.GameManager.orig_ReadyForRespawn orig, GameManager self, bool isFirstLevelForPlayer)
+    {
+        EndMinigame();
+        orig(self, isFirstLevelForPlayer);
     }
 
     #endregion
