@@ -41,7 +41,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>, IGlobalSettings<
         ("Cliffs_02", "Cave Spikes (14)")
     };
 
-    public override string GetVersion() => "0.0.1.0";
+    public override string GetVersion() => "0.1.0.0";
 
     public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
     {
