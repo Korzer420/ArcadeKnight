@@ -792,7 +792,6 @@
 					"Rotation": 180,
 					"ObjectName": "Platform"
 				},
-				,
 				{
 					"$type": "ArcadeKnight.Obstacles.CourseObstacle, ArcadeKnight",
 					"XPosition": 21.62,

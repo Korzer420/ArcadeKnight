@@ -86,13 +86,13 @@ public static class StageBuilder
 
     internal static void SetupLevel(CourseData course)
     {
+        ModHooks.GetPlayerBoolHook += ModHooks_GetPlayerBoolHook;
         AbilityController.Disable();
         AbilityController.Enable(course.Restrictions);
-        PlayerData.instance.isInvincible = true;
         CreateStart(new Vector3(course.StartPositionX, course.StartPositionY), course.StartPositionX > course.EndPositionX);
         CreateEnd(new Vector3(course.EndPositionX, course.EndPositionY));
         CreateObstacles(course.Obstacles);
-        
+
         MinigameController.Tracker.GetComponent<TextMeshPro>().text = "0";
         MinigameController.Tracker.SetActive(false);
 
@@ -111,7 +111,7 @@ public static class StageBuilder
                             Object.Destroy(gameObject);
                             found = true;
                         }
-                    if (!found)
+                    if (!found && MinigameController.ActiveMinigame.Courses[MinigameController.SelectedLevel].IsCustomCourse)
                         LogHelper.Write<ArcadeKnight>("Requested object to delete \"" + objectToRemove + "\" could not be found.", LogType.Warning, false);
                 }
             }
@@ -125,6 +125,9 @@ public static class StageBuilder
                 plaque.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites/No_Pogo_Spikes");
                 plaque.SetActive(true);
             }
+            // Remove shade.
+            GameObject shade = GameObject.Find("Hollow Shade(Clone)");
+            shade?.SetActive(false);
         }, false);
 
         CoroutineHelper.WaitUntil(() =>
@@ -160,13 +163,13 @@ public static class StageBuilder
                 previewPoints.Add(new(course.EndPositionX, course.EndPositionY));
                 MinigameController.CoroutineHolder.StartCoroutine(MinigameController.PreviewCourse(previewPoints));
             }
-            CoroutineHelper.WaitUntil(() => 
+            CoroutineHelper.WaitUntil(() =>
             {
                 if (!MinigameController.PracticeMode)
                     ActiveMinigame.Begin();
                 else
                     GameHelper.DisplayMessage("Enter the dreamgate at the end to quit practice.");
-                PDHelper.IsInvincible = false;
+                ModHooks.GetPlayerBoolHook -= ModHooks_GetPlayerBoolHook;
             }, () => !MinigameController.PlayingPreview, false);
         }, HeroController.instance.CanInput, false);
     }
@@ -267,8 +270,10 @@ public static class StageBuilder
 
     private static void CreateObstacles(Obstacle[] obstacles)
     {
+        int index = -1;
         foreach (Obstacle obstacle in obstacles)
         {
+            index++;
             GameObject obstacleGameObject;
             if (obstacle is CourseObstacle courseObstacle)
                 obstacleGameObject = Object.Instantiate(ArcadeKnight.PreloadedObjects[courseObstacle.ObjectName]);
@@ -362,7 +367,7 @@ public static class StageBuilder
             }
             else
             {
-                LogHelper.Write<ArcadeKnight>("Not a obstacle");
+                LogHelper.Write<ArcadeKnight>("Not an obstacle. Index in obstacle list:"+index);
                 continue;
             }
             obstacleGameObject.transform.position = new(obstacle.XPosition, obstacle.YPosition);
@@ -417,6 +422,13 @@ public static class StageBuilder
 
         }
         orig(self, bossStatue, bossNameSheet, bossNameKey, descriptionSheet, descriptionKey);
+    }
+
+    private static bool ModHooks_GetPlayerBoolHook(string name, bool orig)
+    {
+        if (name == "isInvincible")
+            return true;
+        return orig;
     }
 
     #endregion

@@ -2,6 +2,7 @@
 using ArcadeKnight.Extensions;
 using KorzUtils.Helper;
 using System;
+using System.Globalization;
 using UnityEngine;
 
 namespace ArcadeKnight.Minigames;
@@ -28,12 +29,15 @@ public class NoEyesTrial : TimeMinigame
     
     internal override bool CheckHighscore(CourseData courseData)
     {
+        // Hours are not supported.
+        if (_passedTime >= 3600)
+            _passedTime = 3599;
         if (string.IsNullOrEmpty(courseData.Highscore))
         {
             courseData.Highscore = TimeSpan.FromSeconds(_passedTime).ToFormat("mm:ss.ff");
             return true;
         }
-        else if (TimeSpan.TryParse(courseData.Highscore, out TimeSpan highscore))
+        else if (TimeSpan.TryParseExact(courseData.Highscore, @"mm\:ss\.ff", CultureInfo.InvariantCulture, out TimeSpan highscore))
         {
             TimeSpan currentScore = TimeSpan.FromSeconds(_passedTime);
             if (currentScore < highscore)

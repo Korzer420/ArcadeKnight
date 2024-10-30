@@ -164,7 +164,7 @@ public static class MinigameController
         Text textObject = levelObject.GetComponent<Text>();
         textObject.alignment = TextAnchor.MiddleCenter;
         textObject.fontSize++;
-        textObject.text = ActiveMinigame.Courses[SelectedLevel].Name.ToUpper(); // Name of the first normal course.
+        textObject.text = ActiveMinigame.Courses[SelectedLevel].Name.ToUpper();
         List<Text> highscoreText = [];
         List<(GameObject, GameObject)> sprites = [];
         for (int i = 1; i < 4; i++)
