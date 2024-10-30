@@ -20,7 +20,7 @@ internal class GorbsParkour : Minigame
 
     internal override string GetDescription() => "Reach the goal while touching the ground as few times as possible.";
 
-    internal override string GetEntryScene() => "Cliffs_01";
+    internal override string GetEntryScene() => "Cliffs_02";
 
     internal override string GetTitle() => "Gorbs Parkour";
 

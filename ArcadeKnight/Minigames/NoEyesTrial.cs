@@ -59,7 +59,7 @@ public class NoEyesTrial : TimeMinigame
 
     internal override Vector3 GetEntryPosition() => new(55.04f, 34.4f);
 
-    internal override string GetEntryScene() => "Cliffs_02";
+    internal override string GetEntryScene() => "Cliffs_01";
 
     internal override MinigameType GetMinigameType() => MinigameType.NoEyesTrial;
 
@@ -75,8 +75,6 @@ public class NoEyesTrial : TimeMinigame
     }
 
     internal override string GetCourseFile() => "TrialCourses";
-
-    internal override void AdditionalEntranceSetup() => GameObject.Find("Inspect Region Ghost").SetActive(false);
 
     private void SetVector3XYZ_DoSetVector3XYZ(On.HutongGames.PlayMaker.Actions.SetVector3XYZ.orig_DoSetVector3XYZ orig, HutongGames.PlayMaker.Actions.SetVector3XYZ self)
     {

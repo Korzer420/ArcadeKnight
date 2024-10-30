@@ -153,14 +153,15 @@ public static class MinigameController
 
     internal static IEnumerator ControlSelection()
     {
-        Transform panel = UnityEngine.Object.FindObjectOfType<BossChallengeUI>().transform.Find("Panel");
+        Transform panel = Object.FindObjectOfType<BossChallengeUI>().transform.Find("Panel");
         panel.Find("BossName_Text").position = new Vector3(7.4f, 4f);
         panel.Find("Description_Text").position = new Vector3(7.5f, 2.9f);
-        GameObject levelObject = UnityEngine.Object.Instantiate(panel.Find("Description_Text").gameObject, panel);
-        levelObject.transform.position = new Vector3(10.6f, 1.51f);
+        GameObject levelObject = Object.Instantiate(panel.Find("Description_Text").gameObject, panel);
+        levelObject.transform.position = new Vector3(7.4f, 1.91f);
         Text textObject = levelObject.GetComponent<Text>();
+        textObject.alignment = TextAnchor.MiddleCenter;
         textObject.fontSize++;
-        textObject.text = "CLIFFHANGER"; // Name of the first normal course.
+        textObject.text = ActiveMinigame.Courses[SelectedLevel].Name.ToUpper(); // Name of the first normal course.
         List<Text> highscoreText = [];
         List<(GameObject, GameObject)> sprites = [];
         for (int i = 1; i < 4; i++)
@@ -175,7 +176,7 @@ public static class MinigameController
             sprites.Add(new(parent.Find("NotchImage").gameObject, parent.Find("SymbolImage").gameObject));
             GameObject highscoreObject = UnityEngine.Object.Instantiate(levelObject, panel.Find("Buttons").Find($"Tier{i}Button"));
             highscoreText.Add(highscoreObject.GetComponent<Text>());
-            highscoreObject.transform.localPosition = new(243.3334f, 0f, 0f);
+            highscoreObject.transform.localPosition = new(115.55f, 0f, 0f);
         }
         foreach (Text item in highscoreText)
             item.text = "";
@@ -203,6 +204,8 @@ public static class MinigameController
             {
                 changed = false;
                 textObject.text = ActiveMinigame.Courses[SelectedLevel].Name?.ToUpper();
+                if (ActiveMinigame.Courses[SelectedLevel].IsCustomCourse)
+                    textObject.text += " (by " + (ActiveMinigame.Courses[SelectedLevel].Author ?? "Unknown") + ")";
                 sprites[0].Item1.SetActive(string.IsNullOrEmpty(ActiveMinigame.Courses[SelectedLevel].EasyCourse.Highscore));
                 sprites[0].Item2.SetActive(!string.IsNullOrEmpty(ActiveMinigame.Courses[SelectedLevel].EasyCourse.Highscore));
                 sprites[1].Item1.SetActive(string.IsNullOrEmpty(ActiveMinigame.Courses[SelectedLevel].NormalCourse.Highscore));
