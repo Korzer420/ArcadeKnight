@@ -49,6 +49,7 @@ A score penalty adds 1 extra point the score.
 ### No Eyes Trial
 Reach the goal platform while the room is shrouded in darkness. This minigame uses a "practice mode" to give you some time to develop normalized strats to navigate while your sight is limited.
 This minigame does work with a timer. Reach the goal as fast as possible. The timer start upon exiting practice mode, so you're in no rush to learn setups and the route.
+You can start this minigame at the statue next to the entrance of stone sanctuary. (The statue left to the door to the No Eyes room)
 A score penalty adds 5/10/15 seconds at the end (depending on difficulty), displayed as red text under the normal timer.
 
 ## Custom Stages
