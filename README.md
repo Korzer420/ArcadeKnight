@@ -11,7 +11,7 @@ Pressing confirm will then bring you into the minigame map, where you objective 
 Before talking about each individual minigame, here are few general information:
 - All transitions in the minigame room are disabled and replaced by hazard respawn (although they deal no damage)
 - Dream Gate is disabled while in a minigame.
-- A minigame grants by default: Mothwing Cloak, Mantis Claw, Monarch Wings, Isma's Tear and Crystal Heart. (This will be reset to the original states upon leaving the minigame.) Depending on the course configuration this might differ.
+- A minigame grants by default: Mothwing Cloak, Mantis Claw, Monarch Wings, Isma's Tear, all nail arts, all level 1 spells (downgrade from level 2 if you have them already) and Crystal Heart. (This will be reset to the original states upon leaving the minigame.) Depending on the course configuration this might differ.
 - Each minigame places a Dream Gate sprite at the start where you spawn. You can always exit through this sprite to cancel the minigame (your progress will be lost).
 - You can disable the camera preview at the start of minigames in the settings menu of the mod.
 - You can benchwarp out of a minigame sequence safely. It will cancel the minigame like the dream gate described above.
