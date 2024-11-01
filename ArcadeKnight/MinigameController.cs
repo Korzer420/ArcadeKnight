@@ -159,27 +159,51 @@ public static class MinigameController
         Transform panel = Object.FindObjectOfType<BossChallengeUI>().transform.Find("Panel");
         panel.Find("BossName_Text").position = new Vector3(7.4f, 4f);
         panel.Find("Description_Text").position = new Vector3(7.5f, 2.9f);
-        GameObject levelObject = Object.Instantiate(panel.Find("Description_Text").gameObject, panel);
-        levelObject.transform.position = new Vector3(7.4f, 1.91f);
-        Text textObject = levelObject.GetComponent<Text>();
-        textObject.alignment = TextAnchor.MiddleCenter;
-        textObject.fontSize++;
-        textObject.text = ActiveMinigame.Courses[SelectedLevel].Name.ToUpper();
         List<Text> highscoreText = [];
         List<(GameObject, GameObject)> sprites = [];
-        for (int i = 1; i < 4; i++)
+        Text textObject;
+        if (panel.Find("LevelText") is Transform levelText)
         {
-            Transform parent = panel.Find("Buttons").Find($"Tier{i}Button");
-            parent.Find("Text").GetComponent<Text>().text = i switch
+            for (int i = 1; i < 4; i++)
             {
-                1 => "EASY",
-                2 => "NORMAL",
-                _ => "HARD"
-            };
-            sprites.Add(new(parent.Find("NotchImage").gameObject, parent.Find("SymbolImage").gameObject));
-            GameObject highscoreObject = UnityEngine.Object.Instantiate(levelObject, panel.Find("Buttons").Find($"Tier{i}Button"));
-            highscoreText.Add(highscoreObject.GetComponent<Text>());
-            highscoreObject.transform.localPosition = new(115.55f, 0f, 0f);
+                Transform parent = panel.Find("Buttons").Find($"Tier{i}Button");
+                parent.Find("Text").GetComponent<Text>().text = i switch
+                {
+                    1 => "EASY",
+                    2 => "NORMAL",
+                    _ => "HARD"
+                };
+                sprites.Add(new(parent.Find("NotchImage").gameObject, parent.Find("SymbolImage").gameObject));
+                GameObject highscoreObject = panel.Find($"Buttons/Tier{i}Button/Highscore").gameObject;
+                highscoreText.Add(highscoreObject.GetComponent<Text>());
+            }
+            textObject = levelText.GetComponent<Text>();
+        }
+        else
+        {
+            GameObject levelObject = Object.Instantiate(panel.Find("Description_Text").gameObject, panel);
+            levelObject.name = "LevelText";
+            levelObject.transform.position = new Vector3(7.4f, 1.91f);
+            textObject = levelObject.GetComponent<Text>();
+            textObject.alignment = TextAnchor.MiddleCenter;
+            textObject.fontSize++;
+            textObject.text = ActiveMinigame.Courses[SelectedLevel].Name.ToUpper();
+
+            for (int i = 1; i < 4; i++)
+            {
+                Transform parent = panel.Find("Buttons").Find($"Tier{i}Button");
+                parent.Find("Text").GetComponent<Text>().text = i switch
+                {
+                    1 => "EASY",
+                    2 => "NORMAL",
+                    _ => "HARD"
+                };
+                sprites.Add(new(parent.Find("NotchImage").gameObject, parent.Find("SymbolImage").gameObject));
+                GameObject highscoreObject = Object.Instantiate(levelObject, panel.Find("Buttons").Find($"Tier{i}Button"));
+                highscoreObject.name = "Highscore";
+                highscoreText.Add(highscoreObject.GetComponent<Text>());
+                highscoreObject.transform.localPosition = new(115.55f, 0f, 0f);
+            }
         }
         foreach (Text item in highscoreText)
             item.text = "";

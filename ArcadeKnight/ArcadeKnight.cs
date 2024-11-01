@@ -89,14 +89,14 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>, IGlobalSettings<
             Minigame minigame = MinigameController.Minigames.FirstOrDefault(x => x.GetMinigameType() == recordData.Minigame);
             if (minigame == null)
             {
-                LogHelper.Write("Record data contains unknown minigame. Entry will be skipped.", KorzUtils.Enums.LogType.Warning, false);
+                LogHelper.Write<ArcadeKnight>("Record data contains unknown minigame. Entry will be skipped.", KorzUtils.Enums.LogType.Warning, false);
                 continue;
             }
             CourseMetaData courseMetaData = minigame.Courses.FirstOrDefault(x => x.Name == recordData.CourseName);
             if (courseMetaData == null)
             {
                 MinigameController.UnassignableRecordData.Add(recordData);
-                LogHelper.Write("Couldn't find course \"" + recordData.CourseName + "\" in minigame \"" + minigame.GetMinigameType().ToString() + "\". Entry will still be saved.", KorzUtils.Enums.LogType.Normal, false);
+                LogHelper.Write<ArcadeKnight>("Couldn't find course \"" + recordData.CourseName + "\" in minigame \"" + minigame.GetMinigameType().ToString() + "\". Entry will still be saved.", KorzUtils.Enums.LogType.Normal, false);
                 continue;
             }
             courseMetaData.EasyCourse.Highscore = recordData.EasyHighscore;
@@ -123,9 +123,4 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>, IGlobalSettings<
         records.AddRange(MinigameController.UnassignableRecordData);
         return new() { RecordData = records };
     }
-
-    // ToDo:
-    // Preview und Übung überspringbar machen
-
-    // Readme schreiben
 }

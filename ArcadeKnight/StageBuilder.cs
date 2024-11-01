@@ -63,14 +63,23 @@ public static class StageBuilder
         PlayMakerFSM fsm = tablet.LocateMyFSM("GG Boss UI");
         fsm.FsmVariables.FindFsmString("Boss Name Key").Value = "MinigameTitle";
         fsm.FsmVariables.FindFsmString("Description Key").Value = "MinigameDesc";
-        fsm.GetState("Reset Player").AddActions(() => 
+        fsm.GetState("Reset Player").AddActions(() =>
         {
             MinigameController.PracticeMode = ActiveMinigame.HasPracticeMode() && !MinigameController.GlobalSettings.DisablePractice;
             MinigameController.CurrentState = MinigameState.Active;
         });
-        fsm.GetState("Open UI").AddActions(() => MinigameController.CoroutineHolder.StartCoroutine(MinigameController.ControlSelection()));
-        fsm.GetState("Close UI").AddActions(() => MinigameController.CoroutineHolder.StopCoroutine("ControlSelection"));
-        fsm.GetState("Take Control").AddActions(() => HeroController.instance.StopCoroutine("ControlSelection"));
+        Coroutine runningRoutine = null;
+        fsm.GetState("Open UI").AddActions(() => runningRoutine = MinigameController.CoroutineHolder.StartCoroutine(MinigameController.ControlSelection()));
+        fsm.GetState("Close UI").AddActions(() =>
+        {
+            if (runningRoutine != null)
+                MinigameController.CoroutineHolder.StopCoroutine(runningRoutine);
+        });
+        fsm.GetState("Take Control").AddActions(() => 
+        {
+            if (runningRoutine != null)
+                MinigameController.CoroutineHolder.StopCoroutine(runningRoutine);
+        });
         fsm.GetState("Change Scene").GetFirstAction<BeginSceneTransition>().entryGateName.Value = "minigame_start";
 
         GameObject entryPoint = new("minigame_exit");
@@ -259,7 +268,7 @@ public static class StageBuilder
         teleporter.transform.position = new Vector3(HeroController.instance.transform.position.x, height);
         teleporter.SetActive(true);
         teleporter.transform.localScale = new(0.5f, 1f, 1f);
-        
+
         PlayMakerFSM teleportFsm = teleporter.GetComponent<PlayMakerFSM>();
         teleportFsm.FsmVariables.FindFsmString("Entry Gate").Value = "minigame_exit";
         teleportFsm.FsmVariables.FindFsmString("New Scene").Value = ActiveMinigame.GetEntryScene();
@@ -391,7 +400,7 @@ public static class StageBuilder
                 obstacleGameObject = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Spikes"]);
             else
             {
-                LogHelper.Write<ArcadeKnight>("Not an obstacle. Index in obstacle list:"+index);
+                LogHelper.Write<ArcadeKnight>("Not an obstacle. Index in obstacle list:" + index);
                 continue;
             }
             obstacleGameObject.transform.position = new(obstacle.XPosition, obstacle.YPosition);
