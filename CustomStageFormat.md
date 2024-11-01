@@ -124,7 +124,7 @@ Here is a list of obstacle examples
 | **RestrictObstacle** |||
 | Height| float | The heigth of the hitbox. If this is not set, the height will be either 1 (if "RevertDirection" is Up or Down), or indefinitely (if "RevertDirection" is Left or Right). If "RevertDirection" is "None" this will remain 0. |
 | Width | float | The width of the hitbox. If this is not set, the width will be either indefinitely (if "RevertDirection" is Up or Down), or 1 (if "RevertDirection" is Left or Right). If "RevertDirection" is "None" this will remain 0.|
-| AffectedAbility | string | The ability that you want to set. Must be one of: "canDash", "hasWalljump", "hasDoubleJump", "hasSuperDash", "damagePenalty", "hasAcidArmour".|
+| AffectedAbility | string | The ability that you want to set. Must be one of: "canDash", "hasWalljump", "hasDoubleJump", "hasSuperDash", "damagePenalty", "hasAcidArmour", "hasDashSlash", "hasGreatSlash", "hasCycloneSlash", "canFocus", "canFireball", "canDive", "canScream".|
 | SetValue | bool | The value you want "AffectedAbility" to set.|
 | RevertDirection | int | The direction at which the sign should revert its effect. For example, if this is 0 (left), exiting the sign through the left side (when this effect was triggered already), will revoke its effect. Left = 0, Up = 1, Right = 2, Down = 3, None = 4. If "None" (4) the sign can only be activated one time. |
 | HorizontalOffset | float | The horizontal offset of the hitbox, does not affect the sign sprite.|
