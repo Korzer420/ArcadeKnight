@@ -157,8 +157,7 @@
 				"hasSuperDash"
 			],
 			"ObjectsToRemove":[],
-			"Obstacles":
-			[
+			"Obstacles": [
 				{
 					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
 					"XPosition": 6.77,
@@ -198,6 +197,14 @@
 					"SetValue": true,
 					"AffectedAbility": "hasDoubleJump",
 					"RevertDirection": 0
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.RestrictObstacle, ArcadeKnight",
+					"XPosition": 204.51,
+					"YPosition": 29.41,
+					"SetValue": false,
+					"AffectedAbility": "hasDoubleJump",
+					"RevertDirection": 0
 				}
 			],
 			"PreviewPoints":
@@ -207,7 +214,7 @@
 				{"Item1": 115.78, "Item2": 32.76},
 				{"Item1": 137.54, "Item2": 30.9},
 				{"Item1": 161.9, "Item2": 22.24},
-				{"Item1": 174.03, "Item2": 28.95},
+				{"Item1": 174.03, "Item2": 28.95}
 			]
 		}
 	},

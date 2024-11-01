@@ -281,12 +281,19 @@ public static class StageBuilder
             {
                 string spriteName = sign.AffectedAbility switch
                 {
-                    "hasDoubleJump" => "Double_Jump",
-                    "hasSuperDash" => "Superdash",
-                    "hasWalljump" => "Wall_Jump",
-                    "canDash" => "Dash",
-                    "hasAcidArmour" => "Tear",
-                    "damagePenalty" => "Damage_Penalty",
+                    "hasDoubleJump" => "Monarch_Wings",
+                    "hasSuperDash" => "Crystal_Dash",
+                    "hasWalljump" => "Mantis_Claw",
+                    "canDash" => "Mothwing_Cloak",
+                    "hasAcidArmour" => "Ismas_Tear",
+                    "hasDashSlash" => "Dash_Slash",
+                    "hasGreatSlash" => "Great_Slash",
+                    "hasCycloneSlash" => "Cyclone_Slash",
+                    "canFocus" => "Focus",
+                    "canFireball" => "Vengeful_Spirit",
+                    "canDive" => "Desolate_Dive",
+                    "canScream" => "Howling_Wraiths",
+                    "damagePenalty" => "Broken_Mask",
                     _ => "Error"
                 };
                 if (spriteName == "Error")
@@ -294,17 +301,18 @@ public static class StageBuilder
                     LogHelper.Write<ArcadeKnight>("Couldn't assign ability \"" + sign.AffectedAbility + "\".", LogType.Error, false);
                     continue;
                 }
-                if (sign.SetValue)
-                    spriteName = "Allow_" + spriteName;
-                else
-                    spriteName = "No_" + spriteName;
-
                 obstacleGameObject = new("Ability Blocker");
                 obstacleGameObject.SetActive(false);
                 obstacleGameObject.transform.position = new(sign.XPosition, sign.YPosition, 0.02f);
                 obstacleGameObject.transform.localScale = new(2f, 2f, 1f);
-                obstacleGameObject.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites/" + spriteName);
+                obstacleGameObject.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites.Ability_Sign");
                 AbilityRestrictor controller = obstacleGameObject.AddComponent<AbilityRestrictor>();
+                if (sign.AffectedAbility == "hasDashSlash")
+                    sign.AffectedAbility = "hasUpwardSlash";
+                else if (sign.AffectedAbility == "hasGreatSlash")
+                    sign.AffectedAbility = "hasDashSlash";
+                else if (sign.AffectedAbility == "hasCycloneSlash")
+                    sign.AffectedAbility = "hasCyclone";
                 controller.AffectedFieldName = sign.AffectedAbility;
                 controller.SetValue = sign.SetValue;
                 controller.RevertDirection = sign.RevertDirection;
@@ -329,6 +337,24 @@ public static class StageBuilder
                 controller.Height = height;
                 controller.Width = width;
                 controller.Offset = new(sign.HorizontalOffset, sign.VerticalOffset);
+
+                GameObject abilitySprite = new("Ability Sprite");
+                abilitySprite.transform.SetParent(obstacleGameObject.transform);
+                abilitySprite.transform.localPosition = new(0f, -0.1f, -0.01f);
+                abilitySprite.transform.localScale = new(.4f, .4f);
+                abilitySprite.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites.Abilities." + spriteName);
+                abilitySprite.SetActive(true);
+
+                if (!sign.SetValue || (sign.AffectedAbility == "damagePenalty" && sign.SetValue))
+                {
+                    abilitySprite = new("Block");
+                    abilitySprite.transform.SetParent(obstacleGameObject.transform);
+                    abilitySprite.transform.localPosition = new(0f, -0.1f, -0.011f);
+                    abilitySprite.transform.localScale = new(.95f, .95f);
+                    abilitySprite.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites.ForbiddenSymbol");
+                    abilitySprite.SetActive(true);
+                }
+
                 obstacleGameObject.SetActive(true);
                 continue;
             }
@@ -362,9 +388,7 @@ public static class StageBuilder
                 fsm.FsmVariables.FindFsmGameObject("Target").Value = gate;
             }
             else if (obstacle is SpikeObstacle)
-            {
                 obstacleGameObject = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Spikes"]);
-            }
             else
             {
                 LogHelper.Write<ArcadeKnight>("Not an obstacle. Index in obstacle list:"+index);

@@ -41,7 +41,7 @@ public class AbilityRestrictor : MonoBehaviour
     {
         if (collider.tag == "Player")
         {
-            if (PlayerData.instance.GetBool(AffectedFieldName) == SetValue)
+            if (AbilityController.CheckState(AffectedFieldName) == SetValue)
                 return;
             if (AbilityController.CurrentRestrictions.Contains(this))
                 AbilityController.CurrentRestrictions.Remove(this);

@@ -1,4 +1,5 @@
 ﻿using ArcadeKnight.Components;
+using HutongGames.PlayMaker.Actions;
 using KorzUtils.Data;
 using KorzUtils.Helper;
 using Modding;
@@ -14,14 +15,28 @@ public static class AbilityController
 
     private static Dictionary<string, bool> _originalValues = [];
 
+    private static Dictionary<string, int> _originalSpellStates = new()
+    {
+        {nameof(PlayerData.fireballLevel), 1 },
+        {nameof(PlayerData.screamLevel), 1 },
+        {nameof(PlayerData.quakeLevel), 1 }
+    };
+
     private static Dictionary<string, bool> _initialRules = new()
     {
-        {nameof(PlayerData.instance.canDash), true},
-        {nameof(PlayerData.instance.hasWalljump), true},
-        {nameof(PlayerData.instance.hasSuperDash), true},
-        {nameof(PlayerData.instance.hasDoubleJump), true},
-        {nameof(PlayerData.instance.hasAcidArmour), true},
+        {nameof(PlayerData.canDash), true},
+        {nameof(PlayerData.hasWalljump), true},
+        {nameof(PlayerData.hasSuperDash), true},
+        {nameof(PlayerData.hasDoubleJump), true},
+        {nameof(PlayerData.hasAcidArmour), true},
         {"canFocus", true },
+        {nameof(PlayerData.hasDashSlash), true}, // Great slash
+        {nameof(PlayerData.hasUpwardSlash), true}, // Dash Slash
+        {nameof(PlayerData.hasCyclone), true},
+        {nameof(PlayerData.hasDreamNail), true },
+        {"canFireball", true },
+        {"canDive", true },
+        {"canScream", true },
         {"damagePenalty", false}
     };
 
@@ -61,22 +76,36 @@ public static class AbilityController
         if (_active)
             return;
         _active = true;
-        
+
         _originalValues.Clear();
         foreach (string key in _initialRules.Keys)
             _originalValues.Add(key, PlayerData.instance.GetBool(key));
 
+        foreach (string key in _originalSpellStates.Keys.ToList())
+            _originalSpellStates[key] = PlayerData.instance.GetInt(key);
+
         foreach (string rule in restrictions)
+        {
+            string realRule = rule;
+            // The nail arts have other names internally. To not bother the user with this, we convert them here from "normal" names.
+            if (realRule == "hasDashSlash")
+                realRule = "hasUpwardSlash";
+            else if (realRule == "hasGreatSlash")
+                realRule = "hasDashSlash";
+            else if (realRule == "hasCycloneSlash")
+                realRule = "hasCyclone";
+
             if (_initialRules.ContainsKey(rule))
                 _initialRules[rule] = false;
             else
                 LogHelper.Write<ArcadeKnight>("Restriction " + rule + " could not be established.", KorzUtils.Enums.LogType.Warning, false);
+        }
 
-        ResetToCurrentRules();
         ModHooks.SetPlayerBoolHook += ModHooks_SetPlayerBoolHook;
         ModHooks.AfterTakeDamageHook += ModHooks_AfterTakeDamageHook;
         On.GameManager.HazardRespawn += GameManager_HazardRespawn;
         On.HeroController.CanFocus += HeroController_CanFocus;
+        ResetToCurrentRules();
     }
 
     public static void Disable()
@@ -88,6 +117,8 @@ public static class AbilityController
         _canFocus = true;
         foreach (string key in _originalValues.Keys)
             PlayerData.instance.SetBool(key, _originalValues[key]);
+        foreach (string key in _originalSpellStates.Keys.ToList())
+            _originalSpellStates[key] = PlayerData.instance.GetInt(key);
         if (!_active)
             return;
         _active = false;
@@ -113,6 +144,8 @@ public static class AbilityController
             PlayMakerFSM.BroadcastEvent("GET ACID ARMOUR");
         else
             PlayMakerFSM.BroadcastEvent("REMOVE ACID ARMOUR");
+
+        PDHelper.HasNailArt = PDHelper.HasCyclone || PDHelper.HasDashSlash || PDHelper.HasUpwardSlash;
     }
 
     public static void AdjustCheckpoint()
@@ -130,6 +163,22 @@ public static class AbilityController
         CurrentRestrictions.Clear();
     }
 
+    public static bool CheckState(string name)
+    {
+        if (name == "damagePenalty")
+            return _damagePenalty;
+        else if (name == "canFocus")
+            return _canFocus;
+        else if (name == "canFireball")
+            return PDHelper.FireballLevel == 1;
+        else if (name == "canQuake")
+            return PDHelper.QuakeLevel == 1;
+        else if (name == "canScream")
+            return PDHelper.ScreamLevel == 1;
+        else
+            return PlayerData.instance.GetBool(name);
+    }
+
     #endregion
 
     #region Event handler
@@ -140,6 +189,12 @@ public static class AbilityController
             _damagePenalty = orig;
         else if (name == "canFocus")
             _canFocus = orig;
+        else if (name == "canFireball")
+            PDHelper.FireballLevel = orig ? 1 : 0;
+        else if (name == "canScream")
+            PDHelper.ScreamLevel = orig ? 1 : 0;
+        else if (name == "canDive")
+            PDHelper.QuakeLevel = orig ? 1 : 0;
         return orig;
     }
 
@@ -175,6 +230,24 @@ public static class AbilityController
                 self.GetState("Enable").AddTransition("REMOVE ACID ARMOUR", "Disable");
             }
         }
+        //else if (self.FsmName == "npc_dream_dialogue" && self.gameObject.name == "Impact")
+        //{
+        //    self.GetState("Idle").AdjustTransitions("Impact");
+        //    self.AddState("Generate Particles", () =>
+        //    {
+        //        GameObject hint = Object.Instantiate(ArcadeKnight.PreloadedObjects["Dream Effect"], self.transform);
+        //        hint.name = "Dream Hint";
+        //        hint.SetActive(true);
+        //        hint.GetComponent<ParticleSystem>().enableEmission = true;
+        //        hint.transform.position = self.transform.position;
+        //        hint.transform.position -= new Vector3(0f, 0f, 3f);
+        //    }, FsmTransitionData.FromTargetState("Idle").WithEventName("FINISHED"));
+        //    self.GetState("Impact").AdjustTransitions("Generate Particles");
+        //    self.GetState("Impact").RemoveActions(5);
+        //    self.GetState("Impact").RemoveActions(0);
+        //}
+        //else if (self.FsmName == "Dream Nail" && self.gameObject.name == "Knight")
+        //    self.GetState("Take Control").GetFirstAction<SendMessage>().Enabled = false;
         orig(self);
     }
 

@@ -4,5 +4,7 @@ public enum MinigameType
 {
     GorbsParkour,
 
-    NoEyesTrial
+    NoEyesTrial,
+
+    XerosMirrorWorld
 }
