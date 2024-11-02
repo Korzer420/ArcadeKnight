@@ -66,6 +66,8 @@ public abstract class Minigame
 
     internal virtual void AdditionalEntranceSetup() { }
 
+    internal virtual bool HasMandatoryPractice() => false;
+
     #endregion
 
     #region Eventhandler

@@ -46,7 +46,7 @@ public class XerosMirrorWorld : TimeMinigame
 
     internal List<(string, bool)> Imposter { get; set; } = [];
 
-    public List<bool> ImposterFlags { get; set; } = new();
+    public List<bool> ImposterFlags { get; set; } = [];
 
     #endregion
 
@@ -78,9 +78,9 @@ public class XerosMirrorWorld : TimeMinigame
 
     internal override string GetDescription() => "Remember the room and then dream nail all parts that changed.";
 
-    internal override Vector3 GetEntryPosition() => new(25.75f, 55.4f);
+    internal override Vector3 GetEntryPosition() => new(98.05f, 12.4f);
 
-    internal override string GetEntryScene() => "RestingGrounds_05";
+    internal override string GetEntryScene() => "RestingGrounds_02";
 
     internal override MinigameType GetMinigameType() => MinigameType.XerosMirrorWorld;
 
@@ -223,7 +223,6 @@ public class XerosMirrorWorld : TimeMinigame
             Difficulty.Hard => Random.Range(1, 11),
             _ => Random.Range(1, 8)
         };
-        imposterAmount = 3;
         for (int i = 0; i < imposterAmount; i++)
         {
             int selectedIndex = Random.Range(0, viableIndex.Count);
@@ -272,6 +271,8 @@ public class XerosMirrorWorld : TimeMinigame
         return allCorrect;
     }
 
+    internal override bool HasMandatoryPractice() => true;
+
     private bool HeroController_CanDreamNail(On.HeroController.orig_CanDreamNail orig, HeroController self) => true;
 
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
@@ -312,4 +313,6 @@ public class XerosMirrorWorld : TimeMinigame
         }
         orig(self);
     }
+
+    internal override void AdditionalEntranceSetup() => GameObject.Find("Inspect Region Ghost")?.SetActive(false);
 }

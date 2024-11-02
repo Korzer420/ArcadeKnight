@@ -1,4 +1,5 @@
-﻿using KorzUtils.Enums;
+﻿using ArcadeKnight.Obstacles;
+using KorzUtils.Enums;
 using KorzUtils.Helper;
 using Newtonsoft.Json;
 using System;
@@ -106,7 +107,7 @@ public static class CourseLoader
         if (string.IsNullOrEmpty(courseMetaData.Scene))
             errorMessage += "No scene provided.\r\n";
         if (courseMetaData.EasyCourse == null || courseMetaData.NormalCourse == null || courseMetaData.HardCourse == null)
-            errorMessage += "Not all three difficulties provided.";
+            errorMessage += "Not all three difficulties provided.\r\n";
         else
         {
             // Ensure that we don't have null values.
@@ -122,13 +123,22 @@ public static class CourseLoader
         }
         if (courseMetaData.EasyCourse.StartPositionX == 0 || courseMetaData.EasyCourse.StartPositionY == 0
             || courseMetaData.EasyCourse.EndPositionX == 0 || courseMetaData.EasyCourse.EndPositionY == 0)
-            errorMessage += "Easy course requires the start and end position to be assigned.";
+            errorMessage += "Easy course requires the start and end position to be assigned.\r\n";
         if (courseMetaData.NormalCourse.StartPositionX == 0 || courseMetaData.NormalCourse.StartPositionY == 0
             || courseMetaData.NormalCourse.EndPositionX == 0 || courseMetaData.NormalCourse.EndPositionY == 0)
-            errorMessage += "Normal course requires the start and end position to be assigned.";
+            errorMessage += "Normal course requires the start and end position to be assigned.\r\n";
         if (courseMetaData.HardCourse.StartPositionX == 0 || courseMetaData.HardCourse.StartPositionY == 0
             || courseMetaData.HardCourse.EndPositionX == 0 || courseMetaData.HardCourse.EndPositionY == 0)
-            errorMessage += "Hard course requires the start and end position to be assigned.";
+            errorMessage += "Hard course requires the start and end position to be assigned.\r\n";
+        if (courseMetaData.Minigame == Enums.MinigameType.XerosMirrorWorld)
+        {
+            if (courseMetaData.EasyCourse.Obstacles.Count(x => x is ImposterObstacle imposter && !imposter.AlwaysReal) < 5)
+                errorMessage += "Easy courses of Xeros Mirror world require at least 5 viable imposter obstacles.\r\n";
+            if (courseMetaData.NormalCourse.Obstacles.Count(x => x is ImposterObstacle imposter && !imposter.AlwaysReal) < 7)
+                errorMessage += "Normal courses of Xeros Mirror world require at least 7 viable imposter obstacles.\r\n";
+            if (courseMetaData.HardCourse.Obstacles.Count(x => x is ImposterObstacle imposter && !imposter.AlwaysReal) < 10)
+                errorMessage += "Hard courses of Xeros Mirror world require at least 10 viable imposter obstacles.\r\n";
+        }
 
         return errorMessage.TrimStart();
     }

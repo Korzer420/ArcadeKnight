@@ -68,7 +68,7 @@ public static class StageBuilder
         fsm.FsmVariables.FindFsmString("Description Key").Value = "MinigameDesc";
         fsm.GetState("Reset Player").AddActions(() =>
         {
-            MinigameController.PracticeMode = ActiveMinigame.HasPracticeMode() && !MinigameController.GlobalSettings.DisablePractice;
+            MinigameController.PracticeMode = ActiveMinigame.HasPracticeMode() && (!MinigameController.GlobalSettings.DisablePractice || ActiveMinigame.HasMandatoryPractice());
             MinigameController.CurrentState = MinigameState.Active;
         });
         Coroutine runningRoutine = null;
