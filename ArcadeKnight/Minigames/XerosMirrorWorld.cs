@@ -244,13 +244,13 @@ public class XerosMirrorWorld : TimeMinigame
                 wrongAccusedObjects++;
             else if (!ImposterFlags[i] && Imposter[i].Item2)
                 missedObjects++;
+        PenaltyTimer.transform.position -= new Vector3(0f, 2f);
         TextMeshPro textComponent = PenaltyTimer.GetComponent<TextMeshPro>();
         textComponent.text = "";
         PenaltyTimer.SetActive(true);
         yield return new WaitForSeconds(2f);
         if (wrongAccusedObjects > 0)
             textComponent.text = "<color=#de0404>Wrong accused: " + wrongAccusedObjects + " (+" + wrongAccusedObjects + " Minute(s))</color>\r\n";
-        yield return new WaitForSeconds(2f);
         if (missedObjects > 0)
             textComponent.text += "<color=#de0404>Missed: " + missedObjects + " (+" + missedObjects + " Minute(s))</color>";
         yield return new WaitForSeconds(3f);
@@ -272,7 +272,7 @@ public class XerosMirrorWorld : TimeMinigame
         return allCorrect;
     }
 
-    private bool HeroController_CanDreamNail(On.HeroController.orig_CanDreamNail orig, HeroController self) => HeroController.instance.CanInput();
+    private bool HeroController_CanDreamNail(On.HeroController.orig_CanDreamNail orig, HeroController self) => true;
 
     private void PlayMakerFSM_OnEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
     {
