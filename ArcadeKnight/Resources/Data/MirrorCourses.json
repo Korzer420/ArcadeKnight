@@ -1,104 +1,480 @@
 [
 	{
-		"Name": "Meh",
-		"Scene": "Crossroads_43",
+		"Name": "Ghost Gallery",
+		"Scene": "RestingGrounds_08",
 		"Author": "Korz",
 		"Minigame": 2,
 		"EasyCourse": {
-			"StartPositionX": 9.98,
+			"StartPositionX": 35.41,
 			"StartPositionY": 5.4,
-			"EndPositionX": 50.63,
-			"EndPositionY": 7.03,
+			"EndPositionX": 49.51,
+			"EndPositionY": 31.63,
 			"Restrictions": [],
 			"ObjectsToRemove": [
+				"Ghost atra",
+				"Ghost chagax",
+				"Ghost caspian",
+				"Ghost milly",
+				"Ghost kcin",
+				"Ghost garro",
+				"Ghost grohac",
+				"Dream Enter"
 			],
 			"Obstacles": [
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 18.31,
+					"XPosition": 58.46,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 66.32,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 74.07,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 85.85,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 92.83,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 101.78,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 100.95,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 89,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 81.03,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 75.75,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 24.31,
+					"XPosition": 83.38,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 32.31,
+					"XPosition": 96.33,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 40.31,
+					"XPosition": 105.96,
 					"YPosition": 6.4
 				}
 			],
-			"PreviewPoints": []
+			"PreviewPoints": [
+				{
+					"Item1": 112.15,
+					"Item2": 8.1
+				},
+				{
+					"Item1": 112.15,
+					"Item2": 20.11
+				},
+				{
+					"Item1": 79.27,
+					"Item2": 20.11
+				},
+				{
+					"Item1": 79.27,
+					"Item2": 33.52
+				},
+				{
+					"Item1": 102.07,
+					"Item2": 33.52
+				}
+			]
 		},
 		"NormalCourse": {
-			"StartPositionX": 9.98,
+			"StartPositionX": 35.41,
 			"StartPositionY": 5.4,
-			"EndPositionX": 50.63,
-			"EndPositionY": 7.03,
+			"EndPositionX": 49.9,
+			"EndPositionY": 55.66,
 			"Restrictions": [],
 			"ObjectsToRemove": [
+				"Ghost atra",
+				"Ghost chagax",
+				"Ghost caspian",
+				"Ghost milly",
+				"Ghost kcin",
+				"Ghost garro",
+				"Ghost grohac",
+				"karina",
+				"Ghost NPC 100 nail",
+				"Ghost perpetos",
+				"Ghost molten",
+				"Ghost magnus",
+				"Ghost waldie",
+				"Ghost wayner",
+				"Ghost wyatt",
+				"Ghost wyatt",
+				"Ghost hex",
+				"Ghost thistlewind",
+				"Ghost boss",
+				"Dream Enter"
 			],
 			"Obstacles": [
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 18.31,
+					"XPosition": 58.46,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 66.32,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 74.07,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 85.85,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 92.83,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 101.78,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 100.95,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 89,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 81.03,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 75.75,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 24.31,
+					"XPosition": 83.38,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 32.31,
+					"XPosition": 96.33,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 40.31,
+					"XPosition": 105.96,
 					"YPosition": 6.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 37.77,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 27.98,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 18.68,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 7.86,
+					"YPosition": 59.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 31.83,
+					"YPosition": 59.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 40.29,
+					"YPosition": 59.4
 				}
 			],
-			"PreviewPoints": []
+			"PreviewPoints": [
+				{
+					"Item1": 112.15,
+					"Item2": 8.1
+				},
+				{
+					"Item1": 112.15,
+					"Item2": 20.11
+				},
+				{
+					"Item1": 79.27,
+					"Item2": 20.11
+				},
+				{
+					"Item1": 79.27,
+					"Item2": 33.52
+				},
+				{
+					"Item1": 102.07,
+					"Item2": 33.52
+				},
+				{
+					"Item1": 15.92,
+					"Item2": 36.32
+				},
+				{
+					"Item1": 15.92,
+					"Item2": 59.72
+				}
+			]
 		},
 		"HardCourse": {
-			"StartPositionX": 9.98,
+			"StartPositionX": 35.41,
 			"StartPositionY": 5.4,
-			"EndPositionX": 50.63,
-			"EndPositionY": 7.03,
+			"EndPositionX": 127.33,
+			"EndPositionY": 7.24,
 			"Restrictions": [],
 			"ObjectsToRemove": [
+				"Ghost atra",
+				"Ghost chagax",
+				"Ghost caspian",
+				"Ghost milly",
+				"Ghost kcin",
+				"Ghost garro",
+				"Ghost grohac",
+				"karina",
+				"Ghost NPC 100 nail",
+				"Ghost perpetos",
+				"Ghost molten",
+				"Ghost magnus",
+				"Ghost waldie",
+				"Ghost wayner",
+				"Ghost wyatt",
+				"Ghost wyatt",
+				"Ghost hex",
+				"Ghost thistlewind",
+				"Ghost boss",
+				"Dream Enter"
 			],
 			"Obstacles": [
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 18.31,
+					"XPosition": 58.46,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 66.32,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 74.07,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 85.85,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 92.83,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 101.78,
+					"YPosition": 29.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 100.95,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 89,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 81.03,
+					"YPosition": 18.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 75.75,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 24.31,
+					"XPosition": 83.38,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 32.31,
+					"XPosition": 96.33,
 					"YPosition": 6.4
 				},
 				{
 					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
-					"XPosition": 40.31,
+					"XPosition": 105.96,
 					"YPosition": 6.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 37.77,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 27.98,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 18.68,
+					"YPosition": 34.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 7.86,
+					"YPosition": 59.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 31.83,
+					"YPosition": 59.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 40.29,
+					"YPosition": 59.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 62.19,
+					"YPosition": 57.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 70.16,
+					"YPosition": 57.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 84.93,
+					"YPosition": 57.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 94.56,
+					"YPosition": 57.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 104.85,
+					"YPosition": 57.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 113.15,
+					"YPosition": 57.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 145.4,
+					"YPosition": 57.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 157.85,
+					"YPosition": 57.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 188.29,
+					"YPosition": 26.4
+				},
+				{
+					"$type": "ArcadeKnight.Obstacles.ImposterObstacle, ArcadeKnight",
+					"XPosition": 205.41,
+					"YPosition": 26.4
 				}
 			],
-			"PreviewPoints": []
+			"PreviewPoints": [
+				{
+					"Item1": 112.15,
+					"Item2": 8.1
+				},
+				{
+					"Item1": 112.15,
+					"Item2": 20.11
+				},
+				{
+					"Item1": 79.27,
+					"Item2": 20.11
+				},
+				{
+					"Item1": 79.27,
+					"Item2": 33.52
+				},
+				{
+					"Item1": 102.07,
+					"Item2": 33.52
+				},
+				{
+					"Item1": 15.92,
+					"Item2": 36.32
+				},
+				{
+					"Item1": 15.92,
+					"Item2": 59.72
+				},
+				{
+					"Item1": 120.25,
+					"Item2": 57.45
+				}
+			]
 		}
 	}
 ]
