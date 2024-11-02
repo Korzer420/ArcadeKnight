@@ -3,6 +3,8 @@ A Hollow Knight mod that offers some minigames with custom stage support.
 
 This mod is a collection of small minigames with each one having its own rules, scores, maps etc.
 
+Custom sign sprites made by KAdala <3
+
 ## How do I play?
 In certain spots in the overworld you can open a selection menu for a specific minigame (for the exact position, read the individual minigame segment). There you can select a level via left and right, as well as selecting the difficulty with up or down.
 Pressing confirm will then bring you into the minigame map, where you objective depends on the selected game. Each difficulty level and different stage has its own highscores that will be tracked. Besides the basic ones, you can also play custom levels (Look under "Custom Level" for more info.
