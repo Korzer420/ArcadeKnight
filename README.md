@@ -55,7 +55,7 @@ You can start this minigame at the statue next to the entrance of stone sanctuar
 A score penalty adds 5/10/15 seconds at the end (depending on difficulty), displayed as red text under the normal timer.
 
 ### Xeros Mirror World
-Remember all "signs" in the room. Once you're done, you can enter the dreamgate at the end to start phase 2. Reach the end after hitting all signs with the dream nails that are off/have changed. Note that you can use your dream nail in the air for this minigame.
+Remember all "signs" in the room. Once you're done, you can enter the dreamgate at the end to start phase 2. Reach the end after hitting all signs with the dream nails that are off/have changed. Note that you can use your dream nail in the air for this minigame. You can find this minigame at the Xero Grave in Resting grounds.
 Depending on your difficulty this minigame behaves a bit differently:
 Easy: On easy, the finish line only "appears" after you successfully hit all objects (told by a message when you're done). Hitting a wrong object causes you to take damage and a score penalty (10 seconds each)
 Normal: The finish line is available from the start. However, touching it will apply a 1 minute penalty for each object that you missed/wrongly accused. Hitting an object does not directly tell you, if you're correct (you can always toggle the effect by dream nailing again). Normal score penalty: 20 seconds
