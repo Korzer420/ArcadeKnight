@@ -1,5 +1,6 @@
 ﻿using ArcadeKnight.Enums;
 using ArcadeKnight.Extensions;
+using ArcadeKnight.Minigames;
 using System;
 using System.Collections;
 using System.Threading;
@@ -80,8 +81,15 @@ public abstract class TimeMinigame : Minigame
                 yield return new WaitUntil(() => GameManager.instance?.IsGamePaused() == false);
         }
         _passedTime += _timePenalties * TimePenaltyFactor();
-        GameObject.Destroy(_penaltyTimer);
+        if (MinigameController.ActiveMinigame is not XerosMirrorWorld || MinigameController.SelectedDifficulty != Difficulty.Normal)
+            GameObject.Destroy(_penaltyTimer);
         currentCounter.text = TimeSpan.FromSeconds(_passedTime).ToFormat("mm:ss.ff");
+    }
+
+    public float AddTimePenalty(float seconds) 
+    {
+        _passedTime += seconds;
+        return _passedTime;
     }
 
     protected virtual int TimePenaltyFactor() => 1;

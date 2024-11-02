@@ -1,4 +1,5 @@
 ﻿using ArcadeKnight.SaveData;
+using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
 using Modding;
 using System.Collections.Generic;
@@ -39,8 +40,7 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>, IGlobalSettings<
         ("Fungus1_22", "Metal Gate"),
         ("Crossroads_01", "_Transition Gates/door1"),
         ("Cliffs_02", "Cave Spikes (14)"),
-        ("Abyss_20", "Dream Dialogue"),
-        ("Ruins_Bathhouse", "Ghost NPC/Idle Pt"),
+        ("Abyss_20", "Dream Dialogue")
     };
 
     public override string GetVersion() => "0.2.0.0";
@@ -58,7 +58,6 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>, IGlobalSettings<
         PreloadedObjects.Add("Switch", preloadedObjects["Fungus1_22"]["Gate Switch"]);
         PreloadedObjects.Add("Door", preloadedObjects["Crossroads_01"]["_Transition Gates/door1"]);
         PreloadedObjects.Add("Dream Impact", preloadedObjects["Abyss_20"]["Dream Dialogue"]);
-        PreloadedObjects.Add("Dream Effect", preloadedObjects["Ruins_Bathhouse"]["Ghost NPC/Idle Pt"]);
         PreloadedObjects["Door"].transform.position = new(0f, 0f);
         GameObject spikes = new("Spikes");
         GameObject.DontDestroyOnLoad(spikes);
@@ -74,7 +73,6 @@ public class ArcadeKnight : Mod, ILocalSettings<LocalSaveData>, IGlobalSettings<
         PreloadedObjects.Add("Spikes", spikes);
         GameObject.Destroy(preloadedObjects["Cliffs_02"]["Cave Spikes (14)"]);
         MinigameController.Initialize();
-        //On.HeroController.CanDreamNail += (x, y) => true;
     }
 
     public void OnLoadGlobal(GlobalSaveData globalSaveData) => MinigameController.GlobalSettings = globalSaveData ?? new();

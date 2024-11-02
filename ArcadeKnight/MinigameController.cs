@@ -81,6 +81,7 @@ public static class MinigameController
     {
         Minigames.Add(new GorbsParkour());
         Minigames.Add(new NoEyesTrial());
+        Minigames.Add(new XerosMirrorWorld());
         CourseLoader.Load();
     }
 
@@ -335,58 +336,6 @@ public static class MinigameController
             });
         else
             ActiveMinigame = null;
-        //if (newScene.name == "Town")
-        //{
-        //    string[] abilities = 
-        //    [
-        //        "Broken_Mask",
-        //        "Crystal_Dash",
-        //        "Dream_Gate",
-        //        "Monarch_Wings",
-        //        "Mantis_Claw",
-        //        "Vengeful_Spirit",
-        //        "Dash_Slash",
-        //        "Cyclone_Slash",
-        //        "Great_Slash",
-        //        "Desolate_Dive",
-        //        "Ismas_Tear",
-        //        "Howling_Wraiths",
-        //        "Mothwing_Cloak",
-        //        "Focus"
-        //    ];
-        //    for (int i = 0; i < abilities.Length; i++)
-        //    {
-        //        GameObject obstacleGameObject = new(abilities[i]);
-        //        obstacleGameObject.SetActive(false);
-        //        obstacleGameObject.transform.position = new(42.43f + (i * 4f), 12.4f, 0.02f);
-        //        obstacleGameObject.transform.localScale = new(2f, 2f, 1f);
-        //        obstacleGameObject.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites.Imposter_Sign");
-        //        obstacleGameObject.SetActive(true);
-
-        //        GameObject abilitySprite = new("Ability Sprite");
-        //        abilitySprite.transform.SetParent(obstacleGameObject.transform);
-        //        abilitySprite.transform.localPosition = new(0f, -0.1f, -0.01f);
-        //        // Normal sign scale
-        //        //abilitySprite.transform.localScale = new(.4f, .4f);
-        //        // Imposter scale
-        //        //abilitySprite.transform.localScale = new(.28f, .28f);
-        //        abilitySprite.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites.Abilities." + abilities[i]);
-        //        abilitySprite.SetActive(true);
-
-        //        //abilitySprite = new("Block");
-        //        //abilitySprite.transform.SetParent(obstacleGameObject.transform);
-        //        //abilitySprite.transform.localPosition = new(0f, -0.1f, -0.011f);
-        //        //abilitySprite.transform.localScale = new(.95f, .95f);
-        //        //abilitySprite.AddComponent<SpriteRenderer>().sprite = SpriteHelper.CreateSprite<ArcadeKnight>("Sprites.ForbiddenSymbol");
-        //        //abilitySprite.SetActive(true);
-        //    }
-            
-        //    //GameObject dreamImpact = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Dream Impact"]);
-        //    //dreamImpact.name = "Impact";
-        //    //dreamImpact.SetActive(false);
-        //    //dreamImpact.transform.position = new(42.43f, 11.4f);
-        //    //dreamImpact.SetActive(true);
-        //}
     }
 
     private static IEnumerator UIManager_ReturnToMainMenu(On.UIManager.orig_ReturnToMainMenu orig, UIManager self)

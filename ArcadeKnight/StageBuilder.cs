@@ -1,5 +1,6 @@
 ﻿using ArcadeKnight.Components;
 using ArcadeKnight.Enums;
+using ArcadeKnight.Minigames;
 using ArcadeKnight.Obstacles;
 using HutongGames.PlayMaker.Actions;
 using KorzUtils.Helper;
@@ -44,6 +45,8 @@ public static class StageBuilder
         }
     }
 
+    public static GameObject FinishLine { get; set; }
+
     #endregion
 
     #region Methods
@@ -75,7 +78,7 @@ public static class StageBuilder
             if (runningRoutine != null)
                 MinigameController.CoroutineHolder.StopCoroutine(runningRoutine);
         });
-        fsm.GetState("Take Control").AddActions(() => 
+        fsm.GetState("Take Control").AddActions(() =>
         {
             if (runningRoutine != null)
                 MinigameController.CoroutineHolder.StopCoroutine(runningRoutine);
@@ -176,8 +179,14 @@ public static class StageBuilder
             {
                 if (!MinigameController.PracticeMode)
                     ActiveMinigame.Begin();
-                else
+                else if (MinigameController.ActiveMinigame.GetMinigameType() == MinigameType.NoEyesTrial)
                     GameHelper.DisplayMessage("Enter the dreamgate at the end to quit practice.");
+                else if (MinigameController.ActiveMinigame.GetMinigameType() == MinigameType.XerosMirrorWorld)
+                {
+                    // Roll imposter
+                    (MinigameController.ActiveMinigame as XerosMirrorWorld).RollImposter();
+                    GameHelper.DisplayMessage("Enter the dreamgate at the end to enter phase 2.");
+                }
                 ModHooks.GetPlayerBoolHook -= ModHooks_GetPlayerBoolHook;
             }, () => !MinigameController.PlayingPreview, false);
         }, HeroController.instance.CanInput, false);
@@ -229,11 +238,12 @@ public static class StageBuilder
         }
         else
         {
-            GameObject exit = Object.Instantiate(ArcadeKnight.PreloadedObjects["ExitTrigger"]);
-            exit.transform.position = position + new Vector3(0.1f, 1.5f);
-            exit.SetActive(false);
+            FinishLine = Object.Instantiate(ArcadeKnight.PreloadedObjects["ExitTrigger"]);
+            FinishLine.name = "Minigame_Finish";
+            FinishLine.transform.position = position + new Vector3(0.1f, 1.5f);
+            FinishLine.SetActive(false);
 
-            PlayMakerFSM fsm = exit.LocateMyFSM("Control");
+            PlayMakerFSM fsm = FinishLine.LocateMyFSM("Control");
             fsm.AddState(new(fsm.Fsm)
             {
                 Name = "Idle",
@@ -244,11 +254,11 @@ public static class StageBuilder
             fsm.FsmVariables.FindFsmString("Return Scene").Value = ActiveMinigame.GetEntryScene();
             fsm.FsmVariables.FindFsmString("Return Door").Value = "minigame_exit";
             PlayerData.instance.dreamReturnScene = ActiveMinigame.GetEntryScene();
-            exit.AddComponent<FinishTrigger>();
-            exit.SetActive(true);
+            FinishLine.AddComponent<FinishTrigger>();
+            FinishLine.SetActive(true);
 
             // I can't delete the child somehow... Well, then we resort to other solutions.
-            exit.transform.GetChild(0).transform.position = new Vector3(-1000f, -1000f);
+            FinishLine.transform.GetChild(0).transform.position = new Vector3(-1000f, -1000f);
         }
     }
 
@@ -280,6 +290,9 @@ public static class StageBuilder
     private static void CreateObstacles(Obstacle[] obstacles)
     {
         int index = -1;
+        if (MinigameController.ActiveMinigame.GetMinigameType() == MinigameType.XerosMirrorWorld && MinigameController.PracticeMode)
+            (MinigameController.ActiveMinigame as XerosMirrorWorld).Imposter.Clear();
+        
         foreach (Obstacle obstacle in obstacles)
         {
             index++;
@@ -398,6 +411,14 @@ public static class StageBuilder
             }
             else if (obstacle is SpikeObstacle)
                 obstacleGameObject = GameObject.Instantiate(ArcadeKnight.PreloadedObjects["Spikes"]);
+            else if (obstacle is ImposterObstacle imposter)
+            {
+                if (ActiveMinigame?.GetMinigameType() != MinigameType.XerosMirrorWorld)
+                    LogHelper.Write<ArcadeKnight>("Imposter obstacles are only viable in Xeros Mirror World.");
+                else
+                    (MinigameController.ActiveMinigame as XerosMirrorWorld).SetupImposter(imposter);
+                continue;
+            }
             else
             {
                 LogHelper.Write<ArcadeKnight>("Not an obstacle. Index in obstacle list:" + index);
