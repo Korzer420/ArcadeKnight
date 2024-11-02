@@ -173,7 +173,7 @@ public class XerosMirrorWorld : TimeMinigame
                             abilitySprite.GetComponent<SpriteRenderer>().flipY = true;
                         break;
                     case ImposterEffect.Rotation:
-                        abilitySprite.transform.SetRotationZ(Random.Range(10, 46));
+                        abilitySprite.transform.SetRotationZ(Random.Range(15, 46));
                         break;
                     case ImposterEffect.Color:
                         abilitySprite.GetComponent<SpriteRenderer>().color = new(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.9f));
@@ -198,7 +198,7 @@ public class XerosMirrorWorld : TimeMinigame
                         abilitySprite.transform.localScale = new(xScale, yScale);
                         break;
                     default:
-                        obstacleGameObject.GetComponent<SpriteRenderer>().flipX = true;
+                        obstacleGameObject.GetComponent<SpriteRenderer>().flipY = true;
                         break;
                 }
             }
