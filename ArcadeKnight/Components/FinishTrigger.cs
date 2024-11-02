@@ -41,7 +41,13 @@ public class FinishTrigger : MonoBehaviour
             {
                 if (MinigameController.SelectedDifficulty == Difficulty.Hard)
                 {
-
+                    if (!(MinigameController.ActiveMinigame as XerosMirrorWorld).EvaluteHardModeResult())
+                    {
+                        PDHelper.DisablePause = false;
+                        PDHelper.IsInvincible = false;
+                        GameHelper.DisplayMessage("Not correct...");
+                        return;
+                    }
                 }
                 else if (MinigameController.SelectedDifficulty == Difficulty.Normal)
                 {
@@ -55,13 +61,6 @@ public class FinishTrigger : MonoBehaviour
             if (showScore)
                 StartCoroutine(DisplayScore());
         }
-    }
-
-    private void AddPenalty()
-    {
-        _endingStarted = true;
-        MinigameController.CurrentState = MinigameState.Finish;
-        HeroController.instance.RelinquishControl();
     }
 
     public IEnumerator DisplayScore()

@@ -60,7 +60,7 @@ public abstract class Minigame
 
     internal abstract bool CheckHighscore(CourseData runCourse);
 
-    internal abstract void ApplyScorePenalty();
+    internal abstract void ApplyScorePenalty(int count = 1);
 
     internal virtual bool HasPracticeMode() => false;
 

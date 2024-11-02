@@ -223,6 +223,7 @@ public class XerosMirrorWorld : TimeMinigame
             Difficulty.Hard => Random.Range(1, 11),
             _ => Random.Range(1, 8)
         };
+        imposterAmount = 3;
         for (int i = 0; i < imposterAmount; i++)
         {
             int selectedIndex = Random.Range(0, viableIndex.Count);
@@ -236,13 +237,12 @@ public class XerosMirrorWorld : TimeMinigame
     public IEnumerator EvaluteResult(FinishTrigger finishTrigger)
     {
         yield return null;
-        XerosMirrorWorld xerosMirrorWorld = MinigameController.ActiveMinigame as XerosMirrorWorld;
         int wrongAccusedObjects = 0;
         int missedObjects = 0;
-        for (int i = 0; i < xerosMirrorWorld.ImposterFlags.Count; i++)
-            if (xerosMirrorWorld.ImposterFlags[i] && !xerosMirrorWorld.Imposter[i].Item2)
+        for (int i = 0; i < ImposterFlags.Count; i++)
+            if (ImposterFlags[i] && !Imposter[i].Item2)
                 wrongAccusedObjects++;
-            else if (!xerosMirrorWorld.ImposterFlags[i] && xerosMirrorWorld.Imposter[i].Item2)
+            else if (!ImposterFlags[i] && Imposter[i].Item2)
                 missedObjects++;
         TextMeshPro textComponent = PenaltyTimer.GetComponent<TextMeshPro>();
         textComponent.text = "";
@@ -254,10 +254,22 @@ public class XerosMirrorWorld : TimeMinigame
         if (missedObjects > 0)
             textComponent.text += "<color=#de0404>Missed: " + missedObjects + " (+" + missedObjects + " Minute(s))</color>";
         yield return new WaitForSeconds(3f);
-        xerosMirrorWorld.AddTimePenalty(60 * wrongAccusedObjects);
-        GameObject.Destroy(xerosMirrorWorld.PenaltyTimer);
-        MinigameController.Tracker.GetComponent<TextMeshPro>().text = TimeSpan.FromSeconds(xerosMirrorWorld.AddTimePenalty(60 * missedObjects)).ToFormat("mm:ss.ff");
+        AddTimePenalty(60 * wrongAccusedObjects);
+        GameObject.Destroy(PenaltyTimer);
+        MinigameController.Tracker.GetComponent<TextMeshPro>().text = TimeSpan.FromSeconds(AddTimePenalty(60 * missedObjects)).ToFormat("mm:ss.ff");
         yield return finishTrigger.DisplayScore();
+    }
+
+    public bool EvaluteHardModeResult()
+    {
+        bool allCorrect = true;
+        for (int i = 0; i < ImposterFlags.Count; i++)
+            if ((ImposterFlags[i] && !Imposter[i].Item2) || (!ImposterFlags[i] && Imposter[i].Item2))
+            {
+                ApplyScorePenalty();
+                allCorrect = false;
+            }
+        return allCorrect;
     }
 
     private bool HeroController_CanDreamNail(On.HeroController.orig_CanDreamNail orig, HeroController self) => HeroController.instance.CanInput();

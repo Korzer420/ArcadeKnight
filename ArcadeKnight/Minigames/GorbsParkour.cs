@@ -59,9 +59,9 @@ internal class GorbsParkour : Minigame
         return false;
     }
 
-    internal override void ApplyScorePenalty()
+    internal override void ApplyScorePenalty(int count = 1)
     {
-        _score++;
+        _score += count;
         MinigameController.CoroutineHolder.StartCoroutine(MinigameController.UpdateProgression(_score.ToString()));
     }
 

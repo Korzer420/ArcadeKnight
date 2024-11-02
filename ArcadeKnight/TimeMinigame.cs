@@ -94,7 +94,7 @@ public abstract class TimeMinigame : Minigame
 
     protected virtual int TimePenaltyFactor() => 1;
 
-    internal override void ApplyScorePenalty() => Interlocked.Increment(ref _timePenalties);
-
+    internal override void ApplyScorePenalty(int count = 1) => _timePenalties += count;
+    
     #endregion
 }
