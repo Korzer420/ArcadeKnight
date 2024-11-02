@@ -52,6 +52,13 @@ This minigame does work with a timer. Reach the goal as fast as possible. The ti
 You can start this minigame at the statue next to the entrance of stone sanctuary. (The statue left to the door to the No Eyes room)
 A score penalty adds 5/10/15 seconds at the end (depending on difficulty), displayed as red text under the normal timer.
 
+### Xeros Mirror World
+Remember all "signs" in the room. Once you're done, you can enter the dreamgate at the end to start phase 2. Reach the end after hitting all signs with the dream nails that are off/have changed. Note that you can use your dream nail in the air for this minigame.
+Depending on your difficulty this minigame behaves a bit differently:
+Easy: On easy, the finish line only "appears" after you successfully hit all objects (told by a message when you're done). Hitting a wrong object causes you to take damage and a score penalty (10 seconds each)
+Normal: The finish line is available from the start. However, touching it will apply a 1 minute penalty for each object that you missed/wrongly accused. Hitting an object does not directly tell you, if you're correct (you can always toggle the effect by dream nailing again). Normal score penalty: 20 seconds
+Hard: Hard works similiar to normal with two key differences: The penalty for a wrong object is only 30 seconds instead of 1 minute and the minigame does not end, if you touch the finish line if objects are still in a wrong state. This could cause you to take multiple penalty batches. Score penalty: 30 seconds
+
 ## Custom Stages
 This mod does provide "fairly easy" options to create your own stages and share them with other people. **DISCLAIMER: I'm not responsible for any offensive message, that might be caused by custom stages! You can always identify the normal built-in stages, since they are the only stages in the stage selection menu that do not have the author text "(by X)".**
 
@@ -83,6 +90,7 @@ The obstacle types are:
 - RespawnObstacle: Spawns a sign that sets a checkpoint upon entering it.
 - GateObstacle: Spawns a gate and a lever, which opens said gate.
 - RestrictObstacle: Spawns a sign that toggle a player ability upon entering its hitbox.
+- ImposterObstacle: Spawns a sign which shows a random ability sprite. (Only usable in Xeros Mirror World)
 
 #### Tips
 Generally speaking, upon understanding the format and copying repeated data, you should be fine creating your level.
