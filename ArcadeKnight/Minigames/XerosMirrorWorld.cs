@@ -1,13 +1,16 @@
-﻿using ArcadeKnight.Enums;
+﻿using ArcadeKnight.Components;
+using ArcadeKnight.Enums;
 using ArcadeKnight.Extensions;
 using ArcadeKnight.Obstacles;
 using HutongGames.PlayMaker.Actions;
 using KorzUtils.Data;
 using KorzUtils.Helper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -229,6 +232,33 @@ public class XerosMirrorWorld : TimeMinigame
     }
 
     private ImposterEffect SelectEffect() => (ImposterEffect)Random.Range(0, MinigameController.SelectedDifficulty == Difficulty.Easy ? 6 : 3);
+
+    public IEnumerator EvaluteResult(FinishTrigger finishTrigger)
+    {
+        yield return null;
+        XerosMirrorWorld xerosMirrorWorld = MinigameController.ActiveMinigame as XerosMirrorWorld;
+        int wrongAccusedObjects = 0;
+        int missedObjects = 0;
+        for (int i = 0; i < xerosMirrorWorld.ImposterFlags.Count; i++)
+            if (xerosMirrorWorld.ImposterFlags[i] && !xerosMirrorWorld.Imposter[i].Item2)
+                wrongAccusedObjects++;
+            else if (!xerosMirrorWorld.ImposterFlags[i] && xerosMirrorWorld.Imposter[i].Item2)
+                missedObjects++;
+        TextMeshPro textComponent = PenaltyTimer.GetComponent<TextMeshPro>();
+        textComponent.text = "";
+        PenaltyTimer.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        if (wrongAccusedObjects > 0)
+            textComponent.text = "<color=#de0404>Wrong accused: " + wrongAccusedObjects + " (+" + wrongAccusedObjects + " Minute(s))</color>\r\n";
+        yield return new WaitForSeconds(2f);
+        if (missedObjects > 0)
+            textComponent.text += "<color=#de0404>Missed: " + missedObjects + " (+" + missedObjects + " Minute(s))</color>";
+        yield return new WaitForSeconds(3f);
+        xerosMirrorWorld.AddTimePenalty(60 * wrongAccusedObjects);
+        GameObject.Destroy(xerosMirrorWorld.PenaltyTimer);
+        MinigameController.Tracker.GetComponent<TextMeshPro>().text = TimeSpan.FromSeconds(xerosMirrorWorld.AddTimePenalty(60 * missedObjects)).ToFormat("mm:ss.ff");
+        yield return finishTrigger.DisplayScore();
+    }
 
     private bool HeroController_CanDreamNail(On.HeroController.orig_CanDreamNail orig, HeroController self) => HeroController.instance.CanInput();
 

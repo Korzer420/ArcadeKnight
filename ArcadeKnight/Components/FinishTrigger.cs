@@ -34,6 +34,7 @@ public class FinishTrigger : MonoBehaviour
     {
         if (collider.tag == "Player" && !_endingStarted)
         {
+            bool showScore = true;
             PDHelper.DisablePause = true;
             PDHelper.IsInvincible = true;
             if (MinigameController.ActiveMinigame.GetMinigameType() == MinigameType.XerosMirrorWorld)
@@ -44,48 +45,26 @@ public class FinishTrigger : MonoBehaviour
                 }
                 else if (MinigameController.SelectedDifficulty == Difficulty.Normal)
                 {
-                    StartCoroutine(AddPenalty());
-                    return;
+                    showScore = false;
+                    StartCoroutine((MinigameController.ActiveMinigame as XerosMirrorWorld).EvaluteResult(this));
                 }
             }
             _endingStarted = true;
             MinigameController.CurrentState = MinigameState.Finish;
             HeroController.instance.RelinquishControl();
-            StartCoroutine(DisplayScore());
+            if (showScore)
+                StartCoroutine(DisplayScore());
         }
     }
 
-    private IEnumerator AddPenalty()
+    private void AddPenalty()
     {
         _endingStarted = true;
         MinigameController.CurrentState = MinigameState.Finish;
         HeroController.instance.RelinquishControl();
-        TextMeshPro textComponent = (MinigameController.ActiveMinigame as XerosMirrorWorld).PenaltyTimer.GetComponent<TextMeshPro>();
-        textComponent.gameObject.SetActive(true);
-        yield return null;
-        XerosMirrorWorld xerosMirrorWorld = MinigameController.ActiveMinigame as XerosMirrorWorld;
-        int wrongAccusedObjects = 0;
-        int missedObjects = 0;
-        for (int i = 0; i < xerosMirrorWorld.ImposterFlags.Count; i++)
-            if (xerosMirrorWorld.ImposterFlags[i] && !xerosMirrorWorld.Imposter[i].Item2)
-                wrongAccusedObjects++;
-            else if (!xerosMirrorWorld.ImposterFlags[i] && xerosMirrorWorld.Imposter[i].Item2)
-                missedObjects++;
-        textComponent.text = "";
-        yield return new WaitForSeconds(2f);
-        if (wrongAccusedObjects > 0)
-            textComponent.text = "<color=#de0404>Wrong accused: " + wrongAccusedObjects+" (+"+wrongAccusedObjects+ " Minute(s))</color>";
-        yield return new WaitForSeconds(2f);
-        if (missedObjects > 0)
-            textComponent.text = "<color=#de0404>Missed: " + missedObjects + " (+" + missedObjects + " Minute(s))</color>";
-        yield return new WaitForSeconds(3f);
-        xerosMirrorWorld.AddTimePenalty(60 * wrongAccusedObjects);
-        GameObject.Destroy(xerosMirrorWorld.PenaltyTimer);
-        MinigameController.Tracker.GetComponent<TextMeshPro>().text = TimeSpan.FromSeconds(xerosMirrorWorld.AddTimePenalty(60 * missedObjects)).ToFormat("mm:ss.ff");
-        yield return DisplayScore();
     }
 
-    private IEnumerator DisplayScore()
+    public IEnumerator DisplayScore()
     {
         // Scale 10, 10
         // Position 0,0
@@ -104,7 +83,7 @@ public class FinishTrigger : MonoBehaviour
         if (MinigameController.ActiveMinigame.CheckHighscore(MinigameController.ActiveCourse))
             MinigameController.Tracker.GetComponent<TextMeshPro>().text = MinigameController.Tracker.GetComponent<TextMeshPro>().text + "\r\nNew Highscore!";
         timePassed = 0f;
-        while(timePassed < 3f)
+        while (timePassed < 3f)
         {
             yield return new WaitForSeconds(0.25f);
             timePassed += 0.25f;
