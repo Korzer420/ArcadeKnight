@@ -105,7 +105,7 @@ Here is a list of obstacle examples
 ```
 | Field | Type | Description |
 |-------|------|-------------|
-| $type | string | The type of element. All are written like this "ArcadeKnight.Obstacles.X, ArcadeKnight", while "X" is the specific type. Either "SpikeObstacle", "CourseObstacle", "GateObstacle", "RespawnObstacle" or "RestrictObstacle"|
+| $type | string | The type of element. All are written like this "ArcadeKnight.Obstacles.X, ArcadeKnight", while "X" is the specific type. Either "SpikeObstacle", "CourseObstacle", "GateObstacle", "RespawnObstacle", "RestrictObstacle" or "ImposterObstacle"|
 | XPosition | float | The x coordinate of the obstacle.|
 | YPosition | float | The y coordinate of the obstacle.|
 | Rotation | float | The rotation of the obstacle.|
@@ -129,3 +129,5 @@ Here is a list of obstacle examples
 | RevertDirection | int | The direction at which the sign should revert its effect. For example, if this is 0 (left), exiting the sign through the left side (when this effect was triggered already), will revoke its effect. Left = 0, Up = 1, Right = 2, Down = 3, None = 4. If "None" (4) the sign can only be activated one time. |
 | HorizontalOffset | float | The horizontal offset of the hitbox, does not affect the sign sprite.|
 | VerticalOffset | float | The vertical offset of the hitbox, does not affect the sign sprite.|
+| **ImposterObstacle**| | Xeros Mirror World only!|
+| AlwaysReal | bool | If true, this object will never be modified. At least 5/7/10 imposter obstacles with this set to "false" have to exist (depending on difficulty).|
