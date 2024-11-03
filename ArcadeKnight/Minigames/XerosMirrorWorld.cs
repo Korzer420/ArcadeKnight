@@ -249,7 +249,7 @@ public class XerosMirrorWorld : TimeMinigame
         PenaltyTimer.SetActive(true);
         yield return new WaitForSeconds(2f);
         if (wrongAccusedObjects > 0)
-            textComponent.text = "<color=#de0404>Wrong accused: " + wrongAccusedObjects + " (+" + wrongAccusedObjects + " Minute(s))</color>\r\n";
+            textComponent.text = "<color=#de0404>Wrongly accused: " + wrongAccusedObjects + " (+" + wrongAccusedObjects + " Minute(s))</color>\r\n";
         if (missedObjects > 0)
             textComponent.text += "<color=#de0404>Missed: " + missedObjects + " (+" + missedObjects + " Minute(s))</color>";
         yield return new WaitForSeconds(3f);
