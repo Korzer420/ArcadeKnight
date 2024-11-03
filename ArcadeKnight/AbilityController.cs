@@ -17,9 +17,9 @@ public static class AbilityController
 
     private static Dictionary<string, int> _originalSpellStates = new()
     {
-        {nameof(PlayerData.fireballLevel), 1 },
-        {nameof(PlayerData.screamLevel), 1 },
-        {nameof(PlayerData.quakeLevel), 1 }
+        {nameof(PlayerData.fireballLevel), -1 },
+        {nameof(PlayerData.screamLevel), -1 },
+        {nameof(PlayerData.quakeLevel), -1 }
     };
 
     private static Dictionary<string, bool> _initialRules = new()
@@ -83,7 +83,7 @@ public static class AbilityController
 
         foreach (string key in _originalSpellStates.Keys.ToList())
             _originalSpellStates[key] = PlayerData.instance.GetInt(key);
-
+        
         foreach (string rule in restrictions)
         {
             string realRule = rule;
@@ -117,8 +117,14 @@ public static class AbilityController
         _canFocus = true;
         foreach (string key in _originalValues.Keys)
             PlayerData.instance.SetBool(key, _originalValues[key]);
-        foreach (string key in _originalSpellStates.Keys.ToList())
-            _originalSpellStates[key] = PlayerData.instance.GetInt(key);
+        _originalValues = [];
+        // Ignore, if these values have not been set yet.
+        if (_originalSpellStates[nameof(PlayerData.fireballLevel)] != -1)
+            foreach (string key in _originalSpellStates.Keys.ToList())
+            { 
+                PlayerData.instance.SetInt(key, _originalSpellStates[key]);
+                _originalSpellStates[key] = -1;
+            }
         if (!_active)
             return;
         _active = false;
